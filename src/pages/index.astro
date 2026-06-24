@@ -1,0 +1,37 @@
+---
+import GalleryItem from "../components/GalleryItem.astro";
+import Modal from "../components/Modal.astro";
+import fs from "fs";
+import path from "path";
+import matter from "gray-matter";
+
+const worksDir = "./src/data/works";
+const files = fs.readdirSync(worksDir);
+
+const works = files.map((file) => {
+  const content = fs.readFileSync(path.join(worksDir, file), "utf-8");
+  const { data } = matter(content);
+  return data;
+});
+
+let selected = null;
+---
+
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Portfolio</title>
+  </head>
+
+  <body class="bg-white text-black p-8">
+    <h1 class="text-3xl font-bold mb-6">Portfolio</h1>
+
+    <div id="gallery" class="columns-3 gap-4">
+      {works.map((work) => (
+        <GalleryItem work={work} onClick={(w) => (selected = w)} />
+      ))}
+    </div>
+
+    {selected && <Modal work={selected} onClose={() => (selected = null)} />}
+  </body>
+</html>

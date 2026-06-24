@@ -1,0 +1,10 @@
+---
+const { work, onClick } = Astro.props;
+---
+
+<div
+  class="cursor-pointer transition-transform duration-200 hover:scale-[1.03] hover:shadow-lg"
+  onClick={() => onClick(work)}
+>
+  <img src={work.image} alt={work.title} class="w-full rounded" />
+</div>
