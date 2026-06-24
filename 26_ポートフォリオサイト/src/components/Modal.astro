@@ -1,0 +1,29 @@
+---
+const { work, onClose } = Astro.props;
+---
+
+<div
+  class="fixed inset-0 bg-black/60 flex justify-center items-center z-50"
+  onClick={onClose}
+>
+  <div
+    class="bg-white w-4/5 h-4/5 flex rounded shadow-xl"
+    onClick={(e) => e.stopPropagation()}
+  >
+    <div class="w-3/5 h-full flex justify-center items-center p-4">
+      <img src={work.image} class="max-h-full max-w-full rounded" />
+    </div>
+
+    <div class="w-2/5 p-6 overflow-y-auto">
+      <h2 class="text-2xl font-bold mb-4">{work.title}</h2>
+
+      <div class="mb-4 flex gap-2 flex-wrap">
+        {work.tags.map(tag => (
+          <span class="px-2 py-1 bg-gray-200 rounded text-sm">{tag}</span>
+        ))}
+      </div>
+
+      <p class="text-gray-700 whitespace-pre-line">{work.memo}</p>
+    </div>
+  </div>
+</div>
