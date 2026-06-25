@@ -4,7 +4,7 @@
 const API_BASE = "https://delicate-sunset-ea8a.d08084222816.workers.dev/";
 
 /* ============================================
-   Routing
+   Routing（ページ切り替えだけハッシュ）
 ============================================ */
 window.addEventListener("hashchange", renderPage);
 window.addEventListener("load", renderPage);
@@ -42,14 +42,17 @@ async function loadGallery() {
 }
 
 /* ============================================
-   DETAIL OVERLAY
+   画像拡大＋右側ひょっこり詳細パネル
 ============================================ */
 let currentWork = null;
 
 function openDetail(work) {
   currentWork = work;
 
-  document.getElementById("detail-image").src = work.image;
+  // 画像拡大
+  document.getElementById("overlay-image").src = work.image;
+
+  // 右側詳細
   document.getElementById("detail-title").textContent = work.title || "";
   document.getElementById("detail-tags").textContent = (work.tags || []).join(", ");
   document.getElementById("detail-description").innerHTML = work.description || "";
@@ -57,18 +60,22 @@ function openDetail(work) {
   document.getElementById("detail-view-mode").style.display = "block";
   document.getElementById("detail-edit-mode").style.display = "none";
 
-  document.getElementById("detail-overlay").style.display = "flex";
+  const overlay = document.getElementById("overlay");
+  overlay.style.display = "block";
+
+  // 右側パネルひょっこり
+  overlay.classList.add("show-right");
 }
 
 /* 背景クリックで閉じる */
-document.getElementById("detail-overlay").addEventListener("click", (e) => {
-  if (e.target.id === "detail-overlay") {
-    document.getElementById("detail-overlay").style.display = "none";
-  }
+document.getElementById("overlay-bg").addEventListener("click", () => {
+  const overlay = document.getElementById("overlay");
+  overlay.style.display = "none";
+  overlay.classList.remove("show-right");
 });
 
-/* トリプルクリックで編集モード */
-document.getElementById("detail-right").addEventListener("click", (e) => {
+/* 右側パネル内トリプルクリックで編集モード */
+document.getElementById("overlay-right").addEventListener("click", (e) => {
   if (e.detail === 3) enterDetailEditMode();
 });
 
