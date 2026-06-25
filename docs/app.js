@@ -4,7 +4,7 @@
 const API_BASE = "https://delicate-sunset-ea8a.d08084222816.workers.dev/";
 
 /* ============================================
-   Routing（ページ切り替えだけハッシュ）
+   Routing（About / 制作について だけハッシュ）
 ============================================ */
 window.addEventListener("hashchange", renderPage);
 window.addEventListener("load", renderPage);
@@ -23,7 +23,7 @@ function renderPage() {
 }
 
 /* ============================================
-   Gallery
+   Gallery（6列タイル）
 ============================================ */
 async function loadGallery() {
   const container = document.getElementById("gallery-container");
@@ -42,39 +42,62 @@ async function loadGallery() {
 }
 
 /* ============================================
-   画像拡大＋右側ひょっこり詳細パネル
+   詳細ビュー（暗転＋左3/5＋右2/5）
 ============================================ */
 let currentWork = null;
 
 function openDetail(work) {
   currentWork = work;
 
-  // 画像拡大
+  // 画像セット
   document.getElementById("overlay-image").src = work.image;
 
-  // 右側詳細
+  // タイトル
   document.getElementById("detail-title").textContent = work.title || "";
-  document.getElementById("detail-tags").textContent = (work.tags || []).join(", ");
+
+  // タグ（Lightroom風 pill）
+  const tagList = document.getElementById("detail-tags");
+  tagList.innerHTML = "";
+  (work.tags || []).forEach(tag => {
+    const t = document.createElement("span");
+    t.className = "tag";
+    t.textContent = tag;
+    tagList.appendChild(t);
+  });
+
+  // 説明
   document.getElementById("detail-description").innerHTML = work.description || "";
 
-  document.getElementById("detail-view-mode").style.display = "block";
+  // 編集モードOFF
   document.getElementById("detail-edit-mode").style.display = "none";
 
+  // オーバーレイ表示
   const overlay = document.getElementById("overlay");
   overlay.style.display = "block";
 
-  // 右側パネルひょっこり
-  overlay.classList.add("show-right");
+  // アニメーション開始
+  requestAnimationFrame(() => {
+    overlay.classList.add("show");
+    overlay.classList.add("show-right");
+  });
 }
 
-/* 背景クリックで閉じる */
-document.getElementById("overlay-bg").addEventListener("click", () => {
-  const overlay = document.getElementById("overlay");
-  overlay.style.display = "none";
-  overlay.classList.remove("show-right");
-});
+/* 暗転背景クリックで閉じる */
+document.getElementById("overlay-bg").addEventListener("click", closeOverlay);
 
-/* 右側パネル内トリプルクリックで編集モード */
+function closeOverlay() {
+  const overlay = document.getElementById("overlay");
+  overlay.classList.remove("show");
+  overlay.classList.remove("show-right");
+
+  setTimeout(() => {
+    overlay.style.display = "none";
+  }, 200);
+}
+
+/* ============================================
+   トリプルクリックで編集モード
+============================================ */
 document.getElementById("overlay-right").addEventListener("click", (e) => {
   if (e.detail === 3) enterDetailEditMode();
 });
@@ -85,7 +108,6 @@ function enterDetailEditMode() {
   document.getElementById("edit-tags").value = (currentWork.tags || []).join(", ");
   document.getElementById("edit-description").value = currentWork.description || "";
 
-  document.getElementById("detail-view-mode").style.display = "none";
   document.getElementById("detail-edit-mode").style.display = "block";
 }
 
