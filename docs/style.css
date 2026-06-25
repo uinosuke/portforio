@@ -1,15 +1,28 @@
+/* ===========================
+   全体
+=========================== */
 body {
-  font-family: 'Noto Sans', sans-serif;
   margin: 0;
-  background: #fafafa;
+  font-family: 'Noto Sans', sans-serif;
+  background: #111;
+  color: #eee;
+  overflow-x: hidden;
 }
 
-/* 左サイドバー（ホバーで展開） */
+.page-title {
+  margin: 0 0 20px;
+  font-size: 22px;
+  font-weight: 600;
+}
+
+/* ===========================
+   左サイドバー（ホバーで展開）
+=========================== */
 #sidebar {
   position: fixed;
   top: 0;
   left: 0;
-  width: 40px;
+  width: 48px;
   height: 100vh;
   z-index: 1000;
 }
@@ -17,31 +30,36 @@ body {
 .sidebar-inner {
   position: absolute;
   top: 0;
-  left: -200px;
-  width: 200px;
+  left: -180px;
+  width: 180px;
   height: 100%;
-  background: #111;
+  background: #1a1a1a;
   color: #fff;
   padding: 20px;
   box-sizing: border-box;
   transition: left 0.2s ease;
+  border-right: 1px solid #333;
 }
 
 #sidebar:hover .sidebar-inner {
   left: 0;
 }
 
-.sidebar-inner h2 {
-  font-size: 16px;
-  margin: 0 0 20px;
+.sidebar-title {
+  font-size: 15px;
+  margin-bottom: 20px;
 }
 
-.sidebar-inner nav a {
+.sidebar-nav a {
   display: block;
-  color: #fff;
+  color: #ddd;
   text-decoration: none;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
   font-size: 14px;
+}
+
+.sidebar-nav a:hover {
+  color: #fff;
 }
 
 .sidebar-bottom {
@@ -55,41 +73,48 @@ body {
   width: 100%;
   padding: 8px 0;
   background: #e53935;
-  color: #fff;
   border: none;
   border-radius: 4px;
-  font-size: 13px;
+  color: #fff;
   cursor: pointer;
 }
 
-/* メイン領域 */
+/* ===========================
+   メイン
+=========================== */
 #main {
-  margin-left: 40px;
+  margin-left: 48px;
   padding: 20px;
 }
 
-.page {
-  display: block;
-}
-
-/* Masonry */
+/* ===========================
+   6列タイル（Google画像検索風）
+=========================== */
 .masonry {
-  column-count: 3;
-  column-gap: 10px;
+  column-count: 6;
+  column-gap: 8px;
 }
 
 .masonry-item {
   break-inside: avoid;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
   cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
 .masonry-item img {
   width: 100%;
-  border-radius: 6px;
+  border-radius: 4px;
 }
 
-/* 画像拡大＋右側パネルオーバーレイ */
+.masonry-item:hover {
+  transform: scale(1.02);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+}
+
+/* ===========================
+   詳細ビュー（オーバーレイ）
+=========================== */
 #overlay {
   position: fixed;
   inset: 0;
@@ -97,56 +122,111 @@ body {
   z-index: 2000;
 }
 
+/* 暗転背景 */
 #overlay-bg {
   position: absolute;
   inset: 0;
-  background: rgba(0,0,0,0.7);
+  background: rgba(0,0,0,0.6);
+  opacity: 0;
+  transition: opacity 0.2s ease;
 }
 
-/* 中央に画像拡大 */
-#overlay-center {
+/* 左側：拡大画像（3/5） */
+#overlay-left {
   position: absolute;
   top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  max-width: 60%;
-  max-height: 80%;
+  left: 0;
+  width: 60%;
+  transform: translateY(-50%);
+  text-align: center;
+  opacity: 0;
+  transform-origin: center;
+  transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
 #overlay-image {
-  max-width: 100%;
-  max-height: 100%;
+  max-width: 90%;
+  max-height: 90vh;
   border-radius: 6px;
 }
 
-/* 右側ひょっこり詳細パネル */
+/* 右側：詳細パネル（2/5） */
 #overlay-right {
   position: absolute;
   top: 0;
-  right: -320px;
-  width: 320px;
+  right: -40%;
+  width: 40%;
   height: 100%;
-  background: #fff;
-  box-shadow: -2px 0 8px rgba(0,0,0,0.3);
-  padding: 20px;
+  background: #1a1a1a;
+  border-left: 1px solid #333;
+  padding: 24px;
   box-sizing: border-box;
-  transition: right 0.2s ease;
+  overflow-y: auto;
+  transition: right 0.22s cubic-bezier(0.2, 0, 0.2, 1);
+}
+
+#overlay.show #overlay-bg {
+  opacity: 1;
+}
+
+#overlay.show #overlay-left {
+  opacity: 1;
+  transform: translateY(-50%) scale(1);
 }
 
 #overlay.show-right #overlay-right {
   right: 0;
 }
 
+/* ===========================
+   詳細パネル内
+=========================== */
+.detail-block {
+  margin-bottom: 24px;
+}
+
+.detail-title {
+  font-size: 20px;
+  margin: 0 0 10px;
+  cursor: pointer;
+}
+
+/* Lightroom風タグ */
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tag-list .tag {
+  padding: 4px 10px;
+  background: #2c2c2c;
+  border-radius: 20px;
+  font-size: 12px;
+  color: #ddd;
+  border: 1px solid #444;
+}
+
+/* 編集モード */
 #detail-edit-mode {
   display: none;
 }
 
-textarea {
+#detail-edit-mode input,
+#detail-edit-mode textarea {
   width: 100%;
-  height: 120px;
+  background: #222;
+  color: #eee;
+  border: 1px solid #444;
+  padding: 8px;
+  border-radius: 4px;
 }
 
-button {
+#detail-edit-mode button {
   margin-top: 10px;
   padding: 8px 16px;
+  background: #444;
+  border: none;
+  color: #fff;
+  cursor: pointer;
 }
