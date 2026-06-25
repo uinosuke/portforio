@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>Portfolio</title>
+  <title>My Portfolio</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;700&display=swap" rel="stylesheet">
@@ -14,8 +14,9 @@
   <!-- 左サイドバー（ホバーで展開） -->
   <aside id="sidebar">
     <div class="sidebar-inner">
-      <h2>My Portfolio</h2>
-      <nav>
+      <h2 class="sidebar-title">My Portfolio</h2>
+
+      <nav class="sidebar-nav">
         <a href="#gallery">画像一覧</a>
         <a href="#about">ABOUT</a>
         <a href="#works-info">制作について</a>
@@ -29,15 +30,16 @@
 
   <!-- メイン -->
   <main id="main">
+
     <!-- Gallery -->
     <section id="gallery" class="page">
-      <h1>画像一覧</h1>
+      <h1 class="page-title">画像一覧</h1>
       <div id="gallery-container" class="masonry"></div>
     </section>
 
     <!-- ABOUT -->
     <section id="about" class="page" style="display:none;">
-      <h1>ABOUT</h1>
+      <h1 class="page-title">ABOUT</h1>
 
       <div id="about-view">
         <div id="about-content"></div>
@@ -51,7 +53,7 @@
 
     <!-- 制作について -->
     <section id="works-info" class="page" style="display:none;">
-      <h1>制作について</h1>
+      <h1 class="page-title">制作について</h1>
 
       <div id="works-info-view">
         <div id="works-info-content"></div>
@@ -62,23 +64,34 @@
         <button id="save-works-info">保存</button>
       </div>
     </section>
+
   </main>
 
-  <!-- 画像拡大＋右側ひょっこり詳細パネル -->
+  <!-- 画像拡大＋右側詳細パネル -->
   <div id="overlay">
     <div id="overlay-bg"></div>
 
-    <div id="overlay-center">
+    <!-- 左側：拡大画像（3/5） -->
+    <div id="overlay-left">
       <img id="overlay-image" src="" alt="">
     </div>
 
+    <!-- 右側：詳細パネル（2/5） -->
     <div id="overlay-right">
-      <div id="detail-view-mode">
-        <h2 id="detail-title"></h2>
-        <p id="detail-tags"></p>
-        <div id="detail-description"></div>
+
+      <div class="detail-block">
+        <h2 id="detail-title" class="detail-title"></h2>
       </div>
 
+      <div class="detail-block">
+        <div id="detail-tags" class="tag-list"></div>
+      </div>
+
+      <div class="detail-block">
+        <div id="detail-description" class="detail-description"></div>
+      </div>
+
+      <!-- 編集モード -->
       <div id="detail-edit-mode">
         <label>Tags</label>
         <input id="edit-tags" type="text">
@@ -88,6 +101,7 @@
 
         <button id="save-detail">保存</button>
       </div>
+
     </div>
   </div>
 
