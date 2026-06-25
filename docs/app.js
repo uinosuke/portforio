@@ -1,8 +1,7 @@
 /* ============================================
    Config
 ============================================ */
-const API_BASE = "https://delicate-sunset-ea8a.d08084222816.workers.dev";
-// 例: https://example.workers.dev
+const API_BASE = "https://delicate-sunset-ea8a.d08084222816.workers.dev/";
 
 /* ============================================
    Routing
@@ -29,7 +28,7 @@ async function loadGallery() {
   const container = document.getElementById("gallery-container");
   container.innerHTML = "";
 
-  const res = await fetch(`${API_BASE}/works`);
+  const res = await fetch(`${API_BASE}works`);
   const works = await res.json();
 
   works.forEach(work => {
@@ -85,7 +84,7 @@ document.getElementById("save-detail").addEventListener("click", async () => {
     description
   };
 
-  await fetch(`${API_BASE}/works/${currentWork.id}`, {
+  await fetch(`${API_BASE}works/${currentWork.id}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body)
@@ -104,7 +103,7 @@ async function loadAbout() {
   view.style.display = "block";
   edit.style.display = "none";
 
-  const res = await fetch(`${API_BASE}/about`);
+  const res = await fetch(`${API_BASE}about`);
   if (res.status === 200) {
     const html = await res.text();
     document.getElementById("about-content").innerHTML = html;
@@ -131,7 +130,7 @@ function enterAboutEdit() {
 document.getElementById("save-about").addEventListener("click", async () => {
   const html = document.getElementById("about-editor").value;
 
-  await fetch(`${API_BASE}/about`, {
+  await fetch(`${API_BASE}about`, {
     method: "PUT",
     headers: { "Content-Type": "text/html" },
     body: html
@@ -150,7 +149,7 @@ async function loadWorksInfo() {
   view.style.display = "block";
   edit.style.display = "none";
 
-  const res = await fetch(`${API_BASE}/works-info`);
+  const res = await fetch(`${API_BASE}works-info`);
   if (res.status === 200) {
     const html = await res.text();
     document.getElementById("works-info-content").innerHTML = html;
@@ -177,7 +176,7 @@ function enterWorksInfoEdit() {
 document.getElementById("save-works-info").addEventListener("click", async () => {
   const html = document.getElementById("works-info-editor").value;
 
-  await fetch(`${API_BASE}/works-info`, {
+  await fetch(`${API_BASE}works-info`, {
     method: "PUT",
     headers: { "Content-Type": "text/html" },
     body: html
