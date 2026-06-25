@@ -1,4 +1,278 @@
 <!DOCTYPE html>
-<html>
-  <body>OK</body>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>Portfolio</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Noto Sans -->
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;700&display=swap" rel="stylesheet">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <!-- Header -->
+  <header>
+    <nav>
+      <a href="#gallery">画像一覧</a>
+      <a href="#about">ABOUT</a>
+      <a href="#works-info">制作について</a>
+    </nav>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+
+    <!-- Gallery -->
+    <section id="gallery" class="page">
+      <h1>画像一覧</h1>
+      <div id="gallery-container" class="masonry"></div>
+    </section>
+
+    <!-- Detail -->
+    <section id="detail" class="page" style="display:none;">
+      <div class="detail-wrapper">
+        <div class="detail-left">
+          <img id="detail-image" src="" alt="">
+        </div>
+
+        <div class="detail-right">
+          <div id="detail-view-mode">
+            <h2 id="detail-title"></h2>
+            <p><strong>タグ:</strong> <span id="detail-tags"></span></p>
+            <p><strong>概要:</strong></p>
+            <div id="detail-description"></div>
+          </div>
+
+          <div id="detail-edit-mode" style="display:none;">
+            <label>タグ（カンマ区切り）</label>
+            <input id="edit-tags" type="text">
+
+            <label>概要（HTML可）</label>
+            <textarea id="edit-description"></textarea>
+
+            <button id="save-detail">保存</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about" class="page" style="display:none;">
+      <h1>ABOUT</h1>
+
+      <div id="about-view">
+        <div id="about-content">
+          <h1>まずはご挨拶</h1>
+          <p>業務支援をさせていただいているイマムラと申します。<br>
+          初めましての方、よろしくお願いします🙇‍♂️</p>
+
+          <p>こちらのページでは以下の3項目について記載しています。</p>
+          <ul>
+            <li>私のポジション</li>
+            <li>このサイトについて</li>
+            <li>私の趣味</li>
+          </ul>
+
+          <p>ご相談やお仕事はもちろん、皆さんの会話のネタになればと思います！</p>
+
+          <h2>私のポジション</h2>
+          <p>
+            2023：採用として入社。<br>
+            ↓<br>
+            2025：業務支援として活動開始。
+          </p>
+
+          <p>
+            印刷物のデザイン、資料づくり、PowerPoint、<br>
+            様々な提案や、時には撮影などなど、、<br>
+            新たな試みの為まだまだ開拓中ですが、<br>
+            お手伝いできそうなことを伺って取り組んでおります！
+          </p>
+
+          <p>
+            とはいえ<br>
+            「何を頼めばいいか分からない...」「何の人...？」<br>
+            となるのは必然。。
+          </p>
+
+          <p>
+            そんな印象を払拭するべく、このサイトを立ち上げました。<br>
+            「○○の人」と言われるようになりたいです！
+          </p>
+
+          <h2>このサイトについて</h2>
+          <p>
+            2024～2026年中期ビジョンは<br>
+            <strong>地域コミュニティの形成を軸にダイナミックな福祉活動への挑戦</strong><br>
+            とのことで、私の役割としては「現場で聞こえる小さな声」や「温度感」を拾って、<br>
+            少しずつでも形にしていく役割と定義してみました。
+          </p>
+
+          <p>
+            私は「ハモ庭」という研修を考えるプロジェクトに参加させていただきましたが、<br>
+            その際に出た「ボトムアップ」という言葉。これだ！とﾋﾞﾋﾞﾋﾞｯ。
+          </p>
+
+          <p>
+            ・これまで作ったものや提案したもの等、出来る限りまとめる場として<br>
+            ・皆さんの声を拾い少しずつでも共有し、反映していく場として<br>
+            これらの第一歩としてこのサイトを作ってみました。
+          </p>
+
+          <p>
+            2025年度は<br>
+            「自分のポジションを確立する」<br>
+            「自分の存在を知ってもらう」<br>
+            という事を特に意識していましたが、
+          </p>
+
+          <p>
+            2026年度は法人の中期ビジョン<br>
+            <strong>「地域コミュニティの形成を軸にダイナミックな福祉活動への挑戦」</strong><br>
+            を更に意識した貢献を行っていきたいと考えております。
+          </p>
+
+          <h2>私の趣味</h2>
+          <p>
+            趣/PC/料理/アニメ/音楽/ゲーム/ etc...<br>
+            基本はPC人間ですが、趣を感じることが好きでストーブだったり高速道路（SAとか）だったり、<br>
+            渋滞の時間が好きだったりしますｗ
+          </p>
+
+          <p>
+            アニメは全期録画勢。最近はNetflixです。<br>
+            音楽はボカロ（メジャー曲からみかん星Pやパトリチェフ、ニコラップなど）や<br>
+            藤原さくら・sottebosse・Aimerなどの落ち着いた曲が好きです╭( ・ㅂ・)و ̑̑
+          </p>
+
+          <p>
+            最近はKiller innというゲームを始めようと狙ってます！<br>
+            羊と狼に分かれたFPS人狼みたいな奴です(｀･ω･´)
+          </p>
+
+          <p>
+            がっつり趣味の話をしてしまいましたが、、<br>
+            少しでも興味を持っていただけたら嬉しいですし、プライベートでも仲良くなれたら嬉しいです。<br>
+            実際にハモ庭を通して仲良くなった方もいますし、皆さんの声を聞ける事は私にとって貴重な時間です。
+          </p>
+
+          <p>
+            長々と字面ばかり書きましたが、現場にもちょくちょくお邪魔しているかもしれません。<br>
+            その際は邪魔にならない様に影として生きますので、皆さまよろしくお願い致します(__)
+          </p>
+
+          <p>
+            長文失礼しました！<br>
+            ご相談からお仕事、お喋りまで（）お待ちしております！
+          </p>
+        </div>
+      </div>
+
+      <div id="about-edit" style="display:none;">
+        <textarea id="about-editor"></textarea>
+        <button id="save-about">保存</button>
+      </div>
+    </section>
+
+    <!-- 制作について -->
+    <section id="works-info" class="page" style="display:none;">
+      <h1>制作について</h1>
+
+      <div id="works-info-view">
+        <div id="works-info-content">
+          <h1>制作のご依頼について</h1>
+          <p><strong>3月 01, 2026</strong></p>
+
+          <p>事前に簡単な要件整理があることで、制作がよりスムーズになります。<br>
+          その為、この様な記事を作らさせていただきました。</p>
+
+          <p>「なんとなく作りたい」という段階で大丈夫です。<br>
+          目的整理から一緒に進めさせていただきます。</p>
+
+          <p>また、参考ファイルをいくつかご共有いただき、丸投げでも大丈夫です！<br>
+          （必要に応じて、こちらから確認させていただきます）</p>
+
+          <h2>■ 要件定義の内容</h2>
+          <p>簡単な文章の回答だけで大丈夫です。</p>
+
+          <ol>
+            <li>ターゲット</li>
+            <li>見た人にどうしてほしい？</li>
+            <li>メインで伝えたい一言</li>
+            <li>雰囲気（タッチ／色味）</li>
+            <li>絶対入れるものリスト</li>
+            <li>写真使用（あり／なし／未定）</li>
+            <li>掲示場所・サイズ</li>
+            <li>納期（いつまでに公開？）</li>
+            <li>継続希望（単発／定期）</li>
+          </ol>
+
+          <p>※未定の項目は「未定」でOKです。一旦たたき台を作り、ブラッシュアップしていきます。</p>
+
+          <h2>■ 制作目安</h2>
+
+          <h3>【ポスター／チラシ／動画／Word・Excel・PowerPoint資料】</h3>
+          <ul>
+            <li>たたき台：2〜3日間</li>
+            <li>修正含め：約1週間</li>
+          </ul>
+          <p>※内容や業務状況により前後することがあります</p>
+
+          <h3>【パンフレット／サイトやマクロ作成など】</h3>
+          <ul>
+            <li>たたき台：約1週間</li>
+            <li>修正含め：約2週間</li>
+          </ul>
+          <p>
+            ※内容や業務状況により前後することがあります<br>
+            ※サイトは blogger ドメインとなります。<br>
+            ※URL を知っている方のみ閲覧できる仕様にもできます。
+          </p>
+
+          <h2>■ 複数ファイルをまとめて送るときのお願い</h2>
+          <ul>
+            <li>複数のファイルがある場合は、フォルダごとまとめて共有いただけると作業がスムーズです。</li>
+            <li>ファイル名に「何か」「いつのものか」など簡単な情報を入れてもらえると、その後のヒアリングが減ります。</li>
+          </ul>
+
+          <h2>■ その他サポートについて</h2>
+          <ul>
+            <li>月1イベント等の継続制作</li>
+            <li>個人情報を伴う案件やファイルを整理する作業（現場対応）</li>
+            <li>既存制作物の更新・差し替え</li>
+          </ul>
+
+          <p>単発制作だけでなく、継続的な更新にも対応しています。</p>
+
+          <h2>■ よくあるご相談</h2>
+          <ul>
+            <li>方向性が固まっていない</li>
+            <li>忙しくて構成まで考えられない</li>
+            <li>法人や他施設とイメージを揃えたい</li>
+          </ul>
+
+          <p>何もまとまっていない段階でも大丈夫です。</p>
+
+          <p>アポなしのお電話も歓迎ですので、お気軽にお申し付けください。</p>
+
+          <p><strong>ご相談はコチラから（赤いボタン）</strong></p>
+        </div>
+      </div>
+
+      <div id="works-info-edit" style="display:none;">
+        <textarea id="works-info-editor"></textarea>
+        <button id="save-works-info">保存</button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- JS -->
+  <script src="app.js"></script>
+
+</body>
 </html>
