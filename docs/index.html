@@ -32,33 +32,35 @@
       <div id="gallery-container" class="masonry"></div>
     </section>
 
-    <!-- Detail -->
-    <section id="detail" class="page" style="display:none;">
-      <div class="detail-wrapper">
-        <div class="detail-left">
-          <img id="detail-image" src="" alt="">
-        </div>
+<!-- ============================================
+     DETAIL PAGE
+============================================ -->
+<div id="detail" class="page">
+  <div id="detail-left">
+    <img id="detail-image" src="" alt="">
+  </div>
 
-        <div class="detail-right">
-          <div id="detail-view-mode">
-            <h2 id="detail-title"></h2>
-            <p><strong>タグ:</strong> <span id="detail-tags"></span></p>
-            <p><strong>概要:</strong></p>
-            <div id="detail-description"></div>
-          </div>
+  <div id="detail-right">
+    <!-- 表示モード -->
+    <div id="detail-view-mode">
+      <h2 id="detail-title"></h2>
+      <p id="detail-tags"></p>
+      <div id="detail-description"></div>
+    </div>
 
-          <div id="detail-edit-mode" style="display:none;">
-            <label>タグ（カンマ区切り）</label>
-            <input id="edit-tags" type="text">
+    <!-- 編集モード -->
+    <div id="detail-edit-mode" style="display:none;">
+      <label>Tags</label>
+      <input id="edit-tags" type="text">
 
-            <label>概要（HTML可）</label>
-            <textarea id="edit-description"></textarea>
+      <label>Description</label>
+      <textarea id="edit-description"></textarea>
 
-            <button id="save-detail">保存</button>
-          </div>
-        </div>
-      </div>
-    </section>
+      <button id="save-detail">保存</button>
+    </div>
+  </div>
+</div>
+
 
     <!-- ABOUT -->
     <section id="about" class="page" style="display:none;">
