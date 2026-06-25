@@ -1,7 +1,7 @@
 /* ============================================
    Config
 ============================================ */
-const API_BASE = "https://your-worker-domain.workers.dev"; 
+const API_BASE = "https://delicate-sunset-ea8a.d08084222816.workers.dev/"; 
 // 例: https://example.workers.dev
 
 /* ============================================
