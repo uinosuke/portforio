@@ -4,22 +4,75 @@ body {
   background: #fafafa;
 }
 
-header {
-  background: #fff;
-  padding: 10px 20px;
-  border-bottom: 1px solid #ddd;
+/* 左サイドバー（ホバーで展開） */
+#sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 40px;
+  height: 100vh;
+  z-index: 1000;
 }
 
-nav a {
-  margin-right: 20px;
+.sidebar-inner {
+  position: absolute;
+  top: 0;
+  left: -200px;
+  width: 200px;
+  height: 100%;
+  background: #111;
+  color: #fff;
+  padding: 20px;
+  box-sizing: border-box;
+  transition: left 0.2s ease;
+}
+
+#sidebar:hover .sidebar-inner {
+  left: 0;
+}
+
+.sidebar-inner h2 {
+  font-size: 16px;
+  margin: 0 0 20px;
+}
+
+.sidebar-inner nav a {
+  display: block;
+  color: #fff;
   text-decoration: none;
-  color: #333;
+  margin-bottom: 10px;
+  font-size: 14px;
 }
 
-.page {
+.sidebar-bottom {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  right: 20px;
+}
+
+.consult-btn {
+  width: 100%;
+  padding: 8px 0;
+  background: #e53935;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+/* メイン領域 */
+#main {
+  margin-left: 40px;
   padding: 20px;
 }
 
+.page {
+  display: block;
+}
+
+/* Masonry */
 .masonry {
   column-count: 3;
   column-gap: 10px;
@@ -36,36 +89,52 @@ nav a {
   border-radius: 6px;
 }
 
-/* ============================================
-   DETAIL OVERLAY
-============================================ */
-#detail-overlay {
+/* 画像拡大＋右側パネルオーバーレイ */
+#overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.7);
   display: none;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
+  z-index: 2000;
 }
 
-#detail-box {
-  background: #fff;
-  padding: 20px;
-  max-width: 900px;
-  width: 90%;
-  display: flex;
-  gap: 20px;
-  border-radius: 8px;
+#overlay-bg {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
 }
 
-#detail-left img {
-  max-width: 400px;
+/* 中央に画像拡大 */
+#overlay-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 60%;
+  max-height: 80%;
+}
+
+#overlay-image {
+  max-width: 100%;
+  max-height: 100%;
   border-radius: 6px;
 }
 
-#detail-right {
-  flex: 1;
+/* 右側ひょっこり詳細パネル */
+#overlay-right {
+  position: absolute;
+  top: 0;
+  right: -320px;
+  width: 320px;
+  height: 100%;
+  background: #fff;
+  box-shadow: -2px 0 8px rgba(0,0,0,0.3);
+  padding: 20px;
+  box-sizing: border-box;
+  transition: right 0.2s ease;
+}
+
+#overlay.show-right #overlay-right {
+  right: 0;
 }
 
 #detail-edit-mode {
