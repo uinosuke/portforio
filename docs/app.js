@@ -11,10 +11,11 @@ window.addEventListener("load", renderPage);
 
 function renderPage() {
   const hash = location.hash.replace("#", "") || "gallery";
-  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+
+  document.querySelectorAll(".page").forEach(p => p.style.display = "none");
 
   const page = document.getElementById(hash);
-  if (page) page.classList.add("active");
+  if (page) page.style.display = "block";
 
   if (hash === "gallery") loadGallery();
   if (hash === "about") loadAbout();
@@ -41,13 +42,12 @@ async function loadGallery() {
 }
 
 /* ============================================
-   Detail
+   DETAIL OVERLAY
 ============================================ */
 let currentWork = null;
 
 function openDetail(work) {
   currentWork = work;
-  location.hash = "detail";
 
   document.getElementById("detail-image").src = work.image;
   document.getElementById("detail-title").textContent = work.title || "";
@@ -56,7 +56,16 @@ function openDetail(work) {
 
   document.getElementById("detail-view-mode").style.display = "block";
   document.getElementById("detail-edit-mode").style.display = "none";
+
+  document.getElementById("detail-overlay").style.display = "flex";
 }
+
+/* 背景クリックで閉じる */
+document.getElementById("detail-overlay").addEventListener("click", (e) => {
+  if (e.target.id === "detail-overlay") {
+    document.getElementById("detail-overlay").style.display = "none";
+  }
+});
 
 /* トリプルクリックで編集モード */
 document.getElementById("detail-right").addEventListener("click", (e) => {
@@ -97,12 +106,6 @@ document.getElementById("save-detail").addEventListener("click", async () => {
    ABOUT
 ============================================ */
 async function loadAbout() {
-  const view = document.getElementById("about-view");
-  const edit = document.getElementById("about-edit");
-
-  view.style.display = "block";
-  edit.style.display = "none";
-
   const res = await fetch(`${API_BASE}about`);
   if (res.status === 200) {
     const html = await res.text();
@@ -110,23 +113,18 @@ async function loadAbout() {
   }
 }
 
-/* トリプルクリックで編集 */
 document.getElementById("about-content").addEventListener("click", (e) => {
   if (e.detail === 3) enterAboutEdit();
 });
 
 function enterAboutEdit() {
-  const view = document.getElementById("about-view");
-  const edit = document.getElementById("about-edit");
-
   document.getElementById("about-editor").value =
     document.getElementById("about-content").innerHTML;
 
-  view.style.display = "none";
-  edit.style.display = "block";
+  document.getElementById("about-view").style.display = "none";
+  document.getElementById("about-edit").style.display = "block";
 }
 
-/* 保存 */
 document.getElementById("save-about").addEventListener("click", async () => {
   const html = document.getElementById("about-editor").value;
 
@@ -137,18 +135,14 @@ document.getElementById("save-about").addEventListener("click", async () => {
   });
 
   loadAbout();
+  document.getElementById("about-view").style.display = "block";
+  document.getElementById("about-edit").style.display = "none";
 });
 
 /* ============================================
    制作について
 ============================================ */
 async function loadWorksInfo() {
-  const view = document.getElementById("works-info-view");
-  const edit = document.getElementById("works-info-edit");
-
-  view.style.display = "block";
-  edit.style.display = "none";
-
   const res = await fetch(`${API_BASE}works-info`);
   if (res.status === 200) {
     const html = await res.text();
@@ -156,23 +150,18 @@ async function loadWorksInfo() {
   }
 }
 
-/* トリプルクリックで編集 */
 document.getElementById("works-info-content").addEventListener("click", (e) => {
   if (e.detail === 3) enterWorksInfoEdit();
 });
 
 function enterWorksInfoEdit() {
-  const view = document.getElementById("works-info-view");
-  const edit = document.getElementById("works-info-edit");
-
   document.getElementById("works-info-editor").value =
     document.getElementById("works-info-content").innerHTML;
 
-  view.style.display = "none";
-  edit.style.display = "block";
+  document.getElementById("works-info-view").style.display = "none";
+  document.getElementById("works-info-edit").style.display = "block";
 }
 
-/* 保存 */
 document.getElementById("save-works-info").addEventListener("click", async () => {
   const html = document.getElementById("works-info-editor").value;
 
@@ -183,4 +172,6 @@ document.getElementById("save-works-info").addEventListener("click", async () =>
   });
 
   loadWorksInfo();
+  document.getElementById("works-info-view").style.display = "block";
+  document.getElementById("works-info-edit").style.display = "none";
 });
