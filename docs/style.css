@@ -1,206 +1,83 @@
-
-/* ------------------------------
-   Base
------------------------------- */
 body {
-  margin: 0;
   font-family: 'Noto Sans', sans-serif;
+  margin: 0;
   background: #fafafa;
-  color: #333;
 }
 
 header {
   background: #fff;
-  border-bottom: 1px solid #ddd;
   padding: 10px 20px;
-  position: sticky;
-  top: 0;
-  z-index: 10;
+  border-bottom: 1px solid #ddd;
 }
 
 nav a {
   margin-right: 20px;
   text-decoration: none;
   color: #333;
-  font-weight: 600;
 }
 
-nav a:hover {
-  color: #0078ff;
-}
-
-main {
+.page {
   padding: 20px;
 }
 
-.page h1 {
-  font-size: 28px;
-  margin-bottom: 20px;
-}
-
-/* ------------------------------
-   Masonry Gallery
------------------------------- */
 .masonry {
-  column-count: 4;
-  column-gap: 15px;
+  column-count: 3;
+  column-gap: 10px;
 }
 
 .masonry-item {
   break-inside: avoid;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
   cursor: pointer;
-  transition: opacity 0.2s;
-}
-
-.masonry-item:hover {
-  opacity: 0.8;
 }
 
 .masonry-item img {
   width: 100%;
   border-radius: 6px;
-  display: block;
 }
 
-/* Responsive */
-@media (max-width: 1200px) {
-  .masonry { column-count: 3; }
-}
-@media (max-width: 900px) {
-  .masonry { column-count: 2; }
-}
-@media (max-width: 600px) {
-  .masonry { column-count: 1; }
-}
-
-/* ------------------------------
-   Detail Page
------------------------------- */
-.detail-wrapper {
-  display: flex;
-  gap: 20px;
+/* ============================================
+   DETAIL OVERLAY
+============================================ */
+#detail-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
 }
 
-.detail-left {
-  flex: 3;
-}
-
-.detail-left img {
-  width: 100%;
-  border-radius: 6px;
-}
-
-.detail-right {
-  flex: 2;
+#detail-box {
   background: #fff;
   padding: 20px;
+  max-width: 900px;
+  width: 90%;
+  display: flex;
+  gap: 20px;
+  border-radius: 8px;
+}
+
+#detail-left img {
+  max-width: 400px;
   border-radius: 6px;
-  border: 1px solid #ddd;
 }
 
-.detail-right h2 {
-  margin-top: 0;
+#detail-right {
+  flex: 1;
 }
 
-#detail-description {
-  white-space: pre-wrap;
-}
-
-/* Edit Mode */
-#detail-edit-mode input,
-#detail-edit-mode textarea {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 15px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  font-size: 14px;
-}
-
-#detail-edit-mode textarea {
-  height: 200px;
-  resize: vertical;
-}
-
-#save-detail {
-  padding: 10px 20px;
-  background: #0078ff;
-  color: #fff;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-#save-detail:hover {
-  background: #005fcc;
-}
-
-/* ------------------------------
-   ABOUT / 制作について
------------------------------- */
-#about-content,
-#works-info-content {
-  background: #fff;
-  padding: 25px;
-  border-radius: 6px;
-  border: 1px solid #ddd;
-  line-height: 1.8;
-}
-
-#about-content h1,
-#works-info-content h1 {
-  margin-top: 0;
-}
-
-#about-content h2,
-#works-info-content h2 {
-  margin-top: 30px;
-  border-left: 4px solid #0078ff;
-  padding-left: 10px;
-}
-
-#about-content ul,
-#works-info-content ul,
-#works-info-content ol {
-  padding-left: 20px;
-}
-
-#about-edit textarea,
-#works-info-edit textarea {
-  width: 100%;
-  height: 500px;
-  padding: 15px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  font-size: 14px;
-  font-family: 'Noto Sans', sans-serif;
-  resize: vertical;
-}
-
-#save-about,
-#save-works-info {
-  margin-top: 15px;
-  padding: 10px 20px;
-  background: #0078ff;
-  color: #fff;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-#save-about:hover,
-#save-works-info:hover {
-  background: #005fcc;
-}
-
-/* ------------------------------
-   Hidden Pages
------------------------------- */
-.page {
+#detail-edit-mode {
   display: none;
 }
 
-.page.active {
-  display: block;
+textarea {
+  width: 100%;
+  height: 120px;
+}
+
+button {
+  margin-top: 10px;
+  padding: 8px 16px;
 }
