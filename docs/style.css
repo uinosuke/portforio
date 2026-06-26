@@ -260,10 +260,13 @@ body {
     width: 3px;
     height: 12px;
     background: currentColor;
-    top: 14px;
-    left: 14px;
-    transform: rotate(-45deg);
+
+    /* ★ ここが重要（Q → 虫眼鏡に変わる） */
+    top: 14px;     /* 円の右下に配置 */
+    left: 18px;    /* 円の右下に配置 */
+    transform: rotate(45deg); /* ← これが虫眼鏡の角度 */
 }
+
 
 /* ===========================
    🔍 検索バー
