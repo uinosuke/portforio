@@ -33,6 +33,27 @@ document.addEventListener("dblclick", () => {
 });
 
 // ===============================
+// ハッシュURLでページ切替
+// ===============================
+function showView(view) {
+  document.querySelectorAll(".view").forEach(v => v.classList.add("hidden"));
+  document.getElementById(`view-${view}`).classList.remove("hidden");
+}
+
+window.addEventListener("load", () => {
+  const view = location.hash.replace("#", "") || "gallery";
+  showView(view);
+});
+
+document.querySelectorAll(".nav-button").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const view = btn.dataset.view;
+    location.hash = view;
+    showView(view);
+  });
+});
+
+// ===============================
 // 作品一覧を取得
 // ===============================
 async function loadWorks() {
@@ -200,25 +221,3 @@ dropzone.addEventListener("drop", async (e) => {
     description
   }));
 
-  await fetch(`${API_BASE}/upload`, {
-    method: "POST",
-    body: form
-  });
-
-  loadWorks();
-});
-
-// ===============================
-// ABOUT / INFO 読み込み
-// ===============================
-async function loadAbout() {
-  const res = await fetch(`${API_BASE}/about`);
-  document.getElementById("about-content").innerHTML = await res.text();
-}
-
-async function loadInfo() {
-  const res = await fetch(`${API_BASE}/works-info`);
-  document.getElementById("info-content").innerHTML = await res.text();
-}
-
-//
