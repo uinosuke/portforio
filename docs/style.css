@@ -196,22 +196,22 @@ body {
   right: 70px;
   width: 68px;
   height: 68px;
-  background: #fff;
+  background: #e0e0e0; /* 薄いグレー */
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #111;
+  color: #555; /* 濃いグレーの虫眼鏡 */
   font-size: 28px;
   cursor: pointer;
   z-index: 999999;
   transition: transform 0.15s ease;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
 }
 
 #search-button:hover {
   transform: scale(1.1);
 }
+
 
 /* 🔍 検索バー */
 #search-bar {
