@@ -3,7 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <title>Myportfolio</title>
-  <link rel="stylesheet" href="style.css">
+
+  <!-- ★ CSS（GitHub Pages で確実に読み込まれるパス） -->
+  <link rel="stylesheet" href="./style.css">
+
+  <!-- ★ FontAwesome（虫眼鏡アイコン復活） -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    integrity="sha512-1ycn6IcaQQ40/MKB4Imkb9tZLr9e6Q5e5e5e5e5e5e5e5e5e5e5e5e5e5e"
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  />
 </head>
 <body>
 
@@ -13,7 +24,7 @@
 
     <!-- 🔍 検索バー -->
     <div class="search-box">
-      <span class="magnifying_glass"></span>
+      <i class="fa-solid fa-magnifying-glass"></i>
       <input id="search-input" type="text" placeholder="検索（タイトル・タグ）">
     </div>
   </header>
@@ -29,6 +40,11 @@
         <button class="nav-button" data-view="info">制作について</button>
       </nav>
 
+      <!-- ご相談はコチラ（復活） -->
+      <div class="sidebar-bottom">
+        <button class="consult-btn">ご相談はコチラ</button>
+      </div>
+
       <!-- 管理者モード表示 -->
       <div id="admin-panel" class="admin-only">
         <h2>管理者モード</h2>
@@ -39,7 +55,7 @@
     <!-- メイン領域 -->
     <section class="main">
 
-      <!-- ドロップゾーン（管理者モードのみ） -->
+      <!-- ドロップゾーン -->
       <div id="dropzone" class="dropzone admin-only">
         ここに画像をドラッグ＆ドロップするとアップロードされます
       </div>
@@ -70,6 +86,7 @@
     </section>
   </main>
 
-  <script src="app.js"></script>
+  <!-- JS（GitHub Pages で確実に読み込まれるパス） -->
+  <script src="./app.js"></script>
 </body>
 </html>
