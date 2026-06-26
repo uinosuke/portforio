@@ -38,7 +38,6 @@ body {
   z-index: 1000;
 }
 
-/* 初回ロード時は left:0（全開） → JS が1.5秒後に -140px にする */
 #sidebar-inner {
   position: absolute;
   top: 0;
@@ -76,11 +75,19 @@ body {
   color: #111;
 }
 
+/* ご相談ボタン（ワインレッド＋白文字＋下寄せ） */
+.sidebar-bottom {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  right: 20px;
+}
+
 .consult-btn {
   width: 100%;
-  padding: 10px 0;
+  padding: 12px 0;
   background: #8b1e3f; /* ワインレッド */
-  color: #fff;
+  color: #fff;         /* 白文字 */
   border: none;
   border-radius: 4px;
   font-size: 14px;
@@ -89,9 +96,8 @@ body {
 }
 
 .consult-btn:hover {
-  opacity: 0.8;
+  opacity: 0.85;
 }
-
 
 /* ===========================
    メイン
@@ -205,7 +211,7 @@ body {
 }
 
 /* ===========================
-   🔍 検索アイコン（白丸＋黒虫眼鏡）
+   🔍 検索アイコン（白丸＋グレーアイコン）
 =========================== */
 #search-button {
   position: fixed;
@@ -213,22 +219,22 @@ body {
   right: 70px;
   width: 68px;
   height: 68px;
-  background: #e0e0e0; /* 薄いグレー */
+  background: #fff;     /* 白丸 */
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #555; /* 濃いグレーの虫眼鏡 */
+  color: #666;          /* グレーの虫眼鏡 */
   font-size: 28px;
   cursor: pointer;
   z-index: 999999;
   transition: transform 0.15s ease;
+  border: 2px solid #ddd; /* 薄いグレーの縁 */
 }
 
 #search-button:hover {
   transform: scale(1.1);
 }
-
 
 /* 🔍 検索バー */
 #search-bar {
