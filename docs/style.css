@@ -20,7 +20,7 @@ body {
   font-size: 14px;
   color: #4fc3f7;
   cursor: pointer;
-  display: none; /* ← 検索中だけ表示 */
+  display: none;
 }
 .show-all:hover {
   text-decoration: underline;
@@ -53,9 +53,9 @@ body {
   border-right: 1px solid #333;
 }
 
-/* ★ ホバーで展開（id を使うのが重要） */
+/* ★ ホバーで展開（!important でインラインスタイルに勝つ） */
 #sidebar:hover #sidebar-inner {
-  left: 0;
+  left: 0 !important;
 }
 
 /* サイドバー内リンク */
