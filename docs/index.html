@@ -2,116 +2,73 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>My Portfolio</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <title>Myportfolio</title>
   <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
-  <!-- 左サイドバー -->
-  <aside id="sidebar">
-    <div class="sidebar-inner" id="sidebar-inner">
-      <h2 class="sidebar-title">My Portfolio</h2>
+  <!-- ヘッダー -->
+  <header class="header">
+    <h1 id="site-title">Myportfolio</h1>
 
-      <nav class="sidebar-nav">
-        <a href="#gallery">画像一覧</a>
-        <a href="#about">ABOUT</a>
-        <a href="#works-info">制作について</a>
-        <a href="https://himawari-fukushikai.org/" target="_blank">法人HP</a>
+    <!-- 🔍 検索バー -->
+    <div class="search-box">
+      <span class="magnifying_glass"></span>
+      <input id="search-input" type="text" placeholder="検索（タイトル・タグ）">
+    </div>
+  </header>
+
+  <!-- レイアウト -->
+  <main class="layout">
+
+    <!-- サイドバー -->
+    <aside class="sidebar">
+      <nav>
+        <button class="nav-button" data-view="gallery">WORKS</button>
+        <button class="nav-button" data-view="about">ABOUT</button>
+        <button class="nav-button" data-view="info">制作について</button>
       </nav>
 
-      <div class="sidebar-bottom">
-        <button class="consult-btn">ご相談はコチラ</button>
+      <!-- 管理者モード表示 -->
+      <div id="admin-panel" class="admin-only">
+        <h2>管理者モード</h2>
+        <p>画像を右側のエリアにドラッグ＆ドロップするとアップロードできます。</p>
       </div>
-    </div>
-  </aside>
+    </aside>
 
-  <!-- メイン -->
-  <main id="main">
+    <!-- メイン領域 -->
+    <section class="main">
 
-    <!-- Gallery -->
-    <section id="gallery" class="page">
-      <h1 class="page-title">
-        画像一覧
-        <span id="show-all" class="show-all">すべての画像を表示</span>
-      </h1>
-      <div id="gallery-container" class="masonry"></div>
+      <!-- ドロップゾーン（管理者モードのみ） -->
+      <div id="dropzone" class="dropzone admin-only">
+        ここに画像をドラッグ＆ドロップするとアップロードされます
+      </div>
+
+      <!-- WORKS -->
+      <section id="view-gallery" class="view">
+        <div id="works-list" class="works-grid"></div>
+      </section>
+
+      <!-- ABOUT -->
+      <section id="view-about" class="view hidden">
+        <div class="section-header">
+          <h2>ABOUT</h2>
+          <button id="edit-about" class="admin-only edit-button">✏ 編集</button>
+        </div>
+        <div id="about-content" class="editable-block"></div>
+      </section>
+
+      <!-- 制作について -->
+      <section id="view-info" class="view hidden">
+        <div class="section-header">
+          <h2>制作について</h2>
+          <button id="edit-info" class="admin-only edit-button">✏ 編集</button>
+        </div>
+        <div id="info-content" class="editable-block"></div>
+      </section>
+
     </section>
-
-    <!-- ABOUT -->
-    <section id="about" class="page" style="display:none;">
-      <h1 class="page-title">ABOUT</h1>
-
-      <div id="about-view">
-        <div id="about-content"></div>
-      </div>
-
-      <div id="about-edit" style="display:none;">
-        <textarea id="about-editor"></textarea>
-        <button id="save-about">保存</button>
-      </div>
-    </section>
-
-    <!-- 制作について -->
-    <section id="works-info" class="page" style="display:none;">
-      <h1 class="page-title">制作について</h1>
-
-      <div id="works-info-view">
-        <div id="works-info-content"></div>
-      </div>
-
-      <div id="works-info-edit" style="display:none;">
-        <textarea id="works-info-editor"></textarea>
-        <button id="save-works-info">保存</button>
-      </div>
-    </section>
-
   </main>
-
-  <!-- 画像拡大＋右側詳細パネル -->
-  <div id="overlay">
-    <div id="overlay-bg"></div>
-
-    <div id="overlay-left">
-      <img id="overlay-image" src="" alt="">
-    </div>
-
-    <div id="overlay-right">
-      <div class="detail-block">
-        <h2 id="detail-title" class="detail-title"></h2>
-      </div>
-
-      <div class="detail-block">
-        <div id="detail-tags" class="tag-list"></div>
-      </div>
-
-      <div class="detail-block">
-        <div id="detail-description" class="detail-description"></div>
-      </div>
-
-      <div id="detail-edit-mode">
-        <label>Tags</label>
-        <input id="edit-tags" type="text">
-
-        <label>Description</label>
-        <textarea id="edit-description"></textarea>
-
-        <button id="save-detail">保存</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- 🔍 右下の検索アイコン -->
-<div id="search-button">
-    <i class="fa-solid fa-magnifying-glass"></i>
-</div>
-  
-  <!-- 🔍 検索バー -->
-  <input id="search-bar" type="text" placeholder="検索..." />
 
   <script src="app.js"></script>
 </body>
