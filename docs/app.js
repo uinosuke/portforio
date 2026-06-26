@@ -7,7 +7,6 @@ const API_BASE = "https://delicate-sunset-ea8a.d08084222816.workers.dev";
 // DOM 取得
 // ===============================
 const worksList = document.getElementById("works-list");
-const overlay = document.getElementById("overlay");
 const viewer = document.getElementById("image-viewer");
 
 const viewerImage = document.getElementById("viewer-image");
@@ -112,7 +111,6 @@ function openViewer(index) {
   viewerTags.textContent = item.tags.join(" ");
   viewerDescription.textContent = item.description;
 
-  overlay.classList.add("open");
   viewer.classList.add("open");
 }
 
@@ -120,12 +118,24 @@ function openViewer(index) {
 // ビューアを閉じる
 // ===============================
 function closeViewer() {
-  overlay.classList.remove("open");
   viewer.classList.remove("open");
 }
 
-overlay.addEventListener("click", closeViewer);
+// ===============================
+// 暗い部分クリックで閉じる
+// ===============================
+viewer.addEventListener("click", (e) => {
+  const clickedInsideImage =
+    e.target === viewerImage ||
+    e.target.closest(".viewer-right") ||
+    e.target.closest(".viewer-arrow");
 
+  if (!clickedInsideImage) {
+    closeViewer();
+  }
+});
+
+// ESC で閉じる
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape") closeViewer();
 });
@@ -133,14 +143,14 @@ document.addEventListener("keydown", (e) => {
 // ===============================
 // 前後の画像へ
 // ===============================
-btnPrev.addEventListener("click", () => {
-  if (!works.length) return;
+btnPrev.addEventListener("click", (e) => {
+  e.stopPropagation();
   currentIndex = (currentIndex - 1 + works.length) % works.length;
   openViewer(currentIndex);
 });
 
-btnNext.addEventListener("click", () => {
-  if (!works.length) return;
+btnNext.addEventListener("click", (e) => {
+  e.stopPropagation();
   currentIndex = (currentIndex + 1) % works.length;
   openViewer(currentIndex);
 });
@@ -217,80 +227,4 @@ if (dropzone) {
     const description = prompt("説明", "");
     if (description === null) return;
 
-    const form = new FormData();
-    form.append("file", file);
-    form.append("meta", JSON.stringify({
-      title,
-      tags,
-      description
-    }));
-
-    await fetch(`${API_BASE}/upload`, {
-      method: "POST",
-      body: form
-    });
-
-    await loadWorks();
-  });
-}
-
-// ===============================
-// ABOUT / INFO 読み込み
-// ===============================
-async function loadAbout() {
-  const res = await fetch(`${API_BASE}/about`);
-  const html = await res.text();
-  const el = document.getElementById("about-content");
-  if (el) el.innerHTML = html;
-}
-
-async function loadInfo() {
-  const res = await fetch(`${API_BASE}/works-info`);
-  const html = await res.text();
-  const el = document.getElementById("info-content");
-  if (el) el.innerHTML = html;
-}
-
-// ===============================
-// ABOUT / INFO 編集
-// ===============================
-const btnEditAbout = document.getElementById("edit-about");
-if (btnEditAbout) {
-  btnEditAbout.addEventListener("click", async () => {
-    const el = document.getElementById("about-content");
-    const current = el ? el.innerHTML : "";
-    const html = prompt("ABOUT を編集", current);
-    if (html === null) return;
-
-    await fetch(`${API_BASE}/about`, {
-      method: "PUT",
-      body: html
-    });
-
-    await loadAbout();
-  });
-}
-
-const btnEditInfo = document.getElementById("edit-info");
-if (btnEditInfo) {
-  btnEditInfo.addEventListener("click", async () => {
-    const el = document.getElementById("info-content");
-    const current = el ? el.innerHTML : "";
-    const html = prompt("制作について を編集", current);
-    if (html === null) return;
-
-    await fetch(`${API_BASE}/works-info`, {
-      method: "PUT",
-      body: html
-    });
-
-    await loadInfo();
-  });
-}
-
-// ===============================
-// 初期ロード
-// ===============================
-loadWorks();
-loadAbout();
-loadInfo();
+    const form = new Form
