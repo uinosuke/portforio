@@ -7,8 +7,24 @@ const API_BASE = "https://delicate-sunset-ea8a.d08084222816.workers.dev/";
    Routing
 ============================================ */
 window.addEventListener("hashchange", renderPage);
-window.addEventListener("load", renderPage);
+window.addEventListener("load", () => {
+  renderPage();
 
+  // 初回だけサイドバーを1cmだけ残す
+  const sidebar = document.getElementById("sidebar-inner");
+  setTimeout(() => {
+    sidebar.style.left = "-140px";
+  }, 1500);
+
+  // ホバー解除で完全に隠す
+  document.getElementById("sidebar").addEventListener("mouseleave", () => {
+    sidebar.style.left = "-180px";
+  });
+});
+
+/* ============================================
+   ページ切り替え
+============================================ */
 function renderPage() {
   const hash = location.hash.replace("#", "") || "gallery";
 
@@ -200,6 +216,7 @@ document.getElementById("save-works-info").addEventListener("click", async () =>
 ============================================ */
 const searchBtn = document.getElementById("search-button");
 const searchBar = document.getElementById("search-bar");
+const showAll = document.getElementById("show-all");
 
 searchBtn.addEventListener("click", () => {
   searchBar.classList.toggle("show");
@@ -207,12 +224,18 @@ searchBtn.addEventListener("click", () => {
     searchBar.focus();
   } else {
     searchBar.value = "";
+    showAll.style.display = "none";
     loadGallery();
   }
 });
 
 searchBar.addEventListener("input", () => {
   const keyword = searchBar.value.trim().toLowerCase();
+  if (keyword.length > 0) {
+    showAll.style.display = "inline";
+  } else {
+    showAll.style.display = "none";
+  }
   filterGallery(keyword);
 });
 
@@ -238,9 +261,9 @@ async function filterGallery(keyword) {
   });
 }
 
-/* すべての画像を表示 */
-document.getElementById("show-all").addEventListener("click", () => {
+showAll.addEventListener("click", () => {
   searchBar.value = "";
   searchBar.classList.remove("show");
+  showAll.style.display = "none";
   loadGallery();
 });
