@@ -72,16 +72,13 @@ html, body {
   width: 220px;
   background: #181818;
   border-right: 1px solid #333;
-  padding: 16px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
-
+  gap: 0; /* ← 行間も nav-button 側で調整する */
   position: fixed;
   top: 56px;
   bottom: 0;
   left: 0;
-
   z-index: 9000;
 }
 
@@ -89,9 +86,8 @@ html, body {
 .nav-link {
   display: block;
   width: 100%;
-  padding: 12px 14px;
-  border-radius: 0;          /* ← 枠も角丸も無し */
-  background: transparent;   /* ← 通常は透明 */
+  padding: 14px 18px; /* ← 行の内側余白はここで調整 */
+  background: transparent;
   color: #eee;
   font-size: 14px;
   text-decoration: none;
@@ -101,10 +97,8 @@ html, body {
 
 .nav-button:hover,
 .nav-link:hover {
-  background: rgba(255, 255, 255, 0.12); /* ← ピアノ鍵盤みたいに薄く光る */
-  color: #fff;                           /* ← 文字は白のまま */
+  background: rgba(255, 255, 255, 0.12); /* ← ピアノ鍵盤みたいに光る */
 }
-
 
 
 .sidebar-bottom { margin-top: auto; }
