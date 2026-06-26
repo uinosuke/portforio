@@ -114,17 +114,17 @@ html, body {
   width: 100%;
   padding: 10px 12px;
   border-radius: 999px;
-  border: 1px solid #ff8a3c;
-  background: #ff8a3c;
-  color: #111;
+  background: #8b1e3f; /* ワインレッド */
+  color: #fff;         /* 白文字 */
+  border: none;
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
 }
-
 .consult-btn:hover {
-  background: #ff9c57;
+  background: #7a1937;
 }
+
 
 /* 管理者モード表示 */
 #admin-panel {
