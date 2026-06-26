@@ -95,7 +95,7 @@ function filterWorks(keyword) {
 }
 
 // ===============================
-// ドラッグ＆ドロップアップロード
+// ドラッグ＆ドロップアップロード（修正版）
 // ===============================
 function setupDropzone() {
   const dropzone = document.getElementById("dropzone");
@@ -125,16 +125,16 @@ function setupDropzone() {
     const tags = prompt("タグ（スペース区切り）", "") || "";
     const description = prompt("概要", "") || "";
 
-    const form = new FormData();
-    form.append("file", file);
-    form.append("title", title);
-    form.append("tags", tags);
-    form.append("description", description);
-
     try {
       const res = await fetch(`${API_BASE}/upload`, {
         method: "POST",
-        body: form
+        headers: {
+          "Content-Type": "application/octet-stream",
+          "X-Title": title,
+          "X-Tags": tags,
+          "X-Description": description
+        },
+        body: file
       });
 
       const json = await res.json();
