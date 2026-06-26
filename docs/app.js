@@ -1,409 +1,238 @@
 // ===============================
-// API ベースURL
+// 設定
 // ===============================
 const API_BASE = "https://delicate-sunset-ea8a.d08084222816.workers.dev";
 
 // ===============================
-// 管理者モード（ダブルクリックで ON/OFF）
+// DOM 取得
 // ===============================
+const worksList = document.getElementById("works-list");
+const overlay = document.getElementById("overlay");
+const viewer = document.getElementById("image-viewer");
+
+const viewerImage = document.getElementById("viewer-image");
+const viewerTitle = document.getElementById("viewer-title");
+const viewerTags = document.getElementById("viewer-tags");
+const viewerDescription = document.getElementById("viewer-description");
+
+const viewerClose = document.querySelector(".viewer-close");
+
+const dropzone = document.getElementById("dropzone");
+
 let adminMode = false;
 
-document.addEventListener("DOMContentLoaded", () => {
-  setupAdminToggle();
-  setupNavigation();
-  setupDropzone();
-  setupSearch();
-  setupSidebar();
-  setupImageViewer();
+// ===============================
+// 管理者モード（ダブルクリック）
+// ===============================
+document.addEventListener("dblclick", () => {
+  adminMode = !adminMode;
+  document.body.classList.toggle("admin-mode", adminMode);
+});
+
+// ===============================
+// 作品一覧を取得
+// ===============================
+async function loadWorks() {
+  const res = await fetch(`${API_BASE}/works`);
+  const list = await res.json();
+
+  worksList.innerHTML = "";
+
+  list.forEach(item => {
+    const card = document.createElement("div");
+    card.className = "work-card";
+
+    card.innerHTML = `
+      <img class="work-image" src="${item.image}" alt="">
+      <div class="work-body">
+        <p class="work-title">${item.title}</p>
+        <p class="work-tags">${item.tags.join(" ")}</p>
+        <p class="work-description">${item.description}</p>
+
+        <div class="work-actions admin-only">
+          <button class="edit-button" data-id="${item.id}">編集</button>
+          <button class="delete-button" data-id="${item.id}">削除</button>
+        </div>
+      </div>
+    `;
+
+    // 画像クリック → ビューア表示
+    card.querySelector(".work-image").addEventListener("click", () => {
+      openViewer(item);
+    });
+
+    // 編集
+    card.querySelector(".edit-button").addEventListener("click", () => {
+      editWork(item);
+    });
+
+    // 削除
+    card.querySelector(".delete-button").addEventListener("click", () => {
+      deleteWork(item.id);
+    });
+
+    worksList.appendChild(card);
+  });
+}
+
+// ===============================
+// ビューアを開く（Google画像検索風）
+// ===============================
+function openViewer(item) {
+  viewerImage.src = item.image;
+  viewerTitle.textContent = item.title;
+  viewerTags.textContent = item.tags.join(" ");
+  viewerDescription.textContent = item.description;
+
+  overlay.classList.add("open");
+  viewer.classList.add("open");
+}
+
+// ===============================
+// ビューアを閉じる
+// ===============================
+function closeViewer() {
+  overlay.classList.remove("open");
+  viewer.classList.remove("open");
+}
+
+viewerClose.addEventListener("click", closeViewer);
+overlay.addEventListener("click", closeViewer);
+
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") closeViewer();
+});
+
+// ===============================
+// 削除
+// ===============================
+async function deleteWork(id) {
+  if (!confirm("削除しますか？")) return;
+
+  const res = await fetch(`${API_BASE}/works/${id}`, {
+    method: "DELETE"
+  });
+
+  if (res.ok) {
+    loadWorks();
+  } else {
+    alert("削除に失敗しました");
+  }
+}
+
+// ===============================
+// 編集
+// ===============================
+async function editWork(item) {
+  const title = prompt("タイトル", item.title);
+  if (title === null) return;
+
+  const tags = prompt("タグ（スペース区切り）", item.tags.join(" "));
+  if (tags === null) return;
+
+  const description = prompt("説明", item.description);
+  if (description === null) return;
+
+  await fetch(`${API_BASE}/works/${item.id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      title,
+      tags: tags.split(" "),
+      description
+    })
+  });
+
   loadWorks();
+}
+
+// ===============================
+// アップロード（ドラッグ＆ドロップ）
+// ===============================
+dropzone.addEventListener("dragover", (e) => {
+  e.preventDefault();
+  dropzone.classList.add("hover");
+});
+
+dropzone.addEventListener("dragleave", () => {
+  dropzone.classList.remove("hover");
+});
+
+dropzone.addEventListener("drop", async (e) => {
+  e.preventDefault();
+  dropzone.classList.remove("hover");
+
+  const file = e.dataTransfer.files[0];
+  if (!file) return;
+
+  const title = prompt("タイトル");
+  if (title === null) return;
+
+  const tags = prompt("タグ（スペース区切り）", "");
+  if (tags === null) return;
+
+  const description = prompt("説明", "");
+  if (description === null) return;
+
+  const form = new FormData();
+  form.append("file", file);
+  form.append("meta", JSON.stringify({
+    title,
+    tags,
+    description
+  }));
+
+  await fetch(`${API_BASE}/upload`, {
+    method: "POST",
+    body: form
+  });
+
+  loadWorks();
+});
+
+// ===============================
+// ABOUT / INFO 読み込み
+// ===============================
+async function loadAbout() {
+  const res = await fetch(`${API_BASE}/about`);
+  document.getElementById("about-content").innerHTML = await res.text();
+}
+
+async function loadInfo() {
+  const res = await fetch(`${API_BASE}/works-info`);
+  document.getElementById("info-content").innerHTML = await res.text();
+}
+
+// ===============================
+// ABOUT / INFO 編集
+// ===============================
+document.getElementById("edit-about").addEventListener("click", async () => {
+  const html = prompt("ABOUT を編集", document.getElementById("about-content").innerHTML);
+  if (html === null) return;
+
+  await fetch(`${API_BASE}/about`, {
+    method: "PUT",
+    body: html
+  });
+
   loadAbout();
+});
+
+document.getElementById("edit-info").addEventListener("click", async () => {
+  const html = prompt("制作について を編集", document.getElementById("info-content").innerHTML);
+  if (html === null) return;
+
+  await fetch(`${API_BASE}/works-info`, {
+    method: "PUT",
+    body: html
+  });
+
   loadInfo();
 });
 
-// -------------------------------
-// 管理者モード ON/OFF（ダブルクリック）
-// -------------------------------
-function setupAdminToggle() {
-  const title = document.getElementById("site-title");
-
-  title.addEventListener("dblclick", () => {
-    adminMode = !adminMode;
-    document.body.classList.toggle("admin-mode", adminMode);
-    alert(adminMode ? "管理者モード ON" : "管理者モード OFF");
-  });
-}
-
 // ===============================
-// ナビゲーション
+// 初期ロード
 // ===============================
-function setupNavigation() {
-  const buttons = document.querySelectorAll(".nav-button");
-
-  buttons.forEach(btn => {
-    btn.addEventListener("click", () => {
-      const view = btn.dataset.view;
-
-      document.querySelectorAll(".view").forEach(v => v.classList.add("hidden"));
-      document.getElementById(`view-${view}`).classList.remove("hidden");
-    });
-  });
-
-  document.getElementById("view-gallery").classList.remove("hidden");
-}
-
-// ===============================
-// 🔍 検索
-// ===============================
-function setupSearch() {
-  const input = document.getElementById("search-input");
-
-  input.addEventListener("input", () => {
-    const keyword = input.value.trim().toLowerCase();
-    filterWorks(keyword);
-  });
-}
-
-function filterWorks(keyword) {
-  const cards = document.querySelectorAll(".work-card");
-
-  cards.forEach(card => {
-    const title = card.querySelector(".work-title").textContent.toLowerCase();
-    const tags = card.querySelector(".work-tags").textContent.toLowerCase();
-    const desc = card.querySelector(".work-description").textContent.toLowerCase();
-
-    const hit =
-      title.includes(keyword) ||
-      tags.includes(keyword) ||
-      desc.includes(keyword);
-
-    card.style.display = hit ? "" : "none";
-  });
-}
-
-// ===============================
-// ドラッグ＆ドロップアップロード（JSON + file）
-// ===============================
-function setupDropzone() {
-  const dropzone = document.getElementById("dropzone");
-
-  dropzone.addEventListener("dragover", (e) => {
-    e.preventDefault();
-    dropzone.classList.add("hover");
-  });
-
-  dropzone.addEventListener("dragleave", () => {
-    dropzone.classList.remove("hover");
-  });
-
-  dropzone.addEventListener("drop", async (e) => {
-    e.preventDefault();
-    dropzone.classList.remove("hover");
-
-    if (!adminMode) {
-      alert("管理者モードのみアップロードできます");
-      return;
-    }
-
-    const file = e.dataTransfer.files[0];
-    if (!file) return;
-
-    const title = prompt("タイトルを入力してください", file.name) || file.name;
-    const tags = prompt("タグ（スペース区切り）", "") || "";
-    const description = prompt("概要", "") || "";
-
-    const meta = {
-      title,
-      tags,
-      description
-    };
-
-    const form = new FormData();
-    form.append("meta", JSON.stringify(meta));
-    form.append("file", file);
-
-    try {
-      const res = await fetch(`${API_BASE}/upload`, {
-        method: "POST",
-        body: form
-      });
-
-      const json = await res.json();
-
-      if (!res.ok || !json.ok) {
-        alert("アップロードに失敗しました");
-        return;
-      }
-
-      alert("アップロード完了！");
-      loadWorks();
-    } catch (err) {
-      console.error(err);
-      alert("アップロード中にエラーが発生しました");
-    }
-  });
-}
-
-// ===============================
-// WORKS 読み込み
-// ===============================
-async function loadWorks() {
-  const container = document.getElementById("works-list");
-  container.innerHTML = "読み込み中…";
-
-  try {
-    const res = await fetch(`${API_BASE}/works`);
-    const list = await res.json();
-
-    container.innerHTML = "";
-
-    list.forEach(item => {
-      const card = document.createElement("div");
-      card.className = "work-card";
-
-      const img = document.createElement("img");
-      img.className = "work-image";
-      img.src = item.image;
-      img.alt = item.title || "";
-      img.addEventListener("click", () => openImageViewer(item));
-
-      const body = document.createElement("div");
-      body.className = "work-body";
-
-      const titleEl = document.createElement("p");
-      titleEl.className = "work-title";
-      titleEl.textContent = item.title || "(無題)";
-
-      const tagsEl = document.createElement("p");
-      tagsEl.className = "work-tags";
-      tagsEl.textContent = (item.tags || []).join(" ");
-
-      const descEl = document.createElement("p");
-      descEl.className = "work-description";
-      descEl.textContent = item.description || "";
-
-      const actions = document.createElement("div");
-      actions.className = "work-actions admin-only";
-
-      const editBtn = document.createElement("button");
-      editBtn.className = "edit-button";
-      editBtn.textContent = "編集";
-      editBtn.addEventListener("click", () => editWork(item));
-
-      const deleteBtn = document.createElement("button");
-      deleteBtn.className = "delete-button";
-      deleteBtn.textContent = "×";
-      deleteBtn.addEventListener("click", () => deleteWork(item));
-
-      actions.appendChild(editBtn);
-      actions.appendChild(deleteBtn);
-
-      body.appendChild(titleEl);
-      body.appendChild(tagsEl);
-      body.appendChild(descEl);
-      body.appendChild(actions);
-
-      card.appendChild(img);
-      card.appendChild(body);
-
-      container.appendChild(card);
-    });
-
-    if (adminMode) {
-      document.body.classList.add("admin-mode");
-    }
-
-  } catch (err) {
-    console.error(err);
-    container.innerHTML = "読み込みに失敗しました";
-  }
-}
-
-// ===============================
-// WORKS 編集
-// ===============================
-async function editWork(item) {
-  if (!adminMode) {
-    alert("管理者モードのみ編集できます");
-    return;
-  }
-
-  const newTitle = prompt("タイトル", item.title || "") ?? item.title;
-  const newTagsStr = prompt("タグ（スペース区切り）", (item.tags || []).join(" ")) ?? (item.tags || []).join(" ");
-  const newDesc = prompt("概要", item.description || "") ?? item.description;
-
-  const newTags = newTagsStr.trim() ? newTagsStr.trim().split(/\s+/) : [];
-
-  try {
-    const res = await fetch(`${API_BASE}/works/${item.id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        title: newTitle,
-        tags: newTags,
-        description: newDesc
-      })
-    });
-
-    if (!res.ok) {
-      alert("更新に失敗しました");
-      return;
-    }
-
-    loadWorks();
-
-  } catch (err) {
-    console.error(err);
-    alert("更新中にエラーが発生しました");
-  }
-}
-
-// ===============================
-// WORKS 削除
-// ===============================
-async function deleteWork(item) {
-  if (!adminMode) {
-    alert("管理者モードのみ削除できます");
-    return;
-  }
-
-  if (!confirm("本当に削除しますか？")) return;
-
-  try {
-    const res = await fetch(`${API_BASE}/works/${item.id}`, {
-      method: "DELETE"
-    });
-
-    if (!res.ok) {
-      alert("削除に失敗しました");
-      return;
-    }
-
-    alert("削除しました");
-    loadWorks();
-
-  } catch (err) {
-    console.error(err);
-    alert("削除中にエラーが発生しました");
-  }
-}
-
-// ===============================
-// ABOUT 読み込み・編集
-// ===============================
-async function loadAbout() {
-  const el = document.getElementById("about-content");
-
-  try {
-    const res = await fetch(`${API_BASE}/about`);
-    el.innerHTML = await res.text();
-  } catch {
-    el.textContent = "読み込みに失敗しました";
-  }
-
-  document.getElementById("edit-about").addEventListener("click", async () => {
-    if (!adminMode) return alert("管理者モードのみ編集できます");
-
-    const next = prompt("ABOUT の内容（HTML可）", el.innerHTML) ?? el.innerHTML;
-
-    try {
-      const res = await fetch(`${API_BASE}/about`, {
-        method: "PUT",
-        body: next
-      });
-
-      if (!res.ok) return alert("保存に失敗しました");
-
-      el.innerHTML = next;
-
-    } catch {
-      alert("保存中にエラーが発生しました");
-    }
-  });
-}
-
-// ===============================
-// 制作について 読み込み・編集
-// ===============================
-async function loadInfo() {
-  const el = document.getElementById("info-content");
-
-  try {
-    const res = await fetch(`${API_BASE}/works-info`);
-    el.innerHTML = await res.text();
-  } catch {
-    el.textContent = "読み込みに失敗しました";
-  }
-
-  document.getElementById("edit-info").addEventListener("click", async () => {
-    if (!adminMode) return alert("管理者モードのみ編集できます");
-
-    const next = prompt("制作について（HTML可）", el.innerHTML) ?? el.innerHTML;
-
-    try {
-      const res = await fetch(`${API_BASE}/works-info`, {
-        method: "PUT",
-        body: next
-      });
-
-      if (!res.ok) return alert("保存に失敗しました");
-
-      el.innerHTML = next;
-
-    } catch {
-      alert("保存中にエラーが発生しました");
-    }
-  });
-}
-
-// ===============================
-// 左サイドバー（1秒後に閉じる & ホバーで展開）
-// ===============================
-function setupSidebar() {
-  const sidebar = document.getElementById("sidebar");
-  if (!sidebar) return;
-
-  sidebar.classList.add("sidebar-open");
-
-  setTimeout(() => {
-    sidebar.classList.remove("sidebar-open");
-    sidebar.classList.add("sidebar-collapsed");
-  }, 1000);
-
-  sidebar.addEventListener("mouseenter", () => {
-    sidebar.classList.add("sidebar-open");
-    sidebar.classList.remove("sidebar-collapsed");
-  });
-
-  sidebar.addEventListener("mouseleave", () => {
-    sidebar.classList.remove("sidebar-open");
-    sidebar.classList.add("sidebar-collapsed");
-  });
-}
-
-// ===============================
-/* 画像ビューア（右側スライド表示） */
-// ===============================
-let viewer = null;
-let viewerImg = null;
-let viewerTags = null;
-let viewerDesc = null;
-
-function setupImageViewer() {
-  viewer = document.getElementById("image-viewer");
-  viewerImg = viewer.querySelector(".viewer-image");
-  viewerTags = viewer.querySelector(".viewer-tags");
-  viewerDesc = viewer.querySelector(".viewer-description");
-
-  const closeBtn = viewer.querySelector(".viewer-close");
-  closeBtn.addEventListener("click", () => {
-    viewer.classList.remove("open");
-  });
-}
-
-function openImageViewer(item) {
-  viewerImg.src = item.image;
-  viewerTags.textContent = (item.tags || []).join(" ");
-  viewerDesc.textContent = item.description || "";
-
-  viewer.classList.add("open");
-}
+loadWorks();
+loadAbout();
+loadInfo();
