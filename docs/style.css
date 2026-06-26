@@ -20,6 +20,7 @@ body {
   font-size: 14px;
   color: #4fc3f7;
   cursor: pointer;
+  display: none; /* ← 検索中だけ表示 */
 }
 .show-all:hover {
   text-decoration: underline;
@@ -37,22 +38,44 @@ body {
   z-index: 1000;
 }
 
+/* ← 初回ロード時は全開 → 1.5秒後に1cmだけ残す */
 .sidebar-inner {
   position: absolute;
   top: 0;
-  left: -180px;
+  left: 0; /* ← 初回は全開 */
   width: 180px;
   height: 100%;
   background: #1a1a1a;
   color: #fff;
   padding: 20px;
   box-sizing: border-box;
-  transition: left 0.2s ease;
+  transition: left 0.25s ease;
   border-right: 1px solid #333;
 }
 
+/* ← JS で 1.5秒後に left:-140px に移動させる */
+
+/* ホバーで全開 */
 #sidebar:hover .sidebar-inner {
   left: 0;
+}
+
+/* サイドバー内リンク */
+.sidebar-nav a {
+  display: block;
+  color: #ddd;
+  text-decoration: none;
+  margin-bottom: 12px;
+  font-size: 14px;
+  padding: 4px 6px;
+  border-radius: 4px;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+/* ピアノ鍵盤風ホバー */
+.sidebar-nav a:hover {
+  background: #e5e5e5;
+  color: #111;
 }
 
 /* ===========================
@@ -167,24 +190,25 @@ body {
 }
 
 /* ===========================
-   🔍 検索アイコン
+   🔍 検索アイコン（白丸＋黒虫眼鏡）
 =========================== */
 #search-button {
   position: fixed;
-  bottom: 20px;
-  right: 20px;
-  width: 48px;
-  height: 48px;
-  background: #e53935;
+  bottom: 50px;
+  right: 70px;
+  width: 68px;
+  height: 68px;
+  background: #fff;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #fff;
-  font-size: 22px;
+  color: #111;
+  font-size: 28px;
   cursor: pointer;
   z-index: 999999;
   transition: transform 0.15s ease;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
 }
 
 #search-button:hover {
@@ -194,8 +218,8 @@ body {
 /* 🔍 検索バー */
 #search-bar {
   position: fixed;
-  bottom: 20px;
-  right: 80px;
+  bottom: 50px;
+  right: 150px;
   width: 0;
   opacity: 0;
   padding: 10px;
