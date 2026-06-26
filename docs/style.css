@@ -1,5 +1,5 @@
 /* ===============================
-   全体レイアウト
+   全体
 =============================== */
 * {
   box-sizing: border-box;
@@ -8,9 +8,10 @@
 html, body {
   margin: 0;
   padding: 0;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family: system-ui, sans-serif;
   background: #111;
-  color: #f5f5f5;
+  color: #eee;
+  overflow-x: hidden;
 }
 
 /* ===============================
@@ -28,15 +29,14 @@ html, body {
   z-index: 10;
 }
 
-/* Myportfolio（タイトル） */
 #site-title {
   margin: 0;
   font-size: 20px;
-  cursor: default;   /* ← ホバーしても矢印のまま */
-  color: #fff;       /* ← 白文字 */
+  color: #fff;
+  cursor: default;
 }
 
-/* 検索バー（右上） */
+/* 検索バー */
 .search-box {
   display: flex;
   align-items: center;
@@ -45,14 +45,6 @@ html, body {
   border-radius: 999px;
   background: #222;
   border: 1px solid #444;
-}
-
-.search-box i,
-.search-box .magnifying_glass {
-  display: inline-block;
-  width: 16px;
-  height: 16px;
-  color: #ccc;
 }
 
 #search-input {
@@ -64,10 +56,6 @@ html, body {
   min-width: 180px;
 }
 
-#search-input::placeholder {
-  color: #777;
-}
-
 /* ===============================
    レイアウト
 =============================== */
@@ -77,46 +65,40 @@ html, body {
 }
 
 /* ===============================
-   サイドバー
+   左サイドバー（1秒後に隠れる）
 =============================== */
 .sidebar {
   width: 220px;
+  background: #181818;
   border-right: 1px solid #333;
   padding: 16px;
-  background: #181818;
   display: flex;
   flex-direction: column;
   gap: 16px;
 
-  /* サイドバーのアニメーション用 */
-  position: relative;
+  position: fixed;
+  top: 56px;
+  bottom: 0;
+  left: 0;
+
   transition: transform 0.3s ease;
+  z-index: 20;
 }
 
-/* 展開状態 */
+/* 初期状態：展開 */
 .sidebar.sidebar-open {
   transform: translateX(0);
 }
 
-/* 閉じた状態（10px だけ見えてるイメージ） */
+/* 隠れ状態：1cm（10px）だけ見せる */
 .sidebar.sidebar-collapsed {
   transform: translateX(-190px);
 }
 
-.title-button {
-  font-size: 32px;
-  font-weight: bold;
-  background: none;
-  border: none;
-  padding: 0;
-  cursor: default;
-}
-
+/* サイドバーのボタン */
 .nav-button {
-  display: block;
   width: 100%;
   padding: 8px 10px;
-  margin-bottom: 8px;
   border-radius: 6px;
   border: 1px solid #444;
   background: #222;
@@ -130,7 +112,7 @@ html, body {
   background: #2c2c2c;
 }
 
-/* ご相談はコチラボタン */
+/* ご相談はこちら（ワインレッド） */
 .sidebar-bottom {
   margin-top: auto;
 }
@@ -139,13 +121,14 @@ html, body {
   width: 100%;
   padding: 10px 12px;
   border-radius: 999px;
-  background: #8b1e3f; /* ワインレッド */
-  color: #fff;         /* 白文字 */
+  background: #8b1e3f;
+  color: #fff;
   border: none;
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
 }
+
 .consult-btn:hover {
   background: #7a1937;
 }
@@ -161,7 +144,8 @@ html, body {
 =============================== */
 .main {
   flex: 1;
-  padding: 16px 24px;
+  padding: 24px;
+  margin-left: 220px;
 }
 
 /* ドロップゾーン */
@@ -189,7 +173,7 @@ html, body {
 }
 
 /* ===============================
-   WORKS グリッド
+   画像グリッド
 =============================== */
 .works-grid {
   display: grid;
@@ -197,22 +181,25 @@ html, body {
   gap: 16px;
 }
 
-/* カード */
 .work-card {
   background: #181818;
   border-radius: 8px;
   overflow: hidden;
   border: 1px solid #333;
-  display: flex;
-  flex-direction: column;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.work-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
 }
 
 .work-image {
   width: 100%;
-  display: block;
+  height: 160px;
   object-fit: cover;
   background: #000;
-  cursor: pointer; /* ← 画像クリックできるように */
 }
 
 .work-body {
@@ -254,22 +241,14 @@ html, body {
   cursor: pointer;
 }
 
-.edit-button:hover {
-  background: #2c2c2c;
-}
-
 .delete-button {
   padding: 4px 8px;
   font-size: 11px;
   border-radius: 4px;
-  border: none;
   background: #b00;
   color: #fff;
+  border: none;
   cursor: pointer;
-}
-
-.delete-button:hover {
-  background: #c22;
 }
 
 /* ===============================
@@ -280,11 +259,6 @@ html, body {
   align-items: center;
   justify-content: space-between;
   margin-bottom: 8px;
-}
-
-.section-header h2 {
-  margin: 0;
-  font-size: 16px;
 }
 
 .editable-block {
@@ -308,84 +282,64 @@ body.admin-mode .admin-only {
 }
 
 /* ===============================
-   スクロールバー（軽く）
+   右側：画像拡大ビュー（スライド表示）
+=============================== */
+.image-viewer {
+  position: fixed;
+  top: 56px;
+  right: 0;
+  width: 380px;
+  height: calc(100vh - 56px);
+  background: #1a1a1a;
+  border-left: 1px solid #333;
+  transform: translateX(100%);
+  transition: transform 0.3s ease;
+  z-index: 30;
+  padding: 16px;
+  overflow-y: auto;
+}
+
+.image-viewer.open {
+  transform: translateX(0);
+}
+
+.viewer-close {
+  background: #b00;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 6px 10px;
+  cursor: pointer;
+  margin-bottom: 12px;
+}
+
+.viewer-image {
+  width: 100%;
+  border-radius: 6px;
+  margin-bottom: 12px;
+}
+
+.viewer-info {
+  font-size: 13px;
+}
+
+.viewer-tags {
+  margin-bottom: 8px;
+  color: #ccc;
+}
+
+.viewer-description {
+  color: #ddd;
+}
+
+/* ===============================
+   スクロールバー
 =============================== */
 ::-webkit-scrollbar {
   width: 8px;
 }
 
-::-webkit-scrollbar-track {
-  background: #111;
-}
-
 ::-webkit-scrollbar-thumb {
   background: #444;
   border-radius: 4px;
-}
-
-/* ===============================
-   画像ビューア（オーバーレイ）
-=============================== */
-#image-viewer {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.8);
-  display: none;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999;
-}
-
-#image-viewer.open {
-  display: flex;
-}
-
-.viewer-inner {
-  display: flex;
-  gap: 16px;
-  max-width: 900px;
-  width: 90%;
-  background: #222;
-  padding: 16px;
-  border-radius: 8px;
-}
-
-.viewer-image {
-  max-width: 60%;
-  max-height: 80vh;
-  object-fit: contain;
-  border-radius: 4px;
-}
-
-.viewer-info {
-  flex: 1;
-  color: #eee;
-}
-
-.viewer-title {
-  font-size: 20px;
-  margin-bottom: 8px;
-}
-
-.viewer-tags {
-  font-size: 12px;
-  color: #ccc;
-  margin-bottom: 8px;
-}
-
-.viewer-description {
-  font-size: 14px;
-}
-
-.viewer-close {
-  position: absolute;
-  top: 16px;
-  right: 16px;
-  background: #b00;
-  color: #fff;
-  border: none;
-  border-radius: 50%;
-  width: 32px;
-  height: 32px;
-  cursor: pointer;
 }
