@@ -226,17 +226,13 @@ body {
   align-items: center;
   justify-content: center;
 }
-
+/* 虫眼鏡アイコン */
+#search-button .fa-solid {
+  font-size: 26px;   /* ← アイコンの大きさ（変えてOK） */
+  color: #777;       /* ← 無彩色グレー（ここも好みで変えてOK） */
+}
 #search-button:hover {
   transform: scale(1.1);
-}
-
-/* ===========================
-   CSSだけで描く虫眼鏡（壊れない安定版）
-=========================== */
-#search-button i {
-    font-size: 28px;
-    color: #777;
 }
 
 /* ===========================
