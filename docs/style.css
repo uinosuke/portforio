@@ -99,14 +99,13 @@ html, body {
 .nav-item {
   display: block;
   width: 100%;
-  padding: 14px 18px;
+  padding: 14px 28px;
   background: transparent;
   color: #eee;
   font-size: 14px;
   text-decoration: none;
   cursor: pointer;
   transition: background 0.15s ease;
-  text-align: center;
 }
 
 .nav-item:hover {
