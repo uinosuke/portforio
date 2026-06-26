@@ -10,16 +10,20 @@ window.addEventListener("hashchange", renderPage);
 window.addEventListener("load", () => {
   renderPage();
 
-  // 初回だけサイドバーを1cmだけ残す
+  /* ============================
+     初回だけサイドバーを1cmだけ残す
+  ============================ */
   const sidebar = document.getElementById("sidebar-inner");
+
+  // 初回ロード時は全開（CSSで left:0 になっている）
+  // 1.5秒後に 1cm の位置へ閉じる
   setTimeout(() => {
-    sidebar.style.left = "-140px";
+    sidebar.style.left = "-140px"; // ← 1cm 見える位置
   }, 1500);
 
-  // ホバー解除で完全に隠す
-  document.getElementById("sidebar").addEventListener("mouseleave", () => {
-    sidebar.style.left = "-180px";
-  });
+  // ★ 重要 ★
+  // 「mouseleave で -180px に戻す」処理は削除！
+  // これがあるとホバーしても展開しなくなるため。
 });
 
 /* ============================================
