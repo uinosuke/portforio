@@ -87,6 +87,15 @@ html, body {
   gap: 16px;
 }
 
+.title-button {
+  font-size: 32px;
+  font-weight: bold;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
 .nav-button {
   display: block;
   width: 100%;
