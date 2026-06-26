@@ -88,6 +88,7 @@ html, body {
   display: flex;
   flex-direction: column;
   gap: 0;
+  padding: 10px 0 40px 0px;
   position: fixed;
   top: 56px;
   bottom: 0;
@@ -105,6 +106,7 @@ html, body {
   text-decoration: none;
   cursor: pointer;
   transition: background 0.15s ease;
+  text-align: center;
 }
 
 .nav-item:hover {
@@ -114,7 +116,7 @@ html, body {
 .sidebar-bottom { margin-top: auto; }
 
 .consult-btn {
-  width: 100%;
+  width: 90%;
   padding: 10px 12px;
   border-radius: 999px;
   background: #8b1e3f;
@@ -123,6 +125,8 @@ html, body {
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
+  display: block;
+  margin: 0 auto;
 }
 
 .consult-btn:hover { background: #7a1937; }
