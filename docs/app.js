@@ -19,6 +19,10 @@ const btnNext = document.getElementById("viewer-next");
 
 const dropzone = document.getElementById("dropzone");
 
+// 検索
+const searchInput = document.getElementById("search-input");
+const searchClear = document.getElementById("search-clear");
+
 // モーダル
 const modal = document.getElementById("edit-modal");
 const modalTitle = document.getElementById("modal-title");
@@ -103,6 +107,9 @@ async function loadWorks() {
 
     worksList.appendChild(card);
   });
+
+  // 読み込み後に検索フィルタを再適用
+  filterWorks(searchInput.value.trim());
 }
 
 // ===============================
@@ -115,8 +122,12 @@ function openViewer(index) {
   viewerImage.src = item.image;
   viewerTitle.textContent = item.title;
 
-  // 丸ポチタグ生成
-  viewerTags.innerHTML = item.tags
+  // タグ（丸ポチ）
+  const tagsArray = Array.isArray(item.tags)
+    ? item.tags
+    : item.tags.split(" ").filter(t => t.trim() !== "");
+
+  viewerTags.innerHTML = tagsArray
     .map(tag => `<span class="tag">${tag}</span>`)
     .join("");
 
@@ -336,6 +347,47 @@ if (btnEditInfo) {
   btnEditInfo.addEventListener("click", () => {
     const current = document.getElementById("info-content").innerHTML;
     openModal("info", current);
+  });
+}
+
+// ===============================
+// 🔍 検索機能（タイトル / タグ / 概要）
+// ===============================
+searchInput.addEventListener("input", () => {
+  const keyword = searchInput.value.trim();
+
+  // × ボタン表示切替
+  searchClear.style.display = keyword ? "block" : "none";
+
+  filterWorks(keyword);
+});
+
+searchClear.addEventListener("click", () => {
+  searchInput.value = "";
+  searchClear.style.display = "none";
+  filterWorks("");
+});
+
+// フィルタ処理
+function filterWorks(keyword) {
+  const cards = document.querySelectorAll(".work-card");
+  const k = keyword.toLowerCase();
+
+  cards.forEach((card, index) => {
+    const item = works[index];
+
+    const title = item.title.toLowerCase();
+    const tags = Array.isArray(item.tags)
+      ? item.tags.join(" ").toLowerCase()
+      : item.tags.toLowerCase();
+    const desc = item.description.toLowerCase();
+
+    const match =
+      title.includes(k) ||
+      tags.includes(k) ||
+      desc.includes(k);
+
+    card.style.display = match ? "block" : "none";
   });
 }
 
