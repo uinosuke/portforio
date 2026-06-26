@@ -13,6 +13,8 @@ document.addEventListener("DOMContentLoaded", () => {
   setupNavigation();
   setupDropzone();
   setupSearch();
+  setupSidebar();
+  setupImageViewer();
   loadWorks();
   loadAbout();
   loadInfo();
@@ -116,7 +118,6 @@ function setupDropzone() {
     const tags = prompt("タグ（スペース区切り）", "") || "";
     const description = prompt("概要", "") || "";
 
-    // JSON + file を FormData で送る
     const meta = {
       title,
       tags,
@@ -170,6 +171,7 @@ async function loadWorks() {
       img.className = "work-image";
       img.src = item.image;
       img.alt = item.title || "";
+      img.addEventListener("click", () => openImageViewer(item));
 
       const body = document.createElement("div");
       body.className = "work-body";
@@ -194,7 +196,13 @@ async function loadWorks() {
       editBtn.textContent = "編集";
       editBtn.addEventListener("click", () => editWork(item));
 
+      const deleteBtn = document.createElement("button");
+      deleteBtn.className = "delete-button";
+      deleteBtn.textContent = "×";
+      deleteBtn.addEventListener("click", () => deleteWork(item));
+
       actions.appendChild(editBtn);
+      actions.appendChild(deleteBtn);
 
       body.appendChild(titleEl);
       body.appendChild(tagsEl);
@@ -253,6 +261,36 @@ async function editWork(item) {
   } catch (err) {
     console.error(err);
     alert("更新中にエラーが発生しました");
+  }
+}
+
+// ===============================
+// WORKS 削除
+// ===============================
+async function deleteWork(item) {
+  if (!adminMode) {
+    alert("管理者モードのみ削除できます");
+    return;
+  }
+
+  if (!confirm("本当に削除しますか？")) return;
+
+  try {
+    const res = await fetch(`${API_BASE}/works/${item.id}`, {
+      method: "DELETE"
+    });
+
+    if (!res.ok) {
+      alert("削除に失敗しました");
+      return;
+    }
+
+    alert("削除しました");
+    loadWorks();
+
+  } catch (err) {
+    console.error(err);
+    alert("削除中にエラーが発生しました");
   }
 }
 
@@ -322,4 +360,74 @@ async function loadInfo() {
       alert("保存中にエラーが発生しました");
     }
   });
+}
+
+// ===============================
+// サイドバー（1秒後にシュッと閉じる & ホバーで展開）
+// ===============================
+function setupSidebar() {
+  const sidebar = document.getElementById("sidebar");
+  if (!sidebar) return;
+
+  // 初期状態：展開
+  sidebar.classList.add("sidebar-open");
+
+  // 1秒後に閉じる
+  setTimeout(() => {
+    sidebar.classList.remove("sidebar-open");
+    sidebar.classList.add("sidebar-collapsed");
+  }, 1000);
+
+  // ホバーで展開
+  sidebar.addEventListener("mouseenter", () => {
+    sidebar.classList.add("sidebar-open");
+    sidebar.classList.remove("sidebar-collapsed");
+  });
+
+  sidebar.addEventListener("mouseleave", () => {
+    sidebar.classList.remove("sidebar-open");
+    sidebar.classList.add("sidebar-collapsed");
+  });
+}
+
+// ===============================
+// 画像ビューア（Google画像っぽく拡大表示）
+// ===============================
+let imageViewerEl = null;
+let imageViewerImg = null;
+let imageViewerTitle = null;
+let imageViewerTags = null;
+let imageViewerDesc = null;
+
+function setupImageViewer() {
+  imageViewerEl = document.getElementById("image-viewer");
+  if (!imageViewerEl) return;
+
+  imageViewerImg = imageViewerEl.querySelector(".viewer-image");
+  imageViewerTitle = imageViewerEl.querySelector(".viewer-title");
+  imageViewerTags = imageViewerEl.querySelector(".viewer-tags");
+  imageViewerDesc = imageViewerEl.querySelector(".viewer-description");
+
+  const closeBtn = imageViewerEl.querySelector(".viewer-close");
+  closeBtn.addEventListener("click", () => {
+    imageViewerEl.classList.remove("open");
+  });
+
+  imageViewerEl.addEventListener("click", (e) => {
+    if (e.target === imageViewerEl) {
+      imageViewerEl.classList.remove("open");
+    }
+  });
+}
+
+function openImageViewer(item) {
+  if (!imageViewerEl) return;
+
+  imageViewerImg.src = item.image;
+  imageViewerImg.alt = item.title || "";
+  imageViewerTitle.textContent = item.title || "(無題)";
+  imageViewerTags.textContent = (item.tags || []).join(" ");
+  imageViewerDesc.textContent = item.description || "";
+
+  imageViewerEl.classList.add("open");
 }
