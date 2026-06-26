@@ -1,91 +1,105 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <title>Myportfolio</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Portfolio</title>
 
-  <!-- ★ CSS（GitHub Pages で確実に読み込まれるパス） -->
-  <link rel="stylesheet" href="./style.css">
-
-  <!-- ★ FontAwesome（虫眼鏡アイコン復活） -->
-<link
-  rel="stylesheet"
-  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
-  crossorigin="anonymous"
-/>
-
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-  <!-- ヘッダー -->
+  <!-- ===============================
+       ヘッダー
+  =============================== -->
   <header class="header">
-    <button id="site-title" class="title-button">Myportfolio</button>
-    
-    <!-- 🔍 検索バー -->
+    <h1 id="site-title">MyPortfolio</h1>
+
     <div class="search-box">
-      <i class="fa-solid fa-magnifying-glass"></i>
-      <input id="search-input" type="text" placeholder="検索（タイトル・タグ）">
+      <span class="magnifying_glass">🔍</span>
+      <input id="search-input" type="text" placeholder="検索…" />
     </div>
   </header>
 
-  <!-- レイアウト -->
-  <main class="layout">
+  <!-- ===============================
+       レイアウト
+  =============================== -->
+  <div class="layout">
 
-    <!-- サイドバー -->
-    <aside class="sidebar">
-      <nav>
-        <button class="nav-button" data-view="gallery">WORKS</button>
-        <button class="nav-button" data-view="about">ABOUT</button>
-        <button class="nav-button" data-view="info">制作について</button>
-      </nav>
+    <!-- ===============================
+         サイドバー
+    =============================== -->
+    <aside id="sidebar" class="sidebar">
+      <button class="nav-button" data-view="gallery">ギャラリー</button>
+      <button class="nav-button" data-view="about">ABOUT</button>
+      <button class="nav-button" data-view="info">制作について</button>
 
-      <!-- ご相談はコチラ（復活） -->
       <div class="sidebar-bottom">
         <button class="consult-btn">ご相談はコチラ</button>
       </div>
 
-      <!-- 管理者モード表示 -->
       <div id="admin-panel" class="admin-only">
-        <h2>管理者モード</h2>
-        <p>画像を右側のエリアにドラッグ＆ドロップするとアップロードできます。</p>
+        管理者モード中
       </div>
     </aside>
 
-    <!-- メイン領域 -->
-    <section class="main">
+    <!-- ===============================
+         メイン
+    =============================== -->
+    <main class="main">
 
       <!-- ドロップゾーン -->
       <div id="dropzone" class="dropzone admin-only">
-        ここに画像をドラッグ＆ドロップするとアップロードされます
+        ここに画像をドラッグ＆ドロップ
       </div>
 
-      <!-- WORKS -->
-      <section id="view-gallery" class="view">
+      <!-- ====== VIEW: ギャラリー ====== -->
+      <div id="view-gallery" class="view">
         <div id="works-list" class="works-grid"></div>
-      </section>
+      </div>
 
-      <!-- ABOUT -->
-      <section id="view-about" class="view hidden">
+      <!-- ====== VIEW: ABOUT ====== -->
+      <div id="view-about" class="view hidden">
         <div class="section-header">
           <h2>ABOUT</h2>
-          <button id="edit-about" class="admin-only edit-button">✏ 編集</button>
+          <button id="edit-about" class="edit-button admin-only">編集</button>
         </div>
         <div id="about-content" class="editable-block"></div>
-      </section>
+      </div>
 
-      <!-- 制作について -->
-      <section id="view-info" class="view hidden">
+      <!-- ====== VIEW: 制作について ====== -->
+      <div id="view-info" class="view hidden">
         <div class="section-header">
           <h2>制作について</h2>
-          <button id="edit-info" class="admin-only edit-button">✏ 編集</button>
+          <button id="edit-info" class="edit-button admin-only">編集</button>
         </div>
         <div id="info-content" class="editable-block"></div>
-      </section>
+      </div>
 
-    </section>
-  </main>
+    </main>
+  </div>
 
-  <!-- JS（GitHub Pages で確実に読み込まれるパス） -->
-  <script src="./app.js"></script>
+  <!-- ===============================
+       画像ビューア（Google画像風）
+  =============================== -->
+  <div id="image-viewer">
+    <button class="viewer-close">×</button>
+
+    <div class="viewer-inner">
+      <img class="viewer-image" src="" alt="" />
+
+      <div class="viewer-info">
+        <div class="viewer-title"></div>
+        <div class="viewer-tags"></div>
+        <div class="viewer-description"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===============================
+       JS
+  =============================== -->
+  <script src="app.js"></script>
+
 </body>
 </html>
