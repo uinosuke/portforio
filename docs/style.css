@@ -15,8 +15,18 @@ body {
   font-weight: 600;
 }
 
+.show-all {
+  margin-left: 12px;
+  font-size: 14px;
+  color: #4fc3f7;
+  cursor: pointer;
+}
+.show-all:hover {
+  text-decoration: underline;
+}
+
 /* ===========================
-   左サイドバー（ホバーで展開）
+   左サイドバー
 =========================== */
 #sidebar {
   position: fixed;
@@ -45,40 +55,6 @@ body {
   left: 0;
 }
 
-.sidebar-title {
-  font-size: 15px;
-  margin-bottom: 20px;
-}
-
-.sidebar-nav a {
-  display: block;
-  color: #ddd;
-  text-decoration: none;
-  margin-bottom: 12px;
-  font-size: 14px;
-}
-
-.sidebar-nav a:hover {
-  color: #fff;
-}
-
-.sidebar-bottom {
-  position: absolute;
-  bottom: 20px;
-  left: 20px;
-  right: 20px;
-}
-
-.consult-btn {
-  width: 100%;
-  padding: 8px 0;
-  background: #e53935;
-  border: none;
-  border-radius: 4px;
-  color: #fff;
-  cursor: pointer;
-}
-
 /* ===========================
    メイン
 =========================== */
@@ -88,7 +64,7 @@ body {
 }
 
 /* ===========================
-   6列タイル（Google画像検索風）
+   6列タイル
 =========================== */
 .masonry {
   column-count: 6;
@@ -113,16 +89,15 @@ body {
 }
 
 /* ===========================
-   詳細ビュー（オーバーレイ）
+   詳細ビュー
 =========================== */
 #overlay {
   position: fixed;
   inset: 0;
   display: none;
-  z-index: 2000;
+  z-index: 999999;
 }
 
-/* 暗転背景 */
 #overlay-bg {
   position: absolute;
   inset: 0;
@@ -131,7 +106,6 @@ body {
   transition: opacity 0.2s ease;
 }
 
-/* 左側：拡大画像（3/5） */
 #overlay-left {
   position: absolute;
   top: 50%;
@@ -140,7 +114,6 @@ body {
   transform: translateY(-50%);
   text-align: center;
   opacity: 0;
-  transform-origin: center;
   transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
@@ -150,7 +123,6 @@ body {
   border-radius: 6px;
 }
 
-/* 右側：詳細パネル（2/5） */
 #overlay-right {
   position: absolute;
   top: 0;
@@ -178,19 +150,6 @@ body {
   right: 0;
 }
 
-/* ===========================
-   詳細パネル内
-=========================== */
-.detail-block {
-  margin-bottom: 24px;
-}
-
-.detail-title {
-  font-size: 20px;
-  margin: 0 0 10px;
-  cursor: pointer;
-}
-
 /* Lightroom風タグ */
 .tag-list {
   display: flex;
@@ -198,7 +157,7 @@ body {
   gap: 6px;
 }
 
-.tag-list .tag {
+.tag {
   padding: 4px 10px;
   background: #2c2c2c;
   border-radius: 20px;
@@ -207,26 +166,48 @@ body {
   border: 1px solid #444;
 }
 
-/* 編集モード */
-#detail-edit-mode {
-  display: none;
-}
-
-#detail-edit-mode input,
-#detail-edit-mode textarea {
-  width: 100%;
-  background: #222;
-  color: #eee;
-  border: 1px solid #444;
-  padding: 8px;
-  border-radius: 4px;
-}
-
-#detail-edit-mode button {
-  margin-top: 10px;
-  padding: 8px 16px;
-  background: #444;
-  border: none;
+/* ===========================
+   🔍 検索アイコン
+=========================== */
+#search-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 48px;
+  height: 48px;
+  background: #e53935;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   color: #fff;
+  font-size: 22px;
   cursor: pointer;
+  z-index: 999999;
+  transition: transform 0.15s ease;
+}
+
+#search-button:hover {
+  transform: scale(1.1);
+}
+
+/* 🔍 検索バー */
+#search-bar {
+  position: fixed;
+  bottom: 20px;
+  right: 80px;
+  width: 0;
+  opacity: 0;
+  padding: 10px;
+  border-radius: 6px;
+  border: none;
+  background: #222;
+  color: #fff;
+  transition: width 0.25s ease, opacity 0.25s ease;
+  z-index: 999999;
+}
+
+#search-bar.show {
+  width: 240px;
+  opacity: 1;
 }
