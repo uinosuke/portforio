@@ -82,11 +82,10 @@ html, body {
   z-index: 9000;
 }
 
-.nav-button,
-.nav-link {
+.nav-item {
   display: block;
   width: 100%;
-  padding: 14px 18px; /* ← 行の内側余白はここで調整 */
+  padding: 14px 18px;
   background: transparent;
   color: #eee;
   font-size: 14px;
@@ -95,9 +94,8 @@ html, body {
   transition: background 0.15s ease;
 }
 
-.nav-button:hover,
-.nav-link:hover {
-  background: rgba(255, 255, 255, 0.12); /* ← ピアノ鍵盤みたいに光る */
+.nav-item:hover {
+  background: rgba(255, 255, 255, 0.12);
 }
 
 
