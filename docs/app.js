@@ -363,22 +363,19 @@ async function loadInfo() {
 }
 
 // ===============================
-// サイドバー（1秒後にシュッと閉じる & ホバーで展開）
+// サイドバー（1秒後に閉じる & ホバーで展開）
 // ===============================
 function setupSidebar() {
   const sidebar = document.getElementById("sidebar");
   if (!sidebar) return;
 
-  // 初期状態：展開
   sidebar.classList.add("sidebar-open");
 
-  // 1秒後に閉じる
   setTimeout(() => {
     sidebar.classList.remove("sidebar-open");
     sidebar.classList.add("sidebar-collapsed");
   }, 1000);
 
-  // ホバーで展開
   sidebar.addEventListener("mouseenter", () => {
     sidebar.classList.add("sidebar-open");
     sidebar.classList.remove("sidebar-collapsed");
@@ -391,7 +388,7 @@ function setupSidebar() {
 }
 
 // ===============================
-// 画像ビューア（Google画像っぽく拡大表示）
+// 画像ビューア（Google画像風）
 // ===============================
 let imageViewerEl = null;
 let imageViewerImg = null;
