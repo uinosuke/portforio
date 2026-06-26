@@ -22,20 +22,20 @@
   </header>
 
   <!-- ===============================
-       レイアウト
+       レイアウト（サイドバー＋メイン）
   =============================== -->
   <div class="layout">
 
     <!-- ===============================
-         サイドバー
+         左サイドバー（1秒後に隠れる）
     =============================== -->
     <aside id="sidebar" class="sidebar">
-      <button class="nav-button" data-view="gallery">ギャラリー</button>
+      <button class="nav-button" data-view="gallery">画像一覧</button>
       <button class="nav-button" data-view="about">ABOUT</button>
       <button class="nav-button" data-view="info">制作について</button>
 
       <div class="sidebar-bottom">
-        <button class="consult-btn">ご相談はコチラ</button>
+        <button class="consult-btn">ご相談はこちら</button>
       </div>
 
       <div id="admin-panel" class="admin-only">
@@ -44,11 +44,11 @@
     </aside>
 
     <!-- ===============================
-         メイン
+         メイン領域
     =============================== -->
     <main class="main">
 
-      <!-- ドロップゾーン -->
+      <!-- ドロップゾーン（管理者のみ） -->
       <div id="dropzone" class="dropzone admin-only">
         ここに画像をドラッグ＆ドロップ
       </div>
@@ -80,16 +80,15 @@
   </div>
 
   <!-- ===============================
-       画像ビューア（Google画像風）
+       右側：画像拡大ビュー（クリック時のみ表示）
   =============================== -->
-  <div id="image-viewer">
-    <button class="viewer-close">×</button>
+  <div id="image-viewer" class="image-viewer">
+    <div class="viewer-panel">
+      <button class="viewer-close">×</button>
 
-    <div class="viewer-inner">
       <img class="viewer-image" src="" alt="" />
 
       <div class="viewer-info">
-        <div class="viewer-title"></div>
         <div class="viewer-tags"></div>
         <div class="viewer-description"></div>
       </div>
