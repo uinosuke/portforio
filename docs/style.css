@@ -223,7 +223,7 @@ body.admin-mode .admin-only { display: block; }
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.25s ease;
-  z-index: 9500;
+  z-index: 9500; /* viewer より下 */
 }
 
 .overlay.open {
@@ -245,7 +245,7 @@ body.admin-mode .admin-only { display: block; }
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.25s ease, transform 0.25s ease;
-  z-index: 9600;
+  z-index: 9600; /* overlay の上 */
 }
 
 .image-viewer.open {
@@ -288,7 +288,7 @@ body.admin-mode .admin-only { display: block; }
   align-items: center;
   justify-content: center;
   transition: background 0.2s ease;
-  z-index: 9800;
+  z-index: 9700; /* viewer の上 */
 }
 
 .viewer-arrow:hover {
@@ -305,7 +305,7 @@ body.admin-mode .admin-only { display: block; }
   border-left: 1px solid #333;
   padding: 20px;
   overflow-y: auto;
-  z-index: 9700;
+  z-index: 9600;
 }
 
 .viewer-title {
