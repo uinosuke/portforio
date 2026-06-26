@@ -1,4 +1,9 @@
 // ===============================
+// API ベースURL（★ここだけ変えれば全部切り替わる）
+// ===============================
+const API_BASE = "https://delicate-sunset-ea8a.d08084222816.workers.dev";
+
+// ===============================
 // 管理者モード（Myportfolio 4回クリック）
 // ===============================
 let adminClickCount = 0;
@@ -23,7 +28,6 @@ function setupAdminToggle() {
   title.addEventListener("click", () => {
     adminClickCount++;
 
-    // 0.8秒以内に4回クリック
     setTimeout(() => adminClickCount = 0, 800);
 
     if (adminClickCount >= 4) {
@@ -58,7 +62,6 @@ function setupNavigation() {
     });
   });
 
-  // 初期表示
   document.getElementById("view-gallery").classList.remove("hidden");
 }
 
@@ -129,7 +132,7 @@ function setupDropzone() {
     form.append("description", description);
 
     try {
-      const res = await fetch("/upload", {
+      const res = await fetch(`${API_BASE}/upload`, {
         method: "POST",
         body: form
       });
@@ -158,7 +161,7 @@ async function loadWorks() {
   container.innerHTML = "読み込み中…";
 
   try {
-    const res = await fetch("/works");
+    const res = await fetch(`${API_BASE}/works`);
     const list = await res.json();
 
     container.innerHTML = "";
@@ -234,7 +237,7 @@ async function editWork(item) {
   const newTags = newTagsStr.trim() ? newTagsStr.trim().split(/\s+/) : [];
 
   try {
-    const res = await fetch(`/works/${item.id}`, {
+    const res = await fetch(`${API_BASE}/works/${item.id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -264,7 +267,7 @@ async function loadAbout() {
   const el = document.getElementById("about-content");
 
   try {
-    const res = await fetch("/about");
+    const res = await fetch(`${API_BASE}/about`);
     el.innerHTML = await res.text();
   } catch {
     el.textContent = "読み込みに失敗しました";
@@ -276,7 +279,7 @@ async function loadAbout() {
     const next = prompt("ABOUT の内容（HTML可）", el.innerHTML) ?? el.innerHTML;
 
     try {
-      const res = await fetch("/about", {
+      const res = await fetch(`${API_BASE}/about`, {
         method: "PUT",
         body: next
       });
@@ -298,7 +301,7 @@ async function loadInfo() {
   const el = document.getElementById("info-content");
 
   try {
-    const res = await fetch("/works-info");
+    const res = await fetch(`${API_BASE}/works-info`);
     el.innerHTML = await res.text();
   } catch {
     el.textContent = "読み込みに失敗しました";
@@ -310,7 +313,7 @@ async function loadInfo() {
     const next = prompt("制作について（HTML可）", el.innerHTML) ?? el.innerHTML;
 
     try {
-      const res = await fetch("/works-info", {
+      const res = await fetch(`${API_BASE}/works-info`, {
         method: "PUT",
         body: next
       });
