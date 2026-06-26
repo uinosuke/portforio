@@ -94,8 +94,10 @@ function closeViewer() {
   viewer.classList.remove("open");
 }
 
+// 暗転クリックで閉じる
 overlay.addEventListener("click", closeViewer);
 
+// ESC で閉じる
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape") closeViewer();
 });
@@ -209,4 +211,27 @@ document.getElementById("edit-about").addEventListener("click", async () => {
 
   await fetch(`${API_BASE}/about`, {
     method: "PUT",
-    body:
+    body: html
+  });
+
+  loadAbout();
+});
+
+document.getElementById("edit-info").addEventListener("click", async () => {
+  const html = prompt("制作について を編集", document.getElementById("info-content").innerHTML);
+  if (html === null) return;
+
+  await fetch(`${API_BASE}/works-info`, {
+    method: "PUT",
+    body: html
+  });
+
+  loadInfo();
+});
+
+// ===============================
+// 初期ロード
+// ===============================
+loadWorks();
+loadAbout();
+loadInfo();
