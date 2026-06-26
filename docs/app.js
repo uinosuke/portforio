@@ -1,273 +1,326 @@
-/* ============================================
-   Config
-============================================ */
-const API_BASE = "https://delicate-sunset-ea8a.d08084222816.workers.dev/";
+// ===============================
+// 管理者モード（Myportfolio 4回クリック）
+// ===============================
+let adminClickCount = 0;
+let adminMode = false;
 
-/* ============================================
-   Routing
-============================================ */
-window.addEventListener("hashchange", renderPage);
-window.addEventListener("load", () => {
-  renderPage();
-
-  /* ============================
-     初回だけサイドバーを1cmだけ残す
-  ============================ */
-  const sidebar = document.getElementById("sidebar-inner");
-
-  // 初回ロード時は全開（CSSで left:0 になっている）
-  // 1.5秒後に 1cm の位置へ閉じる
-  setTimeout(() => {
-    sidebar.style.left = "-140px"; // ← 1cm 見える位置
-  }, 1500);
-
-  // ★ 重要 ★
-  // 「mouseleave で -180px に戻す」処理は削除！
-  // これがあるとホバーしても展開しなくなるため。
-});
-
-/* ============================================
-   ページ切り替え
-============================================ */
-function renderPage() {
-  const hash = location.hash.replace("#", "") || "gallery";
-
-  document.querySelectorAll(".page").forEach(p => p.style.display = "none");
-
-  const page = document.getElementById(hash);
-  if (page) page.style.display = "block";
-
-  if (hash === "gallery") loadGallery();
-  if (hash === "about") loadAbout();
-  if (hash === "works-info") loadWorksInfo();
-}
-
-/* ============================================
-   Gallery
-============================================ */
-async function loadGallery() {
-  const container = document.getElementById("gallery-container");
-  container.innerHTML = "";
-
-  const res = await fetch(`${API_BASE}works`);
-  const works = await res.json();
-
-  works.forEach(work => {
-    const item = document.createElement("div");
-    item.className = "masonry-item";
-    item.innerHTML = `<img src="${work.image}" alt="">`;
-    item.addEventListener("click", () => openDetail(work));
-    container.appendChild(item);
-  });
-}
-
-/* ============================================
-   詳細ビュー
-============================================ */
-let currentWork = null;
-
-function openDetail(work) {
-  currentWork = work;
-
-  document.getElementById("overlay-image").src = work.image;
-  document.getElementById("detail-title").textContent = work.title || "";
-
-  const tagList = document.getElementById("detail-tags");
-  tagList.innerHTML = "";
-  (work.tags || []).forEach(tag => {
-    const t = document.createElement("span");
-    t.className = "tag";
-    t.textContent = tag;
-    tagList.appendChild(t);
-  });
-
-  document.getElementById("detail-description").innerHTML = work.description || "";
-
-  document.getElementById("detail-edit-mode").style.display = "none";
-
-  const overlay = document.getElementById("overlay");
-  overlay.style.display = "block";
-
-  requestAnimationFrame(() => {
-    overlay.classList.add("show");
-    overlay.classList.add("show-right");
-  });
-}
-
-document.getElementById("overlay-bg").addEventListener("click", closeOverlay);
-
-function closeOverlay() {
-  const overlay = document.getElementById("overlay");
-  overlay.classList.remove("show");
-  overlay.classList.remove("show-right");
-
-  setTimeout(() => {
-    overlay.style.display = "none";
-  }, 200);
-}
-
-/* ============================================
-   トリプルクリックで編集
-============================================ */
-document.getElementById("overlay-right").addEventListener("click", (e) => {
-  if (e.detail === 3) enterDetailEditMode();
-});
-
-function enterDetailEditMode() {
-  if (!currentWork) return;
-
-  document.getElementById("edit-tags").value = (currentWork.tags || []).join(", ");
-  document.getElementById("edit-description").value = currentWork.description || "";
-
-  document.getElementById("detail-edit-mode").style.display = "block";
-}
-
-document.getElementById("save-detail").addEventListener("click", async () => {
-  const tags = document.getElementById("edit-tags").value.split(",").map(t => t.trim());
-  const description = document.getElementById("edit-description").value;
-
-  const body = {
-    ...currentWork,
-    tags,
-    description
-  };
-
-  await fetch(`${API_BASE}works/${currentWork.id}`, {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body)
-  });
-
-  openDetail(body);
-});
-
-/* ============================================
-   ABOUT
-============================================ */
-async function loadAbout() {
-  const res = await fetch(`${API_BASE}about`);
-  if (res.status === 200) {
-    const html = await res.text();
-    document.getElementById("about-content").innerHTML = html;
-  }
-}
-
-document.getElementById("about-content").addEventListener("click", (e) => {
-  if (e.detail === 3) enterAboutEdit();
-});
-
-function enterAboutEdit() {
-  document.getElementById("about-editor").value =
-    document.getElementById("about-content").innerHTML;
-
-  document.getElementById("about-view").style.display = "none";
-  document.getElementById("about-edit").style.display = "block";
-}
-
-document.getElementById("save-about").addEventListener("click", async () => {
-  const html = document.getElementById("about-editor").value;
-
-  await fetch(`${API_BASE}about`, {
-    method: "PUT",
-    headers: { "Content-Type": "text/html" },
-    body: html
-  });
-
+document.addEventListener("DOMContentLoaded", () => {
+  setupAdminToggle();
+  setupNavigation();
+  setupDropzone();
+  setupSearch();
+  loadWorks();
   loadAbout();
-  document.getElementById("about-view").style.display = "block";
-  document.getElementById("about-edit").style.display = "none";
+  loadInfo();
 });
 
-/* ============================================
-   制作について
-============================================ */
-async function loadWorksInfo() {
-  const res = await fetch(`${API_BASE}works-info`);
-  if (res.status === 200) {
-    const html = await res.text();
-    document.getElementById("works-info-content").innerHTML = html;
-  }
-}
+// -------------------------------
+// 管理者モード ON/OFF
+// -------------------------------
+function setupAdminToggle() {
+  const title = document.getElementById("site-title");
 
-document.getElementById("works-info-content").addEventListener("click", (e) => {
-  if (e.detail === 3) enterWorksInfoEdit();
-});
+  title.addEventListener("click", () => {
+    adminClickCount++;
 
-function enterWorksInfoEdit() {
-  document.getElementById("works-info-editor").value =
-    document.getElementById("works-info-content").innerHTML;
+    // 0.8秒以内に4回クリック
+    setTimeout(() => adminClickCount = 0, 800);
 
-  document.getElementById("works-info-view").style.display = "none";
-  document.getElementById("works-info-edit").style.display = "block";
-}
+    if (adminClickCount >= 4) {
+      adminMode = !adminMode;
+      adminClickCount = 0;
 
-document.getElementById("save-works-info").addEventListener("click", async () => {
-  const html = document.getElementById("works-info-editor").value;
-
-  await fetch(`${API_BASE}works-info`, {
-    method: "PUT",
-    headers: { "Content-Type": "text/html" },
-    body: html
-  });
-
-  loadWorksInfo();
-  document.getElementById("works-info-view").style.display = "block";
-  document.getElementById("works-info-edit").style.display = "none";
-});
-
-/* ============================================
-   🔍 検索機能
-============================================ */
-const searchBtn = document.getElementById("search-button");
-const searchBar = document.getElementById("search-bar");
-const showAll = document.getElementById("show-all");
-
-searchBtn.addEventListener("click", () => {
-  searchBar.classList.toggle("show");
-  if (searchBar.classList.contains("show")) {
-    searchBar.focus();
-  } else {
-    searchBar.value = "";
-    showAll.style.display = "none";
-    loadGallery();
-  }
-});
-
-searchBar.addEventListener("input", () => {
-  const keyword = searchBar.value.trim().toLowerCase();
-  if (keyword.length > 0) {
-    showAll.style.display = "inline";
-  } else {
-    showAll.style.display = "none";
-  }
-  filterGallery(keyword);
-});
-
-async function filterGallery(keyword) {
-  const container = document.getElementById("gallery-container");
-  container.innerHTML = "";
-
-  const res = await fetch(`${API_BASE}works`);
-  const works = await res.json();
-
-  const filtered = works.filter(w => {
-    const tags = (w.tags || []).join(" ").toLowerCase();
-    const desc = (w.description || "").toLowerCase();
-    return tags.includes(keyword) || desc.includes(keyword);
-  });
-
-  filtered.forEach(work => {
-    const item = document.createElement("div");
-    item.className = "masonry-item";
-    item.innerHTML = `<img src="${work.image}" alt="">`;
-    item.addEventListener("click", () => openDetail(work));
-    container.appendChild(item);
+      document.body.classList.toggle("admin-mode", adminMode);
+      alert(adminMode ? "管理者モード ON" : "管理者モード OFF");
+    }
   });
 }
 
-showAll.addEventListener("click", () => {
-  searchBar.value = "";
-  searchBar.classList.remove("show");
-  showAll.style.display = "none";
-  loadGallery();
-});
+// ===============================
+// ナビゲーション
+// ===============================
+function setupNavigation() {
+  const buttons = document.querySelectorAll(".nav-button");
+
+  buttons.forEach(btn => {
+    btn.addEventListener("click", () => {
+      const view = btn.dataset.view;
+
+      document.querySelectorAll(".view").forEach(v => v.classList.add("hidden"));
+
+      if (view === "gallery") {
+        document.getElementById("view-gallery").classList.remove("hidden");
+      } else if (view === "about") {
+        document.getElementById("view-about").classList.remove("hidden");
+      } else if (view === "info") {
+        document.getElementById("view-info").classList.remove("hidden");
+      }
+    });
+  });
+
+  // 初期表示
+  document.getElementById("view-gallery").classList.remove("hidden");
+}
+
+// ===============================
+// 🔍 検索
+// ===============================
+function setupSearch() {
+  const input = document.getElementById("search-input");
+
+  input.addEventListener("input", () => {
+    const keyword = input.value.trim().toLowerCase();
+    filterWorks(keyword);
+  });
+}
+
+function filterWorks(keyword) {
+  const cards = document.querySelectorAll(".work-card");
+
+  cards.forEach(card => {
+    const title = card.querySelector(".work-title").textContent.toLowerCase();
+    const tags = card.querySelector(".work-tags").textContent.toLowerCase();
+    const desc = card.querySelector(".work-description").textContent.toLowerCase();
+
+    const hit =
+      title.includes(keyword) ||
+      tags.includes(keyword) ||
+      desc.includes(keyword);
+
+    card.style.display = hit ? "" : "none";
+  });
+}
+
+// ===============================
+// ドラッグ＆ドロップアップロード
+// ===============================
+function setupDropzone() {
+  const dropzone = document.getElementById("dropzone");
+
+  dropzone.addEventListener("dragover", (e) => {
+    e.preventDefault();
+    dropzone.classList.add("hover");
+  });
+
+  dropzone.addEventListener("dragleave", () => {
+    dropzone.classList.remove("hover");
+  });
+
+  dropzone.addEventListener("drop", async (e) => {
+    e.preventDefault();
+    dropzone.classList.remove("hover");
+
+    if (!adminMode) {
+      alert("管理者モードのみアップロードできます");
+      return;
+    }
+
+    const file = e.dataTransfer.files[0];
+    if (!file) return;
+
+    const title = prompt("タイトルを入力してください", file.name) || file.name;
+    const tags = prompt("タグ（スペース区切り）", "") || "";
+    const description = prompt("概要", "") || "";
+
+    const form = new FormData();
+    form.append("file", file);
+    form.append("title", title);
+    form.append("tags", tags);
+    form.append("description", description);
+
+    try {
+      const res = await fetch("/upload", {
+        method: "POST",
+        body: form
+      });
+
+      const json = await res.json();
+
+      if (!res.ok || !json.ok) {
+        alert("アップロードに失敗しました");
+        return;
+      }
+
+      alert("アップロード完了！");
+      loadWorks();
+    } catch (err) {
+      console.error(err);
+      alert("アップロード中にエラーが発生しました");
+    }
+  });
+}
+
+// ===============================
+// WORKS 読み込み
+// ===============================
+async function loadWorks() {
+  const container = document.getElementById("works-list");
+  container.innerHTML = "読み込み中…";
+
+  try {
+    const res = await fetch("/works");
+    const list = await res.json();
+
+    container.innerHTML = "";
+
+    list.forEach(item => {
+      const card = document.createElement("div");
+      card.className = "work-card";
+
+      const img = document.createElement("img");
+      img.className = "work-image";
+      img.src = item.image;
+      img.alt = item.title || "";
+
+      const body = document.createElement("div");
+      body.className = "work-body";
+
+      const titleEl = document.createElement("p");
+      titleEl.className = "work-title";
+      titleEl.textContent = item.title || "(無題)";
+
+      const tagsEl = document.createElement("p");
+      tagsEl.className = "work-tags";
+      tagsEl.textContent = (item.tags || []).join(" ");
+
+      const descEl = document.createElement("p");
+      descEl.className = "work-description";
+      descEl.textContent = item.description || "";
+
+      const actions = document.createElement("div");
+      actions.className = "work-actions admin-only";
+
+      const editBtn = document.createElement("button");
+      editBtn.className = "edit-button";
+      editBtn.textContent = "編集";
+      editBtn.addEventListener("click", () => editWork(item));
+
+      actions.appendChild(editBtn);
+
+      body.appendChild(titleEl);
+      body.appendChild(tagsEl);
+      body.appendChild(descEl);
+      body.appendChild(actions);
+
+      card.appendChild(img);
+      card.appendChild(body);
+
+      container.appendChild(card);
+    });
+
+    if (adminMode) {
+      document.body.classList.add("admin-mode");
+    }
+
+  } catch (err) {
+    console.error(err);
+    container.innerHTML = "読み込みに失敗しました";
+  }
+}
+
+// ===============================
+// WORKS 編集
+// ===============================
+async function editWork(item) {
+  if (!adminMode) {
+    alert("管理者モードのみ編集できます");
+    return;
+  }
+
+  const newTitle = prompt("タイトル", item.title || "") ?? item.title;
+  const newTagsStr = prompt("タグ（スペース区切り）", (item.tags || []).join(" ")) ?? (item.tags || []).join(" ");
+  const newDesc = prompt("概要", item.description || "") ?? item.description;
+
+  const newTags = newTagsStr.trim() ? newTagsStr.trim().split(/\s+/) : [];
+
+  try {
+    const res = await fetch(`/works/${item.id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        title: newTitle,
+        tags: newTags,
+        description: newDesc
+      })
+    });
+
+    if (!res.ok) {
+      alert("更新に失敗しました");
+      return;
+    }
+
+    loadWorks();
+
+  } catch (err) {
+    console.error(err);
+    alert("更新中にエラーが発生しました");
+  }
+}
+
+// ===============================
+// ABOUT 読み込み・編集
+// ===============================
+async function loadAbout() {
+  const el = document.getElementById("about-content");
+
+  try {
+    const res = await fetch("/about");
+    el.innerHTML = await res.text();
+  } catch {
+    el.textContent = "読み込みに失敗しました";
+  }
+
+  document.getElementById("edit-about").addEventListener("click", async () => {
+    if (!adminMode) return alert("管理者モードのみ編集できます");
+
+    const next = prompt("ABOUT の内容（HTML可）", el.innerHTML) ?? el.innerHTML;
+
+    try {
+      const res = await fetch("/about", {
+        method: "PUT",
+        body: next
+      });
+
+      if (!res.ok) return alert("保存に失敗しました");
+
+      el.innerHTML = next;
+
+    } catch {
+      alert("保存中にエラーが発生しました");
+    }
+  });
+}
+
+// ===============================
+// 制作について 読み込み・編集
+// ===============================
+async function loadInfo() {
+  const el = document.getElementById("info-content");
+
+  try {
+    const res = await fetch("/works-info");
+    el.innerHTML = await res.text();
+  } catch {
+    el.textContent = "読み込みに失敗しました";
+  }
+
+  document.getElementById("edit-info").addEventListener("click", async () => {
+    if (!adminMode) return alert("管理者モードのみ編集できます");
+
+    const next = prompt("制作について（HTML可）", el.innerHTML) ?? el.innerHTML;
+
+    try {
+      const res = await fetch("/works-info", {
+        method: "PUT",
+        body: next
+      });
+
+      if (!res.ok) return alert("保存に失敗しました");
+
+      el.innerHTML = next;
+
+    } catch {
+      alert("保存中にエラーが発生しました");
+    }
+  });
+}
