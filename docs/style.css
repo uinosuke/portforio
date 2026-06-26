@@ -1,9 +1,7 @@
 /* ===============================
    全体
 =============================== */
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 html, body {
   margin: 0;
@@ -95,13 +93,9 @@ html, body {
   cursor: pointer;
 }
 
-.nav-button:hover {
-  background: #2c2c2c;
-}
+.nav-button:hover { background: #2c2c2c; }
 
-.sidebar-bottom {
-  margin-top: auto;
-}
+.sidebar-bottom { margin-top: auto; }
 
 .consult-btn {
   width: 100%;
@@ -115,9 +109,7 @@ html, body {
   cursor: pointer;
 }
 
-.consult-btn:hover {
-  background: #7a1937;
-}
+.consult-btn:hover { background: #7a1937; }
 
 #admin-panel {
   font-size: 12px;
@@ -149,9 +141,7 @@ html, body {
   background: #202020;
 }
 
-.view.hidden {
-  display: none;
-}
+.view.hidden { display: none; }
 
 /* ===============================
    画像グリッド
@@ -183,27 +173,13 @@ html, body {
   background: #000;
 }
 
-.work-body {
-  padding: 10px 12px;
-  font-size: 13px;
-}
+.work-body { padding: 10px 12px; font-size: 13px; }
 
-.work-title {
-  margin: 0 0 4px;
-  font-weight: 600;
-}
+.work-title { margin: 0 0 4px; font-weight: 600; }
 
-.work-tags {
-  margin: 0 0 4px;
-  color: #aaa;
-  font-size: 12px;
-}
+.work-tags { margin: 0 0 4px; color: #aaa; font-size: 12px; }
 
-.work-description {
-  margin: 0 0 8px;
-  font-size: 12px;
-  color: #ddd;
-}
+.work-description { margin: 0 0 8px; font-size: 12px; color: #ddd; }
 
 .work-actions {
   display: flex;
@@ -232,34 +208,10 @@ html, body {
 }
 
 /* ===============================
-   ABOUT / INFO
-=============================== */
-.section-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 8px;
-}
-
-.editable-block {
-  border-radius: 8px;
-  border: 1px solid #333;
-  padding: 12px;
-  background: #181818;
-  font-size: 13px;
-  min-height: 80px;
-}
-
-/* ===============================
    管理者モード
 =============================== */
-.admin-only {
-  display: none;
-}
-
-body.admin-mode .admin-only {
-  display: block;
-}
+.admin-only { display: none; }
+body.admin-mode .admin-only { display: block; }
 
 /* ===============================
    暗転レイヤー
@@ -280,7 +232,7 @@ body.admin-mode .admin-only {
 }
 
 /* ===============================
-   画像ビューア（左80% + 右20%）
+   画像ビューア
 =============================== */
 .image-viewer {
   position: fixed;
@@ -302,12 +254,13 @@ body.admin-mode .admin-only {
   pointer-events: auto;
 }
 
-/* 左側：大きい画像（80%） */
+/* 左側：大きい画像 */
 .viewer-left {
   width: 80%;
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
 }
 
 .viewer-image {
@@ -317,7 +270,33 @@ body.admin-mode .admin-only {
   box-shadow: 0 4px 20px rgba(0,0,0,0.5);
 }
 
-/* 右側：詳細パネル（20%） */
+/* 矢印ボタン（Google画像検索風） */
+.viewer-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(0,0,0,0.5);
+  color: #fff;
+  font-size: 28px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease;
+}
+
+.viewer-arrow:hover {
+  background: rgba(0,0,0,0.7);
+}
+
+.viewer-arrow.left { left: 20px; }
+.viewer-arrow.right { right: 20px; }
+
+/* 右側：詳細パネル */
 .viewer-right {
   width: 20%;
   background: #1a1a1a;
@@ -348,10 +327,7 @@ body.admin-mode .admin-only {
 /* ===============================
    スクロールバー
 =============================== */
-::-webkit-scrollbar {
-  width: 8px;
-}
-
+::-webkit-scrollbar { width: 8px; }
 ::-webkit-scrollbar-thumb {
   background: #444;
   border-radius: 4px;
