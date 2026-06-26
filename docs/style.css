@@ -33,7 +33,6 @@ html, body {
   margin: 0;
   font-size: 20px;
   color: #fff;
-  cursor: default;
 }
 
 /* 検索バー */
@@ -81,16 +80,7 @@ html, body {
   bottom: 0;
   left: 0;
 
-  transition: transform 0.3s ease;
   z-index: 9000;
-}
-
-.sidebar.sidebar-open {
-  transform: translateX(0);
-}
-
-.sidebar.sidebar-collapsed {
-  transform: translateX(-190px);
 }
 
 .nav-button {
@@ -290,7 +280,7 @@ body.admin-mode .admin-only {
 }
 
 /* ===============================
-   画像ビューア（左3/5 + 右2/5）
+   画像ビューア（左80% + 右20%）
 =============================== */
 .image-viewer {
   position: fixed;
@@ -312,13 +302,12 @@ body.admin-mode .admin-only {
   pointer-events: auto;
 }
 
-/* 左側：大きい画像（3/5） */
+/* 左側：大きい画像（80%） */
 .viewer-left {
-  width: 60%;
+  width: 80%;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: transparent;
 }
 
 .viewer-image {
@@ -328,25 +317,14 @@ body.admin-mode .admin-only {
   box-shadow: 0 4px 20px rgba(0,0,0,0.5);
 }
 
-/* 右側：詳細パネル（2/5） */
+/* 右側：詳細パネル（20%） */
 .viewer-right {
   width: 20%;
   background: #1a1a1a;
   border-left: 1px solid #333;
   padding: 20px;
   overflow-y: auto;
-  z-index: 9700; /* overlay より上にする */
-}
-
-
-.viewer-close {
-  background: #b00;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  padding: 6px 10px;
-  cursor: pointer;
-  margin-bottom: 16px;
+  z-index: 9700;
 }
 
 .viewer-title {
