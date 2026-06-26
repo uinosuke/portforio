@@ -99,6 +99,24 @@ html, body {
 
 .nav-button:hover { background: #2c2c2c; }
 
+.nav-link {
+  display: block;
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid #444;
+  background: #222;
+  color: #eee;
+  font-size: 13px;
+  text-decoration: none;
+  cursor: pointer;
+  margin-top: 4px;
+}
+
+.nav-link:hover {
+  background: #2c2c2c;
+}
+
 .sidebar-bottom { margin-top: auto; }
 
 .consult-btn {
