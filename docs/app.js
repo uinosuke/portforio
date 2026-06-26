@@ -15,8 +15,6 @@ const viewerTitle = document.getElementById("viewer-title");
 const viewerTags = document.getElementById("viewer-tags");
 const viewerDescription = document.getElementById("viewer-description");
 
-const viewerClose = document.querySelector(".viewer-close");
-
 const dropzone = document.getElementById("dropzone");
 
 let adminMode = false;
@@ -76,7 +74,7 @@ async function loadWorks() {
 }
 
 // ===============================
-// ビューアを開く（Google画像検索風）
+// ビューアを開く
 // ===============================
 function openViewer(item) {
   viewerImage.src = item.image;
@@ -96,7 +94,6 @@ function closeViewer() {
   viewer.classList.remove("open");
 }
 
-viewerClose.addEventListener("click", closeViewer);
 overlay.addEventListener("click", closeViewer);
 
 document.addEventListener("keydown", (e) => {
@@ -212,27 +209,4 @@ document.getElementById("edit-about").addEventListener("click", async () => {
 
   await fetch(`${API_BASE}/about`, {
     method: "PUT",
-    body: html
-  });
-
-  loadAbout();
-});
-
-document.getElementById("edit-info").addEventListener("click", async () => {
-  const html = prompt("制作について を編集", document.getElementById("info-content").innerHTML);
-  if (html === null) return;
-
-  await fetch(`${API_BASE}/works-info`, {
-    method: "PUT",
-    body: html
-  });
-
-  loadInfo();
-});
-
-// ===============================
-// 初期ロード
-// ===============================
-loadWorks();
-loadAbout();
-loadInfo();
+    body:
