@@ -4,11 +4,15 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>My Portfolio</title>
+
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
 
+  <!-- ===============================
+       ヘッダー
+  =============================== -->
   <header class="header">
     <h1 id="site-title">MyPortfolio</h1>
 
@@ -18,9 +22,16 @@
     </div>
   </header>
 
+  <!-- ===============================
+       レイアウト（サイドバー＋メイン）
+  =============================== -->
   <div class="layout">
 
+    <!-- ===============================
+         左サイドバー
+    =============================== -->
     <aside id="sidebar" class="sidebar">
+
       <a class="nav-item" data-view="gallery">画像一覧</a>
       <a class="nav-item" data-view="about">ABOUT</a>
       <a class="nav-item" data-view="info">制作について</a>
@@ -35,16 +46,22 @@
       </div>
     </aside>
 
+    <!-- ===============================
+         メイン領域
+    =============================== -->
     <main class="main">
 
+      <!-- ドロップゾーン（管理者のみ） -->
       <div id="dropzone" class="dropzone admin-only">
         ここに画像をドラッグ＆ドロップ
       </div>
 
+      <!-- ====== VIEW: ギャラリー ====== -->
       <div id="view-gallery" class="view">
         <div id="works-list" class="works-grid"></div>
       </div>
 
+      <!-- ====== VIEW: ABOUT ====== -->
       <div id="view-about" class="view hidden">
         <div class="section-header">
           <h2>ABOUT</h2>
@@ -53,6 +70,7 @@
         <div id="about-content" class="editable-block"></div>
       </div>
 
+      <!-- ====== VIEW: 制作について ====== -->
       <div id="view-info" class="view hidden">
         <div class="section-header">
           <h2>制作について</h2>
@@ -64,8 +82,11 @@
     </main>
   </div>
 
-  <!-- 画像ビューア -->
+  <!-- ===============================
+       右側：画像ビューア
+  =============================== -->
   <div id="image-viewer" class="image-viewer">
+
     <div class="viewer-left">
       <button id="viewer-prev" class="viewer-arrow left">‹</button>
       <img id="viewer-image" class="viewer-image" src="" alt="" />
@@ -73,17 +94,27 @@
     </div>
 
     <div class="viewer-right">
+
+      <h4 class="viewer-section-title">TITLE</h4>
       <h3 id="viewer-title" class="viewer-title"></h3>
+
+      <h4 class="viewer-section-title">TAGS</h4>
       <div id="viewer-tags" class="viewer-tags"></div>
+
+      <h4 class="viewer-section-title">DESCRIPTION</h4>
       <p id="viewer-description" class="viewer-description"></p>
+
     </div>
   </div>
 
-  <!-- HTML編集モーダル -->
+  <!-- ===============================
+       HTML編集モーダル
+  =============================== -->
   <div id="edit-modal" class="modal">
     <div class="modal-content">
       <h3 id="modal-title"></h3>
       <textarea id="modal-textarea"></textarea>
+
       <div class="modal-buttons">
         <button id="modal-save" class="modal-btn save">保存</button>
         <button id="modal-cancel" class="modal-btn cancel">キャンセル</button>
