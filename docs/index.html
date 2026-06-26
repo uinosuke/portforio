@@ -62,29 +62,31 @@
     </main>
   </div>
 
-  <!-- 画像ビューア（背景が暗い部分） -->
+  <!-- 画像ビューア -->
   <div id="image-viewer" class="image-viewer">
-
-    <!-- 左側：大きい画像 -->
     <div class="viewer-left">
-
-      <!-- 左矢印 -->
       <button id="viewer-prev" class="viewer-arrow left">‹</button>
-
       <img id="viewer-image" class="viewer-image" src="" alt="" />
-
-      <!-- 右矢印 -->
       <button id="viewer-next" class="viewer-arrow right">›</button>
-
     </div>
 
-    <!-- 右側：詳細パネル -->
     <div class="viewer-right">
       <h3 id="viewer-title" class="viewer-title"></h3>
       <div id="viewer-tags" class="viewer-tags"></div>
       <p id="viewer-description" class="viewer-description"></p>
     </div>
+  </div>
 
+  <!-- HTML編集モーダル -->
+  <div id="edit-modal" class="modal">
+    <div class="modal-content">
+      <h3 id="modal-title"></h3>
+      <textarea id="modal-textarea"></textarea>
+      <div class="modal-buttons">
+        <button id="modal-save" class="modal-btn save">保存</button>
+        <button id="modal-cancel" class="modal-btn cancel">キャンセル</button>
+      </div>
+    </div>
   </div>
 
   <script src="app.js"></script>
