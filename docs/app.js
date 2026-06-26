@@ -37,7 +37,8 @@ document.addEventListener("dblclick", () => {
 // ===============================
 function showView(view) {
   document.querySelectorAll(".view").forEach(v => v.classList.add("hidden"));
-  document.getElementById(`view-${view}`).classList.remove("hidden");
+  const target = document.getElementById(`view-${view}`);
+  if (target) target.classList.remove("hidden");
 }
 
 window.addEventListener("load", () => {
@@ -133,11 +134,13 @@ document.addEventListener("keydown", (e) => {
 // 前後の画像へ
 // ===============================
 btnPrev.addEventListener("click", () => {
+  if (!works.length) return;
   currentIndex = (currentIndex - 1 + works.length) % works.length;
   openViewer(currentIndex);
 });
 
 btnNext.addEventListener("click", () => {
+  if (!works.length) return;
   currentIndex = (currentIndex + 1) % works.length;
   openViewer(currentIndex);
 });
@@ -153,7 +156,7 @@ async function deleteWork(id) {
   });
 
   if (res.ok) {
-    loadWorks();
+    await loadWorks();
   } else {
     alert("削除に失敗しました");
   }
@@ -182,42 +185,112 @@ async function editWork(item) {
     })
   });
 
-  loadWorks();
+  await loadWorks();
 }
 
 // ===============================
 // アップロード（ドラッグ＆ドロップ）
 // ===============================
-dropzone.addEventListener("dragover", (e) => {
-  e.preventDefault();
-  dropzone.classList.add("hover");
-});
+if (dropzone) {
+  dropzone.addEventListener("dragover", (e) => {
+    e.preventDefault();
+    dropzone.classList.add("hover");
+  });
 
-dropzone.addEventListener("dragleave", () => {
-  dropzone.classList.remove("hover");
-});
+  dropzone.addEventListener("dragleave", () => {
+    dropzone.classList.remove("hover");
+  });
 
-dropzone.addEventListener("drop", async (e) => {
-  e.preventDefault();
-  dropzone.classList.remove("hover");
+  dropzone.addEventListener("drop", async (e) => {
+    e.preventDefault();
+    dropzone.classList.remove("hover");
 
-  const file = e.dataTransfer.files[0];
-  if (!file) return;
+    const file = e.dataTransfer.files[0];
+    if (!file) return;
 
-  const title = prompt("タイトル");
-  if (title === null) return;
+    const title = prompt("タイトル");
+    if (title === null) return;
 
-  const tags = prompt("タグ（スペース区切り）", "");
-  if (tags === null) return;
+    const tags = prompt("タグ（スペース区切り）", "");
+    if (tags === null) return;
 
-  const description = prompt("説明", "");
-  if (description === null) return;
+    const description = prompt("説明", "");
+    if (description === null) return;
 
-  const form = new FormData();
-  form.append("file", file);
-  form.append("meta", JSON.stringify({
-    title,
-    tags,
-    description
-  }));
+    const form = new FormData();
+    form.append("file", file);
+    form.append("meta", JSON.stringify({
+      title,
+      tags,
+      description
+    }));
 
+    await fetch(`${API_BASE}/upload`, {
+      method: "POST",
+      body: form
+    });
+
+    await loadWorks();
+  });
+}
+
+// ===============================
+// ABOUT / INFO 読み込み
+// ===============================
+async function loadAbout() {
+  const res = await fetch(`${API_BASE}/about`);
+  const html = await res.text();
+  const el = document.getElementById("about-content");
+  if (el) el.innerHTML = html;
+}
+
+async function loadInfo() {
+  const res = await fetch(`${API_BASE}/works-info`);
+  const html = await res.text();
+  const el = document.getElementById("info-content");
+  if (el) el.innerHTML = html;
+}
+
+// ===============================
+// ABOUT / INFO 編集
+// ===============================
+const btnEditAbout = document.getElementById("edit-about");
+if (btnEditAbout) {
+  btnEditAbout.addEventListener("click", async () => {
+    const el = document.getElementById("about-content");
+    const current = el ? el.innerHTML : "";
+    const html = prompt("ABOUT を編集", current);
+    if (html === null) return;
+
+    await fetch(`${API_BASE}/about`, {
+      method: "PUT",
+      body: html
+    });
+
+    await loadAbout();
+  });
+}
+
+const btnEditInfo = document.getElementById("edit-info");
+if (btnEditInfo) {
+  btnEditInfo.addEventListener("click", async () => {
+    const el = document.getElementById("info-content");
+    const current = el ? el.innerHTML : "";
+    const html = prompt("制作について を編集", current);
+    if (html === null) return;
+
+    await fetch(`${API_BASE}/works-info`, {
+      method: "PUT",
+      body: html
+    });
+
+    await loadInfo();
+  });
+}
+
+// ===============================
+// 初期ロード
+// ===============================
+loadWorks();
+loadAbout();
+loadInfo();
