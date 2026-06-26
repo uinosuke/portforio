@@ -4,7 +4,7 @@
 const API_BASE = "https://delicate-sunset-ea8a.d08084222816.workers.dev/";
 
 /* ============================================
-   Routing（About / 制作について だけハッシュ）
+   Routing
 ============================================ */
 window.addEventListener("hashchange", renderPage);
 window.addEventListener("load", renderPage);
@@ -23,7 +23,7 @@ function renderPage() {
 }
 
 /* ============================================
-   Gallery（6列タイル）
+   Gallery
 ============================================ */
 async function loadGallery() {
   const container = document.getElementById("gallery-container");
@@ -42,20 +42,16 @@ async function loadGallery() {
 }
 
 /* ============================================
-   詳細ビュー（暗転＋左3/5＋右2/5）
+   詳細ビュー
 ============================================ */
 let currentWork = null;
 
 function openDetail(work) {
   currentWork = work;
 
-  // 画像セット
   document.getElementById("overlay-image").src = work.image;
-
-  // タイトル
   document.getElementById("detail-title").textContent = work.title || "";
 
-  // タグ（Lightroom風 pill）
   const tagList = document.getElementById("detail-tags");
   tagList.innerHTML = "";
   (work.tags || []).forEach(tag => {
@@ -65,24 +61,19 @@ function openDetail(work) {
     tagList.appendChild(t);
   });
 
-  // 説明
   document.getElementById("detail-description").innerHTML = work.description || "";
 
-  // 編集モードOFF
   document.getElementById("detail-edit-mode").style.display = "none";
 
-  // オーバーレイ表示
   const overlay = document.getElementById("overlay");
   overlay.style.display = "block";
 
-  // アニメーション開始
   requestAnimationFrame(() => {
     overlay.classList.add("show");
     overlay.classList.add("show-right");
   });
 }
 
-/* 暗転背景クリックで閉じる */
 document.getElementById("overlay-bg").addEventListener("click", closeOverlay);
 
 function closeOverlay() {
@@ -96,7 +87,7 @@ function closeOverlay() {
 }
 
 /* ============================================
-   トリプルクリックで編集モード
+   トリプルクリックで編集
 ============================================ */
 document.getElementById("overlay-right").addEventListener("click", (e) => {
   if (e.detail === 3) enterDetailEditMode();
@@ -111,7 +102,6 @@ function enterDetailEditMode() {
   document.getElementById("detail-edit-mode").style.display = "block";
 }
 
-/* 保存 */
 document.getElementById("save-detail").addEventListener("click", async () => {
   const tags = document.getElementById("edit-tags").value.split(",").map(t => t.trim());
   const description = document.getElementById("edit-description").value;
@@ -203,4 +193,54 @@ document.getElementById("save-works-info").addEventListener("click", async () =>
   loadWorksInfo();
   document.getElementById("works-info-view").style.display = "block";
   document.getElementById("works-info-edit").style.display = "none";
+});
+
+/* ============================================
+   🔍 検索機能
+============================================ */
+const searchBtn = document.getElementById("search-button");
+const searchBar = document.getElementById("search-bar");
+
+searchBtn.addEventListener("click", () => {
+  searchBar.classList.toggle("show");
+  if (searchBar.classList.contains("show")) {
+    searchBar.focus();
+  } else {
+    searchBar.value = "";
+    loadGallery();
+  }
+});
+
+searchBar.addEventListener("input", () => {
+  const keyword = searchBar.value.trim().toLowerCase();
+  filterGallery(keyword);
+});
+
+async function filterGallery(keyword) {
+  const container = document.getElementById("gallery-container");
+  container.innerHTML = "";
+
+  const res = await fetch(`${API_BASE}works`);
+  const works = await res.json();
+
+  const filtered = works.filter(w => {
+    const tags = (w.tags || []).join(" ").toLowerCase();
+    const desc = (w.description || "").toLowerCase();
+    return tags.includes(keyword) || desc.includes(keyword);
+  });
+
+  filtered.forEach(work => {
+    const item = document.createElement("div");
+    item.className = "masonry-item";
+    item.innerHTML = `<img src="${work.image}" alt="">`;
+    item.addEventListener("click", () => openDetail(work));
+    container.appendChild(item);
+  });
+}
+
+/* すべての画像を表示 */
+document.getElementById("show-all").addEventListener("click", () => {
+  searchBar.value = "";
+  searchBar.classList.remove("show");
+  loadGallery();
 });
