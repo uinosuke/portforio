@@ -1,47 +1,91 @@
-dropzone.addEventListener("drop", async (e) => {
-  e.preventDefault();
-  dropzone.classList.remove("hover");
+// ===============================
+// API ベースURL
+// ===============================
+const API_BASE = "https://delicate-sunset-ea8a.d08084222816.workers.dev";
 
-  if (!adminMode) {
-    alert("管理者モードのみアップロードできます");
-    return;
-  }
+// ===============================
+// 管理者モード（ダブルクリックで ON/OFF）
+// ===============================
+let adminMode = false;
 
-  const file = e.dataTransfer.files[0];
-  if (!file) return;
-
-  const title = prompt("タイトルを入力してください", file.name) || file.name;
-  const tags = prompt("タグ（スペース区切り）", "") || "";
-  const description = prompt("概要", "") || "";
-
-  // JSON + バイナリをまとめて送る
-  const meta = {
-    title,
-    tags,
-    description
-  };
-
-  const form = new FormData();
-  form.append("meta", JSON.stringify(meta));
-  form.append("file", file);
-
-  try {
-    const res = await fetch(`${API_BASE}/upload`, {
-      method: "POST",
-      body: form
-    });
-
-    const json = await res.json();
-
-    if (!res.ok || !json.ok) {
-      alert("アップロードに失敗しました");
-      return;
-    }
-
-    alert("アップロード完了！");
-    loadWorks();
-  } catch (err) {
-    console.error(err);
-    alert("アップロード中にエラーが発生しました");
-  }
+document.addEventListener("DOMContentLoaded", () => {
+  setupAdminToggle();
+  setupNavigation();
+  setupDropzone();
+  setupSearch();
+  loadWorks();
+  loadAbout();
+  loadInfo();
 });
+
+// -------------------------------
+// 管理者モード ON/OFF（ダブルクリック）
+// -------------------------------
+function setupAdminToggle() {
+  const title = document.getElementById("site-title");
+
+  title.addEventListener("dblclick", () => {
+    adminMode = !adminMode;
+    document.body.classList.toggle("admin-mode", adminMode);
+    alert(adminMode ? "管理者モード ON" : "管理者モード OFF");
+  });
+}
+
+// ===============================
+// ナビゲーション
+// ===============================
+function setupNavigation() {
+  const buttons = document.querySelectorAll(".nav-button");
+
+  buttons.forEach(btn => {
+    btn.addEventListener("click", () => {
+      const view = btn.dataset.view;
+
+      document.querySelectorAll(".view").forEach(v => v.classList.add("hidden"));
+
+      if (view === "gallery") {
+        document.getElementById("view-gallery").classList.remove("hidden");
+      } else if (view === "about") {
+        document.getElementById("view-about").classList.remove("hidden");
+      } else if (view === "info") {
+        document.getElementById("view-info").classList.remove("hidden");
+      }
+    });
+  });
+
+  document.getElementById("view-gallery").classList.remove("hidden");
+}
+
+// ===============================
+// 🔍 検索
+// ===============================
+function setupSearch() {
+  const input = document.getElementById("search-input");
+
+  input.addEventListener("input", () => {
+    const keyword = input.value.trim().toLowerCase();
+    filterWorks(keyword);
+  });
+}
+
+function filterWorks(keyword) {
+  const cards = document.querySelectorAll(".work-card");
+
+  cards.forEach(card => {
+    const title = card.querySelector(".work-title").textContent.toLowerCase();
+    const tags = card.querySelector(".work-tags").textContent.toLowerCase();
+    const desc = card.querySelector(".work-description").textContent.toLowerCase();
+
+    const hit =
+      title.includes(keyword) ||
+      tags.includes(keyword) ||
+      desc.includes(keyword);
+
+    card.style.display = hit ? "" : "none";
+  });
+}
+
+// ===============================
+// ドラッグ＆ドロップアップロード（JSON + file）
+// ===============================
+function setupDropzone()
