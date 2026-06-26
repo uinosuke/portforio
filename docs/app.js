@@ -19,9 +19,17 @@ const btnNext = document.getElementById("viewer-next");
 
 const dropzone = document.getElementById("dropzone");
 
+// モーダル
+const modal = document.getElementById("edit-modal");
+const modalTitle = document.getElementById("modal-title");
+const modalTextarea = document.getElementById("modal-textarea");
+const modalSave = document.getElementById("modal-save");
+const modalCancel = document.getElementById("modal-cancel");
+
 let adminMode = false;
 let works = [];
 let currentIndex = 0;
+let currentEditType = ""; // "about" or "info"
 
 // ===============================
 // 管理者モード（ダブルクリック）
@@ -80,17 +88,14 @@ async function loadWorks() {
       </div>
     `;
 
-    // 画像クリック → ビューア表示
     card.querySelector(".work-image").addEventListener("click", () => {
       openViewer(index);
     });
 
-    // 編集
     card.querySelector(".edit-button").addEventListener("click", () => {
       editWork(item);
     });
 
-    // 削除
     card.querySelector(".delete-button").addEventListener("click", () => {
       deleteWork(item.id);
     });
@@ -139,8 +144,10 @@ viewer.addEventListener("click", (e) => {
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape") closeViewer();
 });
+
+// 左右キーで画像切り替え
 document.addEventListener("keydown", (e) => {
-  if (!viewer.classList.contains("open")) return; // ビューア開いてる時だけ
+  if (!viewer.classList.contains("open")) return;
 
   if (e.key === "ArrowLeft") {
     currentIndex = (currentIndex - 1 + works.length) % works.length;
@@ -275,39 +282,54 @@ async function loadInfo() {
 }
 
 // ===============================
-// ABOUT / INFO 編集
+// ABOUT / INFO 編集（モーダル版）
 // ===============================
-const btnEditAbout = document.getElementById("edit-about");
-if (btnEditAbout) {
-  btnEditAbout.addEventListener("click", async () => {
-    const el = document.getElementById("about-content");
-    const current = el ? el.innerHTML : "";
-    const html = prompt("ABOUT を編集", current);
-    if (html === null) return;
+function openModal(type, currentHTML) {
+  currentEditType = type;
+  modalTitle.textContent = type === "about" ? "ABOUT を編集" : "制作について を編集";
+  modalTextarea.value = currentHTML;
+  modal.classList.add("open");
+}
 
+modalCancel.addEventListener("click", () => {
+  modal.classList.remove("open");
+});
+
+modalSave.addEventListener("click", async () => {
+  const newHTML = modalTextarea.value;
+
+  if (currentEditType === "about") {
     await fetch(`${API_BASE}/about`, {
       method: "PUT",
-      body: html
+      body: newHTML
     });
-
     await loadAbout();
+  }
+
+  if (currentEditType === "info") {
+    await fetch(`${API_BASE}/works-info`, {
+      method: "PUT",
+      body: newHTML
+    });
+    await loadInfo();
+  }
+
+  modal.classList.remove("open");
+});
+
+const btnEditAbout = document.getElementById("edit-about");
+if (btnEditAbout) {
+  btnEditAbout.addEventListener("click", () => {
+    const current = document.getElementById("about-content").innerHTML;
+    openModal("about", current);
   });
 }
 
 const btnEditInfo = document.getElementById("edit-info");
 if (btnEditInfo) {
-  btnEditInfo.addEventListener("click", async () => {
-    const el = document.getElementById("info-content");
-    const current = el ? el.innerHTML : "";
-    const html = prompt("制作について を編集", current);
-    if (html === null) return;
-
-    await fetch(`${API_BASE}/works-info`, {
-      method: "PUT",
-      body: html
-    });
-
-    await loadInfo();
+  btnEditInfo.addEventListener("click", () => {
+    const current = document.getElementById("info-content").innerHTML;
+    openModal("info", current);
   });
 }
 
