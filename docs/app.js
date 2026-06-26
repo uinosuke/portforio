@@ -139,6 +139,19 @@ viewer.addEventListener("click", (e) => {
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape") closeViewer();
 });
+document.addEventListener("keydown", (e) => {
+  if (!viewer.classList.contains("open")) return; // ビューア開いてる時だけ
+
+  if (e.key === "ArrowLeft") {
+    currentIndex = (currentIndex - 1 + works.length) % works.length;
+    openViewer(currentIndex);
+  }
+
+  if (e.key === "ArrowRight") {
+    currentIndex = (currentIndex + 1) % works.length;
+    openViewer(currentIndex);
+  }
+});
 
 // ===============================
 // 前後の画像へ
