@@ -1,24 +1,31 @@
 /* ===============================
-   基本
+   全体レイアウト
 =============================== */
 * {
   box-sizing: border-box;
 }
 
-body {
+html, body {
   margin: 0;
+  padding: 0;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  background: #ffffff;
-  color: #222;
+  background: #111;
+  color: #f5f5f5;
 }
 
 /* ===============================
    ヘッダー
 =============================== */
 .header {
-  padding: 12px 20px;
-  border-bottom: 1px solid #eee;
-  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 24px;
+  border-bottom: 1px solid #333;
+  background: #181818;
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 
 #site-title {
@@ -27,55 +34,36 @@ body {
   cursor: pointer;
 }
 
-/* ===============================
-   🔍 検索バー
-=============================== */
+/* 検索バー（右上） */
 .search-box {
-  position: absolute;
-  top: 12px;
-  right: 20px;
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #222;
+  border: 1px solid #444;
 }
 
-.search-box input {
-  padding: 6px 8px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  width: 180px;
-  font-size: 13px;
-}
-
-/* 虫眼鏡アイコン */
-.magnifying_glass {
+.search-box i,
+.search-box .magnifying_glass {
   display: inline-block;
-  position: relative;
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
+  color: #ccc;
+}
+
+#search-input {
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #eee;
+  font-size: 13px;
+  min-width: 180px;
+}
+
+#search-input::placeholder {
   color: #777;
-}
-
-.magnifying_glass::before {
-  content: "";
-  position: absolute;
-  width: 12px;
-  height: 12px;
-  border: 2px solid currentColor;
-  border-radius: 50%;
-  top: 0;
-  left: 0;
-}
-
-.magnifying_glass::after {
-  content: "";
-  position: absolute;
-  width: 2px;
-  height: 8px;
-  background: currentColor;
-  top: 10px;
-  left: 10px;
-  transform: rotate(45deg);
 }
 
 /* ===============================
@@ -83,7 +71,7 @@ body {
 =============================== */
 .layout {
   display: flex;
-  min-height: calc(100vh - 48px);
+  min-height: calc(100vh - 56px);
 }
 
 /* ===============================
@@ -91,33 +79,57 @@ body {
 =============================== */
 .sidebar {
   width: 220px;
-  border-right: 1px solid #eee;
+  border-right: 1px solid #333;
   padding: 16px;
-  background: #fafafa;
+  background: #181818;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 .nav-button {
   display: block;
   width: 100%;
-  margin-bottom: 8px;
   padding: 8px 10px;
-  border: 1px solid #ddd;
-  background: #fff;
-  cursor: pointer;
+  margin-bottom: 8px;
+  border-radius: 6px;
+  border: 1px solid #444;
+  background: #222;
+  color: #eee;
+  font-size: 13px;
   text-align: left;
-  font-size: 14px;
+  cursor: pointer;
 }
 
 .nav-button:hover {
-  background: #f0f0f0;
+  background: #2c2c2c;
 }
 
+/* ご相談はコチラボタン */
+.sidebar-bottom {
+  margin-top: auto;
+}
+
+.consult-btn {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 999px;
+  border: 1px solid #ff8a3c;
+  background: #ff8a3c;
+  color: #111;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.consult-btn:hover {
+  background: #ff9c57;
+}
+
+/* 管理者モード表示 */
 #admin-panel {
-  margin-top: 20px;
-  padding: 10px;
-  border: 1px dashed #ccc;
   font-size: 12px;
-  background: #fffef5;
+  color: #ccc;
 }
 
 /* ===============================
@@ -125,57 +137,31 @@ body {
 =============================== */
 .main {
   flex: 1;
-  padding: 16px;
+  padding: 16px 24px;
 }
 
-.view.hidden {
-  display: none;
-}
-
-.section-header {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 8px;
-}
-
-.edit-button {
-  padding: 4px 8px;
-  font-size: 12px;
-  border: 1px solid #ccc;
-  background: #fff;
-  cursor: pointer;
-}
-
-.edit-button:hover {
-  background: #f5f5f5;
-}
-
-.editable-block {
-  border: 1px solid #eee;
-  padding: 12px;
-  min-height: 80px;
-  background: #fff;
-  white-space: pre-wrap;
-}
-
-/* ===============================
-   ドロップゾーン（管理者モード）
-=============================== */
+/* ドロップゾーン */
 .dropzone {
-  border: 2px dashed #ccc;
-  border-radius: 6px;
-  padding: 20px;
-  text-align: center;
-  color: #777;
+  border: 1px dashed #666;
+  border-radius: 8px;
+  padding: 16px;
   margin-bottom: 16px;
-  background: #fcfcfc;
+  font-size: 13px;
+  color: #ccc;
+  text-align: center;
+  background: #181818;
 }
 
 .dropzone.hover {
-  border-color: #0078d4;
-  background: #f0f8ff;
-  color: #0078d4;
+  border-color: #ff8a3c;
+  background: #202020;
+}
+
+/* ===============================
+   VIEW 切り替え
+=============================== */
+.view.hidden {
+  display: none;
 }
 
 /* ===============================
@@ -183,28 +169,29 @@ body {
 =============================== */
 .works-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 16px;
 }
 
+/* カード */
 .work-card {
-  border: 1px solid #eee;
-  border-radius: 4px;
+  background: #181818;
+  border-radius: 8px;
   overflow: hidden;
-  background: #fff;
+  border: 1px solid #333;
   display: flex;
   flex-direction: column;
 }
 
 .work-image {
   width: 100%;
-  aspect-ratio: 4 / 3;
+  display: block;
   object-fit: cover;
-  background: #f5f5f5;
+  background: #000;
 }
 
 .work-body {
-  padding: 8px;
+  padding: 10px 12px;
   font-size: 13px;
 }
 
@@ -214,33 +201,84 @@ body {
 }
 
 .work-tags {
-  font-size: 11px;
-  color: #666;
+  margin: 0 0 4px;
+  color: #aaa;
+  font-size: 12px;
 }
 
 .work-description {
+  margin: 0 0 8px;
   font-size: 12px;
-  margin-top: 4px;
+  color: #ddd;
 }
 
+/* 編集ボタン */
 .work-actions {
   display: flex;
   justify-content: flex-end;
-  gap: 4px;
-  margin-top: 6px;
 }
 
-.work-actions .edit-button {
+.edit-button {
+  padding: 4px 8px;
   font-size: 11px;
+  border-radius: 4px;
+  border: 1px solid #555;
+  background: #222;
+  color: #eee;
+  cursor: pointer;
+}
+
+.edit-button:hover {
+  background: #2c2c2c;
 }
 
 /* ===============================
-   管理者モード制御
+   ABOUT / INFO
+=============================== */
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.section-header h2 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.editable-block {
+  border-radius: 8px;
+  border: 1px solid #333;
+  padding: 12px;
+  background: #181818;
+  font-size: 13px;
+  min-height: 80px;
+}
+
+/* ===============================
+   管理者モード
 =============================== */
 .admin-only {
   display: none;
 }
 
-.admin-mode .admin-only {
+body.admin-mode .admin-only {
   display: block;
+}
+
+/* ===============================
+   スクロールバー（軽く）
+=============================== */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #111;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #444;
+  border-radius: 4px;
 }
