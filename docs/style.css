@@ -261,6 +261,7 @@ body.admin-mode .admin-only { display: block; }
   align-items: center;
   justify-content: center;
   position: relative;
+  overflow: visible;
 }
 
 .viewer-image {
@@ -277,9 +278,9 @@ body.admin-mode .admin-only { display: block; }
   transform: translateY(-50%);
   width: 48px;
   height: 48px;
-  border-radius: 50%; /* ← 丸ボタン */
+  border-radius: 50%;
   border: none;
-  background: rgba(0,0,0,0.35); /* ← もっと透明に */
+  background: rgba(0,0,0,0.35);
   color: #fff;
   font-size: 28px;
   cursor: pointer;
@@ -287,13 +288,12 @@ body.admin-mode .admin-only { display: block; }
   align-items: center;
   justify-content: center;
   transition: background 0.2s ease;
-  z-index: 9800; /* ← 画像より上に */
+  z-index: 9800;
 }
 
 .viewer-arrow:hover {
   background: rgba(0,0,0,0.55);
 }
-
 
 .viewer-arrow.left { left: 20px; }
 .viewer-arrow.right { right: 20px; }
