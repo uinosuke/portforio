@@ -225,27 +225,31 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
 }
 
-/* CSSで虫眼鏡を描く（完全無彩色） */
+/* 虫眼鏡（中央に表示されるように修正済み） */
 #search-button::before {
   content: "";
-  width: 22px;
-  height: 22px;
-  border: 3px solid #777; /* 無彩色グレー */
+  width: 24px;
+  height: 24px;
+  border: 3px solid #777;
   border-radius: 50%;
   position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 #search-button::after {
   content: "";
-  width: 12px;
+  width: 14px;
   height: 3px;
-  background: #777; /* 無彩色グレー */
+  background: #777;
   position: absolute;
+  top: 58%;
+  left: 58%;
   transform: rotate(45deg);
-  right: 20px;
-  bottom: 20px;
 }
 
 #search-button:hover {
