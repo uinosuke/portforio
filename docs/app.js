@@ -78,8 +78,6 @@ async function loadWorks() {
       <img class="work-image" src="${item.image}" alt="">
       <div class="work-body">
         <p class="work-title">${item.title}</p>
-        <p class="work-tags">${item.tags.join(" ")}</p>
-        <p class="work-description">${item.description}</p>
 
         <div class="work-actions admin-only">
           <button class="edit-button" data-id="${item.id}">編集</button>
@@ -88,14 +86,17 @@ async function loadWorks() {
       </div>
     `;
 
+    // 画像クリックで viewer を開く
     card.querySelector(".work-image").addEventListener("click", () => {
       openViewer(index);
     });
 
+    // 編集
     card.querySelector(".edit-button").addEventListener("click", () => {
       editWork(item);
     });
 
+    // 削除
     card.querySelector(".delete-button").addEventListener("click", () => {
       deleteWork(item.id);
     });
@@ -113,7 +114,12 @@ function openViewer(index) {
 
   viewerImage.src = item.image;
   viewerTitle.textContent = item.title;
-  viewerTags.textContent = item.tags.join(" ");
+
+  // 丸ポチタグ生成
+  viewerTags.innerHTML = item.tags
+    .map(tag => `<span class="tag">${tag}</span>`)
+    .join("");
+
   viewerDescription.textContent = item.description;
 
   viewer.classList.add("open");
