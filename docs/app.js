@@ -44,14 +44,7 @@ function setupNavigation() {
       const view = btn.dataset.view;
 
       document.querySelectorAll(".view").forEach(v => v.classList.add("hidden"));
-
-      if (view === "gallery") {
-        document.getElementById("view-gallery").classList.remove("hidden");
-      } else if (view === "about") {
-        document.getElementById("view-about").classList.remove("hidden");
-      } else if (view === "info") {
-        document.getElementById("view-info").classList.remove("hidden");
-      }
+      document.getElementById(`view-${view}`).classList.remove("hidden");
     });
   });
 
@@ -363,7 +356,7 @@ async function loadInfo() {
 }
 
 // ===============================
-// サイドバー（1秒後に閉じる & ホバーで展開）
+// 左サイドバー（1秒後に閉じる & ホバーで展開）
 // ===============================
 function setupSidebar() {
   const sidebar = document.getElementById("sidebar");
@@ -388,43 +381,29 @@ function setupSidebar() {
 }
 
 // ===============================
-// 画像ビューア（Google画像風）
+/* 画像ビューア（右側スライド表示） */
 // ===============================
-let imageViewerEl = null;
-let imageViewerImg = null;
-let imageViewerTitle = null;
-let imageViewerTags = null;
-let imageViewerDesc = null;
+let viewer = null;
+let viewerImg = null;
+let viewerTags = null;
+let viewerDesc = null;
 
 function setupImageViewer() {
-  imageViewerEl = document.getElementById("image-viewer");
-  if (!imageViewerEl) return;
+  viewer = document.getElementById("image-viewer");
+  viewerImg = viewer.querySelector(".viewer-image");
+  viewerTags = viewer.querySelector(".viewer-tags");
+  viewerDesc = viewer.querySelector(".viewer-description");
 
-  imageViewerImg = imageViewerEl.querySelector(".viewer-image");
-  imageViewerTitle = imageViewerEl.querySelector(".viewer-title");
-  imageViewerTags = imageViewerEl.querySelector(".viewer-tags");
-  imageViewerDesc = imageViewerEl.querySelector(".viewer-description");
-
-  const closeBtn = imageViewerEl.querySelector(".viewer-close");
+  const closeBtn = viewer.querySelector(".viewer-close");
   closeBtn.addEventListener("click", () => {
-    imageViewerEl.classList.remove("open");
-  });
-
-  imageViewerEl.addEventListener("click", (e) => {
-    if (e.target === imageViewerEl) {
-      imageViewerEl.classList.remove("open");
-    }
+    viewer.classList.remove("open");
   });
 }
 
 function openImageViewer(item) {
-  if (!imageViewerEl) return;
+  viewerImg.src = item.image;
+  viewerTags.textContent = (item.tags || []).join(" ");
+  viewerDesc.textContent = item.description || "";
 
-  imageViewerImg.src = item.image;
-  imageViewerImg.alt = item.title || "";
-  imageViewerTitle.textContent = item.title || "(無題)";
-  imageViewerTags.textContent = (item.tags || []).join(" ");
-  imageViewerDesc.textContent = item.description || "";
-
-  imageViewerEl.classList.add("open");
+  viewer.classList.add("open");
 }
