@@ -53,7 +53,7 @@ window.addEventListener("load", () => {
   showView(view);
 });
 
-document.querySelectorAll(".nav-button").forEach(btn => {
+document.querySelectorAll(".nav-item").forEach(btn => {
   btn.addEventListener("click", () => {
     const view = btn.dataset.view;
     location.hash = view;
