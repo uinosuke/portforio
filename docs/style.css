@@ -226,9 +226,10 @@ body {
   align-items: center;
   justify-content: center;
   position: relative;
+  overflow: visible;
 }
 
-/* 虫眼鏡（中央に表示されるように完全修正） */
+/* 虫眼鏡（中央に確実に表示） */
 #search-button::before {
   content: "";
   width: 26px;
@@ -239,6 +240,7 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  z-index: 2;
 }
 
 #search-button::after {
@@ -247,9 +249,10 @@ body {
   height: 3px;
   background: #777;
   position: absolute;
-  top: 62%;
-  left: 62%;
-  transform: rotate(45deg);
+  top: 50%;
+  left: 50%;
+  transform: translate(8px, 8px) rotate(45deg);
+  z-index: 2;
 }
 
 #search-button:hover {
