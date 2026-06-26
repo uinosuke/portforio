@@ -214,7 +214,7 @@ html, body {
 body.admin-mode .admin-only { display: block; }
 
 /* ===============================
-   画像ビューア（暗い部分クリックで閉じる）
+   画像ビューア
 =============================== */
 .image-viewer {
   position: fixed;
@@ -223,7 +223,7 @@ body.admin-mode .admin-only { display: block; }
   width: 100%;
   height: calc(100vh - 56px);
   display: flex;
-  background: rgba(0,0,0,0.65); /* ← 暗い部分 */
+  background: rgba(0,0,0,0.65);
   transform: translateY(20px);
   opacity: 0;
   pointer-events: none;
@@ -237,7 +237,6 @@ body.admin-mode .admin-only { display: block; }
   pointer-events: auto;
 }
 
-/* 左側：大きい画像 */
 .viewer-left {
   width: 80%;
   display: flex;
@@ -254,7 +253,6 @@ body.admin-mode .admin-only { display: block; }
   box-shadow: 0 4px 20px rgba(0,0,0,0.5);
 }
 
-/* 矢印ボタン（Google画像検索風） */
 .viewer-arrow {
   position: absolute;
   top: 50%;
@@ -281,7 +279,6 @@ body.admin-mode .admin-only { display: block; }
 .viewer-arrow.left { left: 20px; }
 .viewer-arrow.right { right: 20px; }
 
-/* 右側：詳細パネル */
 .viewer-right {
   width: 20%;
   background: #1a1a1a;
@@ -291,22 +288,67 @@ body.admin-mode .admin-only { display: block; }
   z-index: 9600;
 }
 
-.viewer-title {
-  margin: 0 0 12px;
-  font-size: 18px;
-  font-weight: 600;
+/* ===============================
+   モーダル（HTML編集）
+=============================== */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 20000;
 }
 
-.viewer-tags {
-  margin-bottom: 12px;
-  color: #ccc;
-  font-size: 13px;
+.modal.open {
+  display: flex;
 }
 
-.viewer-description {
-  color: #ddd;
+.modal-content {
+  width: 70%;
+  height: 70%;
+  background: #fff;
+  color: #000;
+  border-radius: 8px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+#modal-textarea {
+  flex: 1;
+  width: 100%;
+  resize: none;
   font-size: 14px;
-  line-height: 1.6;
+  padding: 10px;
+  border: 1px solid #aaa;
+  border-radius: 6px;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.modal-btn {
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.modal-btn.save {
+  background: #0078ff;
+  color: #fff;
+}
+
+.modal-btn.cancel {
+  background: #ccc;
+  color: #000;
 }
 
 /* ===============================
