@@ -8,9 +8,6 @@
 </head>
 <body>
 
-  <!-- ===============================
-       ヘッダー
-  =============================== -->
   <header class="header">
     <h1 id="site-title">MyPortfolio</h1>
 
@@ -20,14 +17,8 @@
     </div>
   </header>
 
-  <!-- ===============================
-       レイアウト（サイドバー＋メイン）
-  =============================== -->
   <div class="layout">
 
-    <!-- ===============================
-         左サイドバー
-    =============================== -->
     <aside id="sidebar" class="sidebar">
       <button class="nav-button" data-view="gallery">画像一覧</button>
       <button class="nav-button" data-view="about">ABOUT</button>
@@ -42,22 +33,16 @@
       </div>
     </aside>
 
-    <!-- ===============================
-         メイン領域
-    =============================== -->
     <main class="main">
 
-      <!-- ドロップゾーン（管理者のみ） -->
       <div id="dropzone" class="dropzone admin-only">
         ここに画像をドラッグ＆ドロップ
       </div>
 
-      <!-- ====== VIEW: ギャラリー ====== -->
       <div id="view-gallery" class="view">
         <div id="works-list" class="works-grid"></div>
       </div>
 
-      <!-- ====== VIEW: ABOUT ====== -->
       <div id="view-about" class="view hidden">
         <div class="section-header">
           <h2>ABOUT</h2>
@@ -66,7 +51,6 @@
         <div id="about-content" class="editable-block"></div>
       </div>
 
-      <!-- ====== VIEW: 制作について ====== -->
       <div id="view-info" class="view hidden">
         <div class="section-header">
           <h2>制作について</h2>
@@ -78,19 +62,23 @@
     </main>
   </div>
 
-  <!-- ===============================
-       暗転レイヤー
-  =============================== -->
+  <!-- 暗転レイヤー -->
   <div id="overlay" class="overlay"></div>
 
-  <!-- ===============================
-       画像ビューア（左80% + 右20%）
-  =============================== -->
+  <!-- 画像ビューア -->
   <div id="image-viewer" class="image-viewer">
 
     <!-- 左側：大きい画像 -->
     <div class="viewer-left">
+
+      <!-- 左矢印 -->
+      <button id="viewer-prev" class="viewer-arrow left">‹</button>
+
       <img id="viewer-image" class="viewer-image" src="" alt="" />
+
+      <!-- 右矢印 -->
+      <button id="viewer-next" class="viewer-arrow right">›</button>
+
     </div>
 
     <!-- 右側：詳細パネル -->
