@@ -20,7 +20,7 @@ body {
   font-size: 14px;
   color: #4fc3f7;
   cursor: pointer;
-  display: none; /* ← 検索中だけ表示 */
+  display: none;
 }
 .show-all:hover {
   text-decoration: underline;
@@ -38,11 +38,10 @@ body {
   z-index: 1000;
 }
 
-/* ← 初回ロード時は全開 → 1.5秒後に1cmだけ残す */
 .sidebar-inner {
   position: absolute;
   top: 0;
-  left: 0; /* ← 初回は全開 */
+  left: 0; /* 初回は全開 */
   width: 180px;
   height: 100%;
   background: #1a1a1a;
@@ -53,14 +52,10 @@ body {
   border-right: 1px solid #333;
 }
 
-/* ← JS で 1.5秒後に left:-140px に移動させる */
-
-/* ホバーで全開 */
 #sidebar:hover .sidebar-inner {
   left: 0;
 }
 
-/* サイドバー内リンク */
 .sidebar-nav a {
   display: block;
   color: #ddd;
@@ -72,7 +67,6 @@ body {
   transition: background 0.15s ease, color 0.15s ease;
 }
 
-/* ピアノ鍵盤風ホバー */
 .sidebar-nav a:hover {
   background: #e5e5e5;
   color: #111;
