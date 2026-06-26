@@ -195,11 +195,17 @@ html, body {
   font-size: 13px;
 }
 
+/* タイトルを通常は非表示に */
 .work-title {
-  margin: 0;
-  font-weight: 600;
-  font-size: 14px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
 }
+
+/* ホバー時だけ表示 */
+.work-card:hover .work-title {
+  opacity: 1;
+}
+
 
 /* タグと説明は非表示 */
 .work-tags,
