@@ -89,21 +89,22 @@ html, body {
 .nav-link {
   display: block;
   width: 100%;
-  padding: 10px 12px;
-  border-radius: 6px;
-  background: transparent; /* ← 通常は透明 */
+  padding: 12px 14px;
+  border-radius: 0;          /* ← 枠も角丸も無し */
+  background: transparent;   /* ← 通常は透明 */
   color: #eee;
-  font-size: 13px;
+  font-size: 14px;
   text-decoration: none;
   cursor: pointer;
-  transition: background 0.2s ease, color 0.2s ease;
+  transition: background 0.15s ease;
 }
 
 .nav-button:hover,
 .nav-link:hover {
-  background: #e5e5e5; /* ← ピアノ鍵盤みたいな薄い白 */
-  color: #000;         /* ← 黒文字に反転 */
+  background: rgba(255, 255, 255, 0.12); /* ← ピアノ鍵盤みたいに薄く光る */
+  color: #fff;                           /* ← 文字は白のまま */
 }
+
 
 
 .sidebar-bottom { margin-top: auto; }
