@@ -15,9 +15,14 @@ const viewerTitle = document.getElementById("viewer-title");
 const viewerTags = document.getElementById("viewer-tags");
 const viewerDescription = document.getElementById("viewer-description");
 
+const btnPrev = document.getElementById("viewer-prev");
+const btnNext = document.getElementById("viewer-next");
+
 const dropzone = document.getElementById("dropzone");
 
 let adminMode = false;
+let works = [];
+let currentIndex = 0;
 
 // ===============================
 // 管理者モード（ダブルクリック）
@@ -32,11 +37,11 @@ document.addEventListener("dblclick", () => {
 // ===============================
 async function loadWorks() {
   const res = await fetch(`${API_BASE}/works`);
-  const list = await res.json();
+  works = await res.json();
 
   worksList.innerHTML = "";
 
-  list.forEach(item => {
+  works.forEach((item, index) => {
     const card = document.createElement("div");
     card.className = "work-card";
 
@@ -56,7 +61,7 @@ async function loadWorks() {
 
     // 画像クリック → ビューア表示
     card.querySelector(".work-image").addEventListener("click", () => {
-      openViewer(item);
+      openViewer(index);
     });
 
     // 編集
@@ -76,7 +81,10 @@ async function loadWorks() {
 // ===============================
 // ビューアを開く
 // ===============================
-function openViewer(item) {
+function openViewer(index) {
+  currentIndex = index;
+  const item = works[index];
+
   viewerImage.src = item.image;
   viewerTitle.textContent = item.title;
   viewerTags.textContent = item.tags.join(" ");
@@ -94,12 +102,23 @@ function closeViewer() {
   viewer.classList.remove("open");
 }
 
-// 暗転クリックで閉じる
 overlay.addEventListener("click", closeViewer);
 
-// ESC で閉じる
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape") closeViewer();
+});
+
+// ===============================
+// 前後の画像へ
+// ===============================
+btnPrev.addEventListener("click", () => {
+  currentIndex = (currentIndex - 1 + works.length) % works.length;
+  openViewer(currentIndex);
+});
+
+btnNext.addEventListener("click", () => {
+  currentIndex = (currentIndex + 1) % works.length;
+  openViewer(currentIndex);
 });
 
 // ===============================
@@ -202,36 +221,4 @@ async function loadInfo() {
   document.getElementById("info-content").innerHTML = await res.text();
 }
 
-// ===============================
-// ABOUT / INFO 編集
-// ===============================
-document.getElementById("edit-about").addEventListener("click", async () => {
-  const html = prompt("ABOUT を編集", document.getElementById("about-content").innerHTML);
-  if (html === null) return;
-
-  await fetch(`${API_BASE}/about`, {
-    method: "PUT",
-    body: html
-  });
-
-  loadAbout();
-});
-
-document.getElementById("edit-info").addEventListener("click", async () => {
-  const html = prompt("制作について を編集", document.getElementById("info-content").innerHTML);
-  if (html === null) return;
-
-  await fetch(`${API_BASE}/works-info`, {
-    method: "PUT",
-    body: html
-  });
-
-  loadInfo();
-});
-
-// ===============================
-// 初期ロード
-// ===============================
-loadWorks();
-loadAbout();
-loadInfo();
+//
