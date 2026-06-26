@@ -41,7 +41,7 @@ body {
 #sidebar-inner {
   position: absolute;
   top: 0;
-  left: 0; /* 初回は全開 */
+  left: 0;
   width: 180px;
   height: 100%;
   background: #1a1a1a;
@@ -52,12 +52,10 @@ body {
   border-right: 1px solid #333;
 }
 
-/* ★ ホバーで展開（!important でインラインスタイルに勝つ） */
 #sidebar:hover #sidebar-inner {
   left: 0 !important;
 }
 
-/* サイドバー内リンク */
 .sidebar-nav a {
   display: block;
   color: #ddd;
@@ -69,7 +67,6 @@ body {
   transition: background 0.15s ease, color 0.15s ease;
 }
 
-/* ピアノ鍵盤風ホバー */
 .sidebar-nav a:hover {
   background: #e5e5e5;
   color: #111;
@@ -86,8 +83,8 @@ body {
 .consult-btn {
   width: 100%;
   padding: 12px 0;
-  background: #8b1e3f; /* ワインレッド */
-  color: #fff;         /* 白文字 */
+  background: #8b1e3f;
+  color: #fff;
   border: none;
   border-radius: 4px;
   font-size: 14px;
@@ -211,7 +208,7 @@ body {
 }
 
 /* ===========================
-   🔍 検索アイコン（白丸＋グレーアイコン）
+   🔍 検索アイコン（白丸＋完全無彩色グレー）
 =========================== */
 #search-button {
   position: fixed;
@@ -219,17 +216,36 @@ body {
   right: 70px;
   width: 68px;
   height: 68px;
-  background: #fff;     /* 白丸 */
+  background: #fff;
   border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #666;          /* グレーの虫眼鏡 */
-  font-size: 28px;
+  border: 2px solid #ccc;
   cursor: pointer;
   z-index: 999999;
   transition: transform 0.15s ease;
-  border: 2px solid #ddd; /* 薄いグレーの縁 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* CSSで虫眼鏡を描く（完全無彩色） */
+#search-button::before {
+  content: "";
+  width: 22px;
+  height: 22px;
+  border: 3px solid #777; /* 無彩色グレー */
+  border-radius: 50%;
+  position: absolute;
+}
+
+#search-button::after {
+  content: "";
+  width: 12px;
+  height: 3px;
+  background: #777; /* 無彩色グレー */
+  position: absolute;
+  transform: rotate(45deg);
+  right: 20px;
+  bottom: 20px;
 }
 
 #search-button:hover {
