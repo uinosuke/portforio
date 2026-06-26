@@ -228,11 +228,11 @@ body {
   position: relative;
 }
 
-/* 虫眼鏡（中央に表示されるように修正済み） */
+/* 虫眼鏡（中央に表示されるように完全修正） */
 #search-button::before {
   content: "";
-  width: 24px;
-  height: 24px;
+  width: 26px;
+  height: 26px;
   border: 3px solid #777;
   border-radius: 50%;
   position: absolute;
@@ -247,8 +247,8 @@ body {
   height: 3px;
   background: #777;
   position: absolute;
-  top: 58%;
-  left: 58%;
+  top: 62%;
+  left: 62%;
   transform: rotate(45deg);
 }
 
