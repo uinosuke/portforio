@@ -172,10 +172,13 @@ html, body {
   margin-bottom: 16px;
   background: #181818;
   border-radius: 8px;
-  overflow: hidden;
   border: 1px solid #333;
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  /* 画像に重ねるために必要 */
+  position: relative;
+  overflow: hidden;
 }
 
 .work-card:hover {
@@ -183,6 +186,7 @@ html, body {
   box-shadow: 0 4px 12px rgba(0,0,0,0.4);
 }
 
+/* 画像 */
 .work-image {
   width: 100%;
   height: auto;
@@ -190,22 +194,42 @@ html, body {
   background: #000;
 }
 
-.work-body {
-  padding: 10px 12px;
-  font-size: 13px;
-}
-
-/* タイトルを通常は非表示に */
+/* タイトル（最初は透明） */
 .work-title {
+  position: absolute;
+  bottom: 8px;
+  left: 12px;
+  margin: 0;
+  font-weight: 600;
+  font-size: 14px;
+  color: #fff;
   opacity: 0;
+  z-index: 2;
   transition: opacity 0.2s ease;
 }
 
-/* ホバー時だけ表示 */
-.work-card:hover .work-title {
+/* 黒グラデ（疑似要素で重ねる） */
+.work-card::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 40%;
+  background: linear-gradient(to top, rgba(0,0,0,0.6), transparent);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  z-index: 1;
+}
+
+/* ホバー時に黒グラデ＋タイトル表示 */
+.work-card:hover::after {
   opacity: 1;
 }
 
+.work-card:hover .work-title {
+  opacity: 1;
+}
 
 /* タグと説明は非表示 */
 .work-tags,
@@ -216,7 +240,6 @@ html, body {
 .work-actions {
   display: none; /* ギャラリーでは非表示（管理者モードでJSが表示） */
 }
-
 
 /* ===============================
    管理者モード
