@@ -234,39 +234,10 @@ body {
 /* ===========================
    CSSだけで描く虫眼鏡（壊れない安定版）
 =========================== */
-.magnifying_glass {
-    display: inline-block;
-    position: relative;
-    width: 28px;
-    height: 28px;
+#search-button i {
+    font-size: 28px;
     color: #777;
 }
-
-.magnifying_glass::before {
-    content: "";
-    position: absolute;
-    width: 18px;
-    height: 18px;
-    border: 3px solid currentColor;
-    border-radius: 50%;
-    background: #fff;
-    top: 0;
-    left: 0;
-}
-
-.magnifying_glass::after {
-    content: "";
-    position: absolute;
-    width: 3px;
-    height: 12px;
-    background: currentColor;
-    top: 14px;
-    left: 18px;
-    transform: rotate(45deg);
-}
-
-
-
 
 /* ===========================
    🔍 検索バー
