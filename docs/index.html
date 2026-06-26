@@ -11,7 +11,7 @@
 
 <body>
 
-  <!-- 左サイドバー（ホバーで展開） -->
+  <!-- 左サイドバー -->
   <aside id="sidebar">
     <div class="sidebar-inner">
       <h2 class="sidebar-title">My Portfolio</h2>
@@ -33,7 +33,10 @@
 
     <!-- Gallery -->
     <section id="gallery" class="page">
-      <h1 class="page-title">画像一覧</h1>
+      <h1 class="page-title">
+        画像一覧
+        <span id="show-all" class="show-all">すべての画像を表示</span>
+      </h1>
       <div id="gallery-container" class="masonry"></div>
     </section>
 
@@ -71,14 +74,11 @@
   <div id="overlay">
     <div id="overlay-bg"></div>
 
-    <!-- 左側：拡大画像（3/5） -->
     <div id="overlay-left">
       <img id="overlay-image" src="" alt="">
     </div>
 
-    <!-- 右側：詳細パネル（2/5） -->
     <div id="overlay-right">
-
       <div class="detail-block">
         <h2 id="detail-title" class="detail-title"></h2>
       </div>
@@ -91,7 +91,6 @@
         <div id="detail-description" class="detail-description"></div>
       </div>
 
-      <!-- 編集モード -->
       <div id="detail-edit-mode">
         <label>Tags</label>
         <input id="edit-tags" type="text">
@@ -101,9 +100,14 @@
 
         <button id="save-detail">保存</button>
       </div>
-
     </div>
   </div>
+
+  <!-- 🔍 右下の検索アイコン -->
+  <div id="search-button">🔍</div>
+
+  <!-- 🔍 検索バー -->
+  <input id="search-bar" type="text" placeholder="検索..." />
 
   <script src="app.js"></script>
 </body>
