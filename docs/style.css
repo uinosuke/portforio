@@ -214,25 +214,7 @@ html, body {
 body.admin-mode .admin-only { display: block; }
 
 /* ===============================
-   暗転レイヤー
-=============================== */
-.overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.65);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.25s ease;
-  z-index: 9500; /* viewer より下 */
-}
-
-.overlay.open {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-/* ===============================
-   画像ビューア
+   画像ビューア（暗い部分クリックで閉じる）
 =============================== */
 .image-viewer {
   position: fixed;
@@ -241,11 +223,12 @@ body.admin-mode .admin-only { display: block; }
   width: 100%;
   height: calc(100vh - 56px);
   display: flex;
+  background: rgba(0,0,0,0.65); /* ← 暗い部分 */
   transform: translateY(20px);
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.25s ease, transform 0.25s ease;
-  z-index: 9600; /* overlay の上 */
+  z-index: 9600;
 }
 
 .image-viewer.open {
@@ -288,7 +271,7 @@ body.admin-mode .admin-only { display: block; }
   align-items: center;
   justify-content: center;
   transition: background 0.2s ease;
-  z-index: 9700; /* viewer の上 */
+  z-index: 9700;
 }
 
 .viewer-arrow:hover {
