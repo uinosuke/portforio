@@ -330,12 +330,14 @@ body.admin-mode .admin-only {
 
 /* 右側：詳細パネル（2/5） */
 .viewer-right {
-  width: 40%;
+  width: 20%;
   background: #1a1a1a;
   border-left: 1px solid #333;
   padding: 20px;
   overflow-y: auto;
+  z-index: 9700; /* overlay より上にする */
 }
+
 
 .viewer-close {
   background: #b00;
