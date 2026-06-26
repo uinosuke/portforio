@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>My Portfolio</title>
-
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -27,7 +26,7 @@
   <div class="layout">
 
     <!-- ===============================
-         左サイドバー（1秒後に隠れる）
+         左サイドバー
     =============================== -->
     <aside id="sidebar" class="sidebar">
       <button class="nav-button" data-view="gallery">画像一覧</button>
@@ -80,26 +79,31 @@
   </div>
 
   <!-- ===============================
-       右側：画像拡大ビュー（クリック時のみ表示）
+       暗転レイヤー（Google画像検索風）
   =============================== -->
-<div id="image-viewer" class="image-viewer">
-  <div class="viewer-panel">
-    <button class="viewer-close">×</button>
-
-    <img class="viewer-image" src="" alt="" />
-
-    <div class="viewer-info">
-      <div class="viewer-tags"></div>
-      <div class="viewer-description"></div>
-    </div>
-  </div>
-</div>
-
+  <div id="overlay" class="overlay"></div>
 
   <!-- ===============================
-       JS
+       画像ビューア（左3/5 + 右2/5）
   =============================== -->
-  <script src="app.js"></script>
+  <div id="image-viewer" class="image-viewer">
 
+    <!-- 左側：大きい画像 -->
+    <div class="viewer-left">
+      <img id="viewer-image" class="viewer-image" src="" alt="" />
+    </div>
+
+    <!-- 右側：詳細パネル -->
+    <div class="viewer-right">
+      <button class="viewer-close">×</button>
+
+      <h3 id="viewer-title" class="viewer-title"></h3>
+      <div id="viewer-tags" class="viewer-tags"></div>
+      <p id="viewer-description" class="viewer-description"></p>
+    </div>
+
+  </div>
+
+  <script src="app.js"></script>
 </body>
 </html>
