@@ -162,31 +162,59 @@ html, body {
 /* ===============================
    画像グリッド（Masonry風）
 =============================== */
+.works-grid {
+  column-count: 4;
+  column-gap: 16px;
+}
+
 .work-card {
-  position: relative;
+  break-inside: avoid;
+  margin-bottom: 16px;
+  background: #181818;
+  border-radius: 8px;
   overflow: hidden;
+  border: 1px solid #333;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.work-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+}
+
+.work-image {
+  width: 100%;
+  height: auto;
+  display: block;
+  background: #000;
 }
 
 .work-body {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
   padding: 10px 12px;
-  background: linear-gradient(to top, rgba(0,0,0,0.6), transparent);
+  font-size: 13px;
+}
+
+/* タイトルを通常は非表示に */
+.work-title {
   opacity: 0;
   transition: opacity 0.2s ease;
 }
 
-.work-card:hover .work-body {
+/* ホバー時だけ表示 */
+.work-card:hover .work-title {
   opacity: 1;
 }
 
-.work-title {
-  margin: 0;
-  font-weight: 600;
-  font-size: 14px;
-  color: #fff;
+
+/* タグと説明は非表示 */
+.work-tags,
+.work-description {
+  display: none;
+}
+
+.work-actions {
+  display: none; /* ギャラリーでは非表示（管理者モードでJSが表示） */
 }
 
 
