@@ -85,37 +85,26 @@ html, body {
   z-index: 9000;
 }
 
-.nav-button {
-  width: 100%;
-  padding: 8px 10px;
-  border-radius: 6px;
-  border: 1px solid #444;
-  background: #222;
-  color: #eee;
-  font-size: 13px;
-  text-align: left;
-  cursor: pointer;
-}
-
-.nav-button:hover { background: #2c2c2c; }
-
+.nav-button,
 .nav-link {
   display: block;
   width: 100%;
-  padding: 8px 10px;
+  padding: 10px 12px;
   border-radius: 6px;
-  border: 1px solid #444;
-  background: #222;
+  background: transparent; /* ← 通常は透明 */
   color: #eee;
   font-size: 13px;
   text-decoration: none;
   cursor: pointer;
-  margin-top: 4px;
+  transition: background 0.2s ease, color 0.2s ease;
 }
 
+.nav-button:hover,
 .nav-link:hover {
-  background: #2c2c2c;
+  background: #e5e5e5; /* ← ピアノ鍵盤みたいな薄い白 */
+  color: #000;         /* ← 黒文字に反転 */
 }
+
 
 .sidebar-bottom { margin-top: auto; }
 
