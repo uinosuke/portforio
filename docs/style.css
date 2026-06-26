@@ -52,6 +52,10 @@ html, body {
   font-size: 13px;
   min-width: 180px;
 }
+.search-icon {
+  color: #aaa; /* グレー単色 */
+  font-size: 16px;
+}
 
 /* ===============================
    レイアウト
