@@ -260,13 +260,11 @@ body {
     width: 3px;
     height: 12px;
     background: currentColor;
-
-    /* ★ 円の右下に確実に出すための座標 */
-    top: calc(18px - 1px);
-    left: calc(18px - 1px);
-
+    top: 14px;
+    left: 18px;
     transform: rotate(45deg);
 }
+
 
 
 
