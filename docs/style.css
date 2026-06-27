@@ -432,9 +432,9 @@ body.admin-mode .admin-only { display: block; }
     object-fit: contain;
   }
 
-  /* ★ 下のエリアは20%固定 */
+  /* ★ 下のエリアは30%固定 */
   .viewer-right {
-    height: 20%;
+    height: 30%;
     background: #1a1a1a;
     border-radius: 16px 16px 0 0;
     padding: 16px;
