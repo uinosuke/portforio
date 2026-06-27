@@ -35,6 +35,7 @@ const modalCancel = document.getElementById("modal-cancel");
 const mobileMenuBtn = document.querySelector(".mobile-menu-btn");
 const mobileMenuPanel = document.querySelector(".mobile-menu-panel");
 const viewerRight = document.querySelector(".viewer-right");
+const viewerDragHandle = document.querySelector(".viewer-drag-handle");
 
 let adminMode = false;
 let works = [];
@@ -166,7 +167,10 @@ function openViewer(index) {
 
   viewer.classList.add("open");
 
-  viewerRight.classList.remove("open-full");
+  // スマホ：ボトムシート初期状態（25%）
+  if (window.innerWidth <= 768) {
+    viewerRight.classList.remove("open-full");
+  }
 }
 
 // ===============================
@@ -222,6 +226,17 @@ btnNext.addEventListener("click", (e) => {
   currentIndex = (currentIndex + 1) % works.length;
   openViewer(currentIndex);
 });
+
+// ===============================
+// スマホ：ボトムシート展開（タップで開く）
+// ===============================
+if (viewerDragHandle) {
+  viewerDragHandle.addEventListener("click", () => {
+    if (window.innerWidth <= 768) {
+      viewerRight.classList.toggle("open-full");
+    }
+  });
+}
 
 // ===============================
 // 削除
