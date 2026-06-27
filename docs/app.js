@@ -230,14 +230,42 @@ btnNext.addEventListener("click", (e) => {
 });
 
 // ===============================
-// スマホ：ボトムシート展開（タップで開く）
+// スマホ：viewer-right をドラッグで開閉
 // ===============================
-if (viewerDragHandle) {
-  viewerDragHandle.addEventListener("click", () => {
-    if (window.innerWidth <= 768) {
-      viewerRight.classList.toggle("open-full");
+let startY = 0;
+let currentY = 0;
+let isDragging = false;
+
+function enableDragSheet() {
+  viewerRight.addEventListener("touchstart", (e) => {
+    startY = e.touches[0].clientY;
+    isDragging = true;
+  });
+
+  viewerRight.addEventListener("touchmove", (e) => {
+    if (!isDragging) return;
+
+    currentY = e.touches[0].clientY;
+    const diff = startY - currentY;
+
+    // 上にフリック → 全開
+    if (diff > 30) {
+      viewerRight.classList.add("open-full");
+    }
+
+    // 下にフリック → 閉じる
+    if (diff < -30) {
+      viewerRight.classList.remove("open-full");
     }
   });
+
+  viewerRight.addEventListener("touchend", () => {
+    isDragging = false;
+  });
+}
+
+if (window.innerWidth <= 768) {
+  enableDragSheet();
 }
 
 // ===============================
@@ -285,7 +313,7 @@ async function editWork(item) {
 
 // ===============================
 // アップロード（ドラッグ＆ドロップ）
-// ===============================
+=============================== */
 if (dropzone) {
   dropzone.addEventListener("dragover", (e) => {
     e.preventDefault();
@@ -348,7 +376,7 @@ async function loadInfo() {
 
 // ===============================
 // ABOUT / INFO 編集（モーダル版）
-// ===============================
+=============================== */
 function openModal(type, currentHTML) {
   currentEditType = type;
   modalTitle.textContent = type === "about" ? "ABOUT を編集" : "制作について を編集";
