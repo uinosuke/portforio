@@ -373,14 +373,19 @@ body.admin-mode .admin-only { display: block; }
     column-count: 2;
   }
 
+  /* viewer 全体の高さを固定 */
   .image-viewer {
     display: flex;
     flex-direction: column;
     height: calc(100vh - 56px);
     overflow: hidden;
+    position: fixed;
+    top: 56px;
+    left: 0;
+    width: 100%;
   }
 
-  /* 🌟 浮かせた × ボタン（スマホ専用） */
+  /* 浮かせた × ボタン */
   .viewer-close-btn {
     display: block;
     position: absolute;
@@ -405,9 +410,9 @@ body.admin-mode .admin-only { display: block; }
     background: rgba(0,0,0,0.75);
   }
 
-  /* 画像エリアを 75% に固定 → 中央寄せ安定 */
+  /* 上の画像エリアを 70% に固定 → 中央寄せ安定 */
   .viewer-left {
-    height: 75%;
+    height: 70%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -415,14 +420,16 @@ body.admin-mode .admin-only { display: block; }
 
   .viewer-image {
     max-height: 100%;
-    width: auto;
+    max-width: 100%;
     object-fit: contain;
+    margin: auto;
+    display: block;
   }
 
-  /* 下のちょこん（ボトムシート）を 25% に固定 */
+  /* 下のボトムシートを 30% に固定 */
   .viewer-right {
-    height: 25%;
-    max-height: 25%;
+    height: 30%;
+    max-height: 30%;
     background: #1a1a1a;
     border-radius: 16px 16px 0 0;
     padding: 16px;
@@ -432,8 +439,8 @@ body.admin-mode .admin-only { display: block; }
 
   /* フリックで展開（80%） */
   .viewer-right.open-full {
-    max-height: 80%;
     height: 80%;
+    max-height: 80%;
     overflow-y: auto;
   }
 
