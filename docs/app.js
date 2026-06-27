@@ -190,7 +190,7 @@ document.addEventListener("keydown", (e) => {
 });
 
 // ===============================
-// 前後の画像へ
+// 前後の画像へ（PC）
 // ===============================
 btnPrev.addEventListener("click", (e) => {
   e.stopPropagation();
@@ -205,7 +205,7 @@ btnNext.addEventListener("click", (e) => {
 });
 
 // ===============================
-// スマホ：viewer-right スワイプで展開/縮小（active クラスのみ）
+// スマホ：viewer-right スワイプで展開/縮小
 // ===============================
 function enableDragSheet() {
   if (!viewerRight) return;
@@ -218,7 +218,6 @@ function enableDragSheet() {
     const rect = viewerRight.getBoundingClientRect();
     const offsetY = touchY - rect.top;
 
-    // 上端60px以内で開始したときだけドラッグ扱い
     if (offsetY <= 60) {
       startY = touchY;
       isDragging = true;
@@ -238,7 +237,6 @@ function enableDragSheet() {
     isDragging = false;
   });
 
-  // ハンドルタップでも展開トグル（使いやすい）
   if (dragHandle) {
     dragHandle.addEventListener("click", () => {
       viewerRight.classList.toggle("active");
@@ -246,9 +244,39 @@ function enableDragSheet() {
   }
 }
 
+// ===============================
+// スマホ：左右スワイプで画像切り替え
+// ===============================
+function enableSwipeNavigation() {
+  if (!viewerLeft) return;
+
+  let startX = 0;
+  let endX = 0;
+
+  viewerLeft.addEventListener("touchstart", (e) => {
+    startX = e.touches[0].clientX;
+  });
+
+  viewerLeft.addEventListener("touchend", (e) => {
+    endX = e.changedTouches[0].clientX;
+    const diff = endX - startX;
+
+    if (diff < -50) {
+      currentIndex = (currentIndex + 1) % works.length;
+      openViewer(currentIndex);
+    }
+
+    if (diff > 50) {
+      currentIndex = (currentIndex - 1 + works.length) % works.length;
+      openViewer(currentIndex);
+    }
+  });
+}
+
 window.addEventListener("load", () => {
   if (window.innerWidth <= 768) {
     enableDragSheet();
+    enableSwipeNavigation();
   }
 });
 
