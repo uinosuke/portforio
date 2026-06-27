@@ -368,6 +368,21 @@ body.admin-mode .admin-only { display: block; }
 }
 
 /* ===============================
+   ★ PC viewer-right（白ベース＋影）
+=============================== */
+.viewer-right {
+  width: 20%;
+  height: 90%;
+  background: #ffffff;
+  border-left: 1px solid #e5e5e5;
+  padding: 20px;
+  overflow-y: auto;
+
+  /* ふわっと浮く影 */
+  box-shadow: -4px 0 20px rgba(0,0,0,0.06);
+}
+
+/* ===============================
    スマホ：画像ビューア（ボトムシート）
 =============================== */
 @media (max-width: 768px) {
@@ -447,13 +462,12 @@ body.admin-mode .admin-only { display: block; }
     left: 0;
     width: 100%;
     height: 30%;
-    background: #ffffff; /* ★白ベース */
+    background: #ffffff;
     border-radius: 16px 16px 0 0;
     padding: 16px;
     overflow: hidden;
     transition: height 0.3s ease;
 
-    /* ★ふわっと浮く影 */
     box-shadow: 0 -6px 20px rgba(0,0,0,0.08);
     border-top: 1px solid #e5e5e5;
   }
