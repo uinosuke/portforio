@@ -38,6 +38,7 @@ const mobileMenuBtn = document.querySelector(".mobile-menu-btn");
 const mobileMenuPanel = document.querySelector(".mobile-menu-panel");
 const viewerRight = document.querySelector(".viewer-right");
 const viewerLeft = document.querySelector(".viewer-left");
+const dragHandle = document.querySelector(".viewer-drag-handle");
 
 let adminMode = false;
 let works = [];
@@ -60,7 +61,7 @@ mobileMenuBtn.addEventListener("click", () => {
 });
 
 // ===============================
-// ハッシュURLでページ切替（★修正済み）
+// ハッシュURLでページ切替
 // ===============================
 function showView(view) {
   document.querySelectorAll(".view").forEach(v => v.classList.add("hidden"));
@@ -70,13 +71,11 @@ function showView(view) {
   mobileMenuPanel.classList.remove("open");
 }
 
-// 初回ロード
 window.addEventListener("load", () => {
   const view = location.hash.replace("#", "") || "gallery";
   showView(view);
 });
 
-// ★ハッシュ変化を監視（これが無いと切り替わらない）
 window.addEventListener("hashchange", () => {
   const view = location.hash.replace("#", "") || "gallery";
   showView(view);
@@ -138,7 +137,7 @@ async function loadWorks() {
 }
 
 // ===============================
-// ビューアを開く
+// viewer を開く
 // ===============================
 function openViewer(index) {
   currentIndex = index;
@@ -206,16 +205,17 @@ btnNext.addEventListener("click", (e) => {
 });
 
 // ===============================
-// スマホ：viewer-right をドラッグで開閉（★修正済み）
+// スマホ：viewer-right をドラッグで開閉（ドラッグハンドル基準）
 // ===============================
 let startY = 0;
 let currentY = 0;
 let isDragging = false;
 
 function enableDragSheet() {
-  viewerRight.style.touchAction = "none"; // ★追加：イベント吸われ防止
+  viewerRight.style.touchAction = "none";
 
-  viewerRight.addEventListener("touchstart", (e) => {
+  // ★ フリック開始はドラッグハンドルだけ
+  dragHandle.addEventListener("touchstart", (e) => {
     startY = e.touches[0].clientY;
     isDragging = true;
   });
