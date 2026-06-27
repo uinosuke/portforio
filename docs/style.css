@@ -391,13 +391,12 @@ body.admin-mode .admin-only { display: block; }
   }
 
   .image-viewer {
-    align-items: flex-end;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* ★ 画像を上に配置 */
+    align-items: center;         /* ★ 中央寄せ */
   }
 
-  /* ★★★ スマホでも画像を表示するために削除した部分 ★★★ */
-  /* .viewer-left { display: none; } ← 削除 */
-
-  /* ★★★ スマホで画像を画面いっぱいに表示 ★★★ */
   .viewer-left {
     width: 100%;
     display: flex;
