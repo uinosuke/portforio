@@ -33,8 +33,8 @@ html, body {
   color: #fff;
 }
 
-/* PC検索バー */
-.search-box {
+/* PC検索バー（スマホでは非表示） */
+.pc-search {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -44,18 +44,13 @@ html, body {
   border: 1px solid #444;
 }
 
-#search-input {
+.pc-search input {
   border: none;
   outline: none;
   background: transparent;
   color: #eee;
   font-size: 13px;
   min-width: 180px;
-}
-
-.search-icon {
-  color: #aaa;
-  font-size: 16px;
 }
 
 #search-clear {
@@ -117,7 +112,7 @@ html, body {
   width: 100%;
 }
 
-/* スマホ検索バー（検索ボタン付き） */
+/* スマホ検索バー（1つだけ） */
 .mobile-search-area {
   margin-top: 20px;
 }
@@ -349,30 +344,16 @@ body.admin-mode .admin-only { display: block; }
   z-index: 9700;
 }
 
-.viewer-arrow:hover {
-  background: rgba(0,0,0,0.55);
-}
-
 .viewer-arrow.left { left: 20px; }
 .viewer-arrow.right { right: 20px; }
 
-.viewer-right {
-  width: 20%;
-  background: #1a1a1a;
-  border-left: 1px solid #333;
-  padding: 20px;
-  overflow-y: auto;
-}
-
-.viewer-section-title {
-  font-size: 12px;
-  color: #aaa;
-  margin: 16px 0 6px;
-  letter-spacing: 1px;
+/* PCでは × ボタン非表示 */
+.viewer-close-btn {
+  display: none;
 }
 
 /* ===============================
-   スマホ：画像ビューア（完全修正版）
+   スマホ：画像ビューア
 =============================== */
 @media (max-width: 768px) {
 
@@ -380,6 +361,8 @@ body.admin-mode .admin-only { display: block; }
 
   .mobile-menu-btn { display: block; }
   .mobile-menu-panel { display: block; }
+
+  .pc-search { display: none; }
 
   .main {
     margin-left: 0;
@@ -391,18 +374,13 @@ body.admin-mode .admin-only { display: block; }
   }
 
   .image-viewer {
-    position: fixed;
-    top: 56px;
-    left: 0;
-    width: 100%;
-    height: calc(100vh - 56px);
-    display: flex;
     flex-direction: column;
     overflow: hidden;
   }
 
-  /* × ボタン */
+  /* スマホだけ × ボタン表示 */
   .viewer-close-btn {
+    display: block;
     position: absolute;
     top: 12px;
     right: 12px;
