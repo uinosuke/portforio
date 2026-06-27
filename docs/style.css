@@ -447,12 +447,12 @@ body.admin-mode .admin-only { display: block; }
     transition: height 0.3s ease;
   }
 
-  /* フリックで展開（80%固定） */
+  /* ★ フリックで展開（overflow解除） */
   .viewer-right.open-full {
     height: 80%;
     min-height: 80%;
     max-height: 80%;
-    overflow-y: auto;
+    overflow-y: auto; /* ← これが重要 */
   }
 
   /* ★ フリック開始は drag-handle のみに限定 */
