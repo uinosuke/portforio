@@ -30,6 +30,13 @@ const modalTextarea = document.getElementById("modal-textarea");
 const modalSave = document.getElementById("modal-save");
 const modalCancel = document.getElementById("modal-cancel");
 
+// スマホメニュー
+const mobileMenuBtn = document.querySelector(".mobile-menu-btn");
+const mobileMenuPanel = document.querySelector(".mobile-menu-panel");
+
+// スマホ viewer（ボトムシート）
+const viewerRight = document.querySelector(".viewer-right");
+
 let adminMode = false;
 let works = [];
 let currentIndex = 0;
@@ -44,12 +51,24 @@ document.addEventListener("dblclick", () => {
 });
 
 // ===============================
+// スマホ：ハンバーガー開閉
+// ===============================
+if (mobileMenuBtn) {
+  mobileMenuBtn.addEventListener("click", () => {
+    mobileMenuPanel.classList.toggle("open");
+  });
+}
+
+// ===============================
 // ハッシュURLでページ切替
 // ===============================
 function showView(view) {
   document.querySelectorAll(".view").forEach(v => v.classList.add("hidden"));
   const target = document.getElementById(`view-${view}`);
   if (target) target.classList.remove("hidden");
+
+  // スマホメニュー閉じる
+  mobileMenuPanel.classList.remove("open");
 }
 
 window.addEventListener("load", () => {
@@ -134,6 +153,9 @@ function openViewer(index) {
   viewerDescription.textContent = item.description;
 
   viewer.classList.add("open");
+
+  // スマホ：ボトムシート初期状態（ちょい見せ）
+  viewerRight.classList.remove("open-full");
 }
 
 // ===============================
@@ -147,14 +169,12 @@ function closeViewer() {
 // 暗い部分クリックで閉じる
 // ===============================
 viewer.addEventListener("click", (e) => {
-  const clickedInsideImage =
+  const clickedInside =
     e.target === viewerImage ||
     e.target.closest(".viewer-right") ||
     e.target.closest(".viewer-arrow");
 
-  if (!clickedInsideImage) {
-    closeViewer();
-  }
+  if (!clickedInside) closeViewer();
 });
 
 // ESC で閉じる
@@ -190,6 +210,32 @@ btnNext.addEventListener("click", (e) => {
   e.stopPropagation();
   currentIndex = (currentIndex + 1) % works.length;
   openViewer(currentIndex);
+});
+
+// ===============================
+// スマホ viewer：フリックで全開
+// ===============================
+let startY = 0;
+let endY = 0;
+
+viewerRight.addEventListener("touchstart", (e) => {
+  startY = e.touches[0].clientY;
+});
+
+viewerRight.addEventListener("touchend", (e) => {
+  endY = e.changedTouches[0].clientY;
+
+  const diff = startY - endY;
+
+  // 上方向にフリック → 全開
+  if (diff > 40) {
+    viewerRight.classList.add("open-full");
+  }
+
+  // 下方向にフリック → 閉じる
+  if (diff < -40) {
+    viewerRight.classList.remove("open-full");
+  }
 });
 
 // ===============================
