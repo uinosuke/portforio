@@ -46,12 +46,30 @@ let currentIndex = 0;
 let currentEditType = ""; // "about" or "info"
 
 // ===============================
-// 管理者モード（ダブルクリック）
+// 管理者モード（4回クリック）
 // ===============================
-document.addEventListener("dblclick", () => {
-  adminMode = !adminMode;
-  document.body.classList.toggle("admin-mode", adminMode);
+let adminClickCount = 0;
+let adminClickTimer = null;
+
+document.addEventListener("click", () => {
+  adminClickCount++;
+
+  // 500ms以内に4回クリックされたら管理者モード切り替え
+  if (adminClickCount === 4) {
+    adminMode = !adminMode;
+    document.body.classList.toggle("admin-mode", adminMode);
+    adminClickCount = 0;
+    clearTimeout(adminClickTimer);
+    return;
+  }
+
+  // 500ms経ったらリセット
+  clearTimeout(adminClickTimer);
+  adminClickTimer = setTimeout(() => {
+    adminClickCount = 0;
+  }, 500);
 });
+
 
 // ===============================
 // スマホ：ハンバーガー開閉
