@@ -16,13 +16,18 @@ const viewerDescription = document.getElementById("viewer-description");
 
 const btnPrev = document.getElementById("viewer-prev");
 const btnNext = document.getElementById("viewer-next");
+const viewerCloseBtn = document.getElementById("viewer-close-btn");
 
 const dropzone = document.getElementById("dropzone");
 
-// 検索（スマホ用に移動させる）
+// PC検索
 const searchBox = document.querySelector(".search-box");
 const searchInput = document.getElementById("search-input");
 const searchClear = document.getElementById("search-clear");
+
+// スマホ検索
+const mobileSearchInput = document.getElementById("mobile-search-input");
+const mobileSearchBtn = document.getElementById("mobile-search-btn");
 
 // モーダル
 const modal = document.getElementById("edit-modal");
@@ -95,11 +100,13 @@ window.addEventListener("load", () => {
   showView(view);
 });
 
-document.querySelectorAll(".nav-item[data-view]").forEach(btn => {
+// PC / スマホ共通：画像一覧押したらフィルター解除
+document.querySelectorAll(".nav-item[data-view='gallery']").forEach(btn => {
   btn.addEventListener("click", () => {
-    const view = btn.dataset.view;
-    location.hash = view;
-    showView(view);
+    searchInput.value = "";
+    mobileSearchInput.value = "";
+    searchClear.style.display = "none";
+    filterWorks("");
   });
 });
 
@@ -175,11 +182,11 @@ function openViewer(index) {
 }
 
 // ===============================
-// ビューアを閉じる
+// ビューアを閉じる（×ボタン）
 // ===============================
-function closeViewer() {
+viewerCloseBtn.addEventListener("click", () => {
   viewer.classList.remove("open");
-}
+});
 
 // ===============================
 // 暗い部分クリックで閉じる
@@ -188,14 +195,15 @@ viewer.addEventListener("click", (e) => {
   const clickedInside =
     e.target === viewerImage ||
     e.target.closest(".viewer-right") ||
-    e.target.closest(".viewer-arrow");
+    e.target.closest(".viewer-arrow") ||
+    e.target === viewerCloseBtn;
 
-  if (!clickedInside) closeViewer();
+  if (!clickedInside) viewer.classList.remove("open");
 });
 
 // ESC で閉じる
 document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape") closeViewer();
+  if (e.key === "Escape") viewer.classList.remove("open");
 });
 
 // 左右キーで画像切り替え
@@ -265,93 +273,65 @@ window.addEventListener("load", () => {
 });
 
 // ===============================
-// 削除
+// スマホ検索ボタン
 // ===============================
-async function deleteWork(id) {
-  if (!confirm("削除しますか？")) return;
+mobileSearchBtn.addEventListener("click", () => {
+  const keyword = mobileSearchInput.value.trim();
+  searchInput.value = keyword;
+  filterWorks(keyword);
 
-  const res = await fetch(`${API_BASE}/works/${id}`, {
-    method: "DELETE"
-  });
-
-  if (res.ok) {
-    await loadWorks();
-  } else {
-    alert("削除に失敗しました");
-  }
-}
+  mobileMenuPanel.classList.remove("open");
+  showView("gallery");
+});
 
 // ===============================
-// 編集
+// PC検索
 // ===============================
-async function editWork(item) {
-  const title = prompt("タイトル", item.title);
-  if (title === null) return;
+searchInput.addEventListener("input", () => {
+  const keyword = searchInput.value.trim();
+  searchClear.style.display = keyword ? "block" : "none";
+  filterWorks(keyword);
+});
 
-  const tags = prompt("タグ（スペース区切り）", item.tags.join(" "));
-  if (tags === null) return;
-
-  const description = prompt("説明", item.description);
-  if (description === null) return;
-
-  await fetch(`${API_BASE}/works/${item.id}`, {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      title,
-      tags: tags.split(" "),
-      description
-    })
-  });
-
-  await loadWorks();
-}
+searchClear.addEventListener("click", () => {
+  searchInput.value = "";
+  searchClear.style.display = "none";
+  filterWorks("");
+});
 
 // ===============================
-// アップロード（ドラッグ＆ドロップ）
+// フィルタ処理
 // ===============================
-if (dropzone) {
-  dropzone.addEventListener("dragover", (e) => {
-    e.preventDefault();
-    dropzone.classList.add("hover");
-  });
+function filterWorks(keyword) {
+  const cards = document.querySelectorAll(".work-card");
+  const k = keyword.toLowerCase();
 
-  dropzone.addEventListener("dragleave", () => {
-    dropzone.classList.remove("hover");
-  });
+  cards.forEach((card, index) => {
+    const item = works[index];
 
-  dropzone.addEventListener("drop", async (e) => {
-    e.preventDefault();
-    dropzone.classList.remove("hover");
+    const title = item.title.toLowerCase();
+    const tags = Array.isArray(item.tags)
+      ? item.tags.join(" ").toLowerCase()
+      : item.tags.toLowerCase();
+    const desc = item.description.toLowerCase();
 
-    const file = e.dataTransfer.files[0];
-    if (!file) return;
+    const match =
+      title.includes(k) ||
+      tags.includes(k) ||
+      desc.includes(k);
 
-    const title = prompt("タイトル");
-    if (title === null) return;
-
-    const tags = prompt("タグ（スペース区切り）", "");
-    if (tags === null) return;
-
-    const description = prompt("説明", "");
-    if (description === null) return;
-
-    const form = new FormData();
-    form.append("file", file);
-    form.append("meta", JSON.stringify({
-      title,
-      tags,
-      description
-    }));
-
-    await fetch(`${API_BASE}/upload`, {
-      method: "POST",
-      body: form
-    });
-
-    await loadWorks();
+    card.style.display = match ? "block" : "none";
   });
 }
+
+// ===============================
+// 初期ロード
+// ===============================
+window.addEventListener("load", () => {
+  loadWorks();
+  loadAbout();
+  loadInfo();
+});
 
 // ===============================
 // ABOUT / INFO 読み込み
@@ -371,7 +351,7 @@ async function loadInfo() {
 }
 
 // ===============================
-// ABOUT / INFO 編集（モーダル版）
+// 編集
 // ===============================
 function openModal(type, currentHTML) {
   currentEditType = type;
@@ -421,50 +401,3 @@ if (btnEditInfo) {
     openModal("info", current);
   });
 }
-
-// ===============================
-// 🔍 検索機能（タイトル / タグ / 概要）
-// ===============================
-searchInput.addEventListener("input", () => {
-  const keyword = searchInput.value.trim();
-  searchClear.style.display = keyword ? "block" : "none";
-  filterWorks(keyword);
-});
-
-searchClear.addEventListener("click", () => {
-  searchInput.value = "";
-  searchClear.style.display = "none";
-  filterWorks("");
-});
-
-// フィルタ処理
-function filterWorks(keyword) {
-  const cards = document.querySelectorAll(".work-card");
-  const k = keyword.toLowerCase();
-
-  cards.forEach((card, index) => {
-    const item = works[index];
-
-    const title = item.title.toLowerCase();
-    const tags = Array.isArray(item.tags)
-      ? item.tags.join(" ").toLowerCase()
-      : item.tags.toLowerCase();
-    const desc = item.description.toLowerCase();
-
-    const match =
-      title.includes(k) ||
-      tags.includes(k) ||
-      desc.includes(k);
-
-    card.style.display = match ? "block" : "none";
-  });
-}
-
-// ===============================
-// 初期ロード
-// ===============================
-window.addEventListener("load", () => {
-  loadWorks();
-  loadAbout();
-  loadInfo();
-});
