@@ -19,7 +19,8 @@ const btnNext = document.getElementById("viewer-next");
 
 const dropzone = document.getElementById("dropzone");
 
-// 検索
+// 検索（スマホ用に移動させる）
+const searchBox = document.querySelector(".search-box");
 const searchInput = document.getElementById("search-input");
 const searchClear = document.getElementById("search-clear");
 
@@ -51,6 +52,25 @@ document.addEventListener("dblclick", () => {
 });
 
 // ===============================
+// スマホ：検索バーをメニュー内へ移動
+// ===============================
+function moveSearchToMobileMenu() {
+  if (window.innerWidth <= 768) {
+    if (!mobileMenuPanel.contains(searchBox)) {
+      mobileMenuPanel.appendChild(searchBox);
+    }
+  } else {
+    const header = document.querySelector(".header");
+    if (!header.contains(searchBox)) {
+      header.appendChild(searchBox);
+    }
+  }
+}
+
+window.addEventListener("resize", moveSearchToMobileMenu);
+window.addEventListener("load", moveSearchToMobileMenu);
+
+// ===============================
 // スマホ：ハンバーガー開閉
 // ===============================
 if (mobileMenuBtn) {
@@ -67,7 +87,6 @@ function showView(view) {
   const target = document.getElementById(`view-${view}`);
   if (target) target.classList.remove("hidden");
 
-  // スマホメニュー閉じる
   mobileMenuPanel.classList.remove("open");
 }
 
@@ -109,17 +128,14 @@ async function loadWorks() {
       </div>
     `;
 
-    // 画像クリックで viewer を開く
     card.querySelector(".work-image").addEventListener("click", () => {
       openViewer(index);
     });
 
-    // 編集
     card.querySelector(".edit-button").addEventListener("click", () => {
       editWork(item);
     });
 
-    // 削除
     card.querySelector(".delete-button").addEventListener("click", () => {
       deleteWork(item.id);
     });
@@ -127,12 +143,11 @@ async function loadWorks() {
     worksList.appendChild(card);
   });
 
-  // 読み込み後に検索フィルタを再適用
   filterWorks(searchInput.value.trim());
 }
 
 // ===============================
-// ビューアを開く
+// ビューアを開く（スマホ対応）
 // ===============================
 function openViewer(index) {
   currentIndex = index;
@@ -141,7 +156,6 @@ function openViewer(index) {
   viewerImage.src = item.image;
   viewerTitle.textContent = item.title;
 
-  // タグ（丸ポチ）
   const tagsArray = Array.isArray(item.tags)
     ? item.tags
     : item.tags.split(" ").filter(t => t.trim() !== "");
@@ -154,7 +168,11 @@ function openViewer(index) {
 
   viewer.classList.add("open");
 
-  // スマホ：ボトムシート初期状態（ちょい見せ）
+  // スマホ時は画像を viewer-right の上に表示
+  if (window.innerWidth <= 768) {
+    viewerRight.prepend(viewerImage);
+  }
+
   viewerRight.classList.remove("open-full");
 }
 
@@ -227,15 +245,8 @@ viewerRight.addEventListener("touchend", (e) => {
 
   const diff = startY - endY;
 
-  // 上方向にフリック → 全開
-  if (diff > 40) {
-    viewerRight.classList.add("open-full");
-  }
-
-  // 下方向にフリック → 閉じる
-  if (diff < -40) {
-    viewerRight.classList.remove("open-full");
-  }
+  if (diff > 40) viewerRight.classList.add("open-full");
+  if (diff < -40) viewerRight.classList.remove("open-full");
 });
 
 // ===============================
@@ -401,10 +412,7 @@ if (btnEditInfo) {
 // ===============================
 searchInput.addEventListener("input", () => {
   const keyword = searchInput.value.trim();
-
-  // × ボタン表示切替
   searchClear.style.display = keyword ? "block" : "none";
-
   filterWorks(keyword);
 });
 
