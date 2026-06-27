@@ -33,7 +33,7 @@ html, body {
   color: #fff;
 }
 
-/* PC検索バー（スマホでは非表示） */
+/* PC検索バー */
 .pc-search {
   display: flex;
   align-items: center;
@@ -112,7 +112,7 @@ html, body {
   width: 100%;
 }
 
-/* スマホ検索バー（1つだけ） */
+/* スマホ検索バー */
 .mobile-search-area {
   margin-top: 20px;
 }
@@ -310,7 +310,7 @@ body.admin-mode .admin-only { display: block; }
   pointer-events: auto;
 }
 
-/* ★ PCでも viewer-left を全面にして中央寄せ */
+/* PC画像中央寄せ */
 .viewer-left {
   width: 100%;
   height: 100%;
@@ -320,7 +320,6 @@ body.admin-mode .admin-only { display: block; }
   position: relative;
 }
 
-/* ★ 画像を縦横ともに中央に固定 */
 .viewer-image {
   max-width: 100%;
   max-height: 100%;
@@ -357,7 +356,7 @@ body.admin-mode .admin-only { display: block; }
 }
 
 /* ===============================
-   スマホ：画像ビューア（完全修正版）
+   スマホ：画像ビューア（縦長画像でも絶対壊れない版）
 =============================== */
 @media (max-width: 768px) {
 
@@ -377,16 +376,16 @@ body.admin-mode .admin-only { display: block; }
     column-count: 2;
   }
 
-  /* viewer 全体の高さを固定 */
+  /* viewer 全体 */
   .image-viewer {
-    display: flex;
-    flex-direction: column;
-    height: calc(100vh - 56px);
-    overflow: hidden;
     position: fixed;
     top: 56px;
     left: 0;
     width: 100%;
+    height: calc(100vh - 56px);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
   }
 
   /* 浮かせた × ボタン */
@@ -414,53 +413,47 @@ body.admin-mode .admin-only { display: block; }
     background: rgba(0,0,0,0.75);
   }
 
-  /* ★ フリック安定化：画像エリアを 65% にする */
+  /* ★ 画像エリアは高さ固定しない（flex: 1） */
   .viewer-left {
-    height: 65%;
+    flex: 1;
     display: flex;
     justify-content: center;
     align-items: center;
   }
 
   .viewer-image {
-    max-height: 100%;
     max-width: 100%;
+    max-height: 100%;
     object-fit: contain;
-    margin: auto;
-    display: block;
   }
 
-  /* ★ フリック安定化：ボトムシートを 35% にする */
+  /* ★ ボトムシートを絶対位置で固定（縦長画像でもズレない） */
   .viewer-right {
-    height: 35%;
-    max-height: 35%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 28%;
     background: #1a1a1a;
     border-radius: 16px 16px 0 0;
     padding: 16px;
     overflow: hidden;
-    transition: max-height 0.3s ease;
-    touch-action: none; /* ★フリック復活の決定打 */
-    position: relative;
+    transition: height 0.3s ease;
+    touch-action: none;
   }
 
-  /* ★ ドラッグハンドルを絶対固定（画像に影響されない） */
+  /* ドラッグハンドル */
   .viewer-drag-handle {
     width: 50px;
     height: 6px;
     background: #666;
     border-radius: 999px;
-    margin: 0 auto;
-    position: absolute;
-    top: 8px;
-    left: 0;
-    right: 0;
-    z-index: 9999;
+    margin: 0 auto 12px;
   }
 
-  /* フリックで展開（80%） */
+  /* フリックで展開 */
   .viewer-right.open-full {
     height: 80%;
-    max-height: 80%;
     overflow-y: auto;
   }
 }
