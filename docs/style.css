@@ -440,6 +440,21 @@ body.admin-mode .admin-only { display: block; }
     overflow: hidden;
     transition: max-height 0.3s ease;
     touch-action: none; /* ★フリック復活の決定打 */
+    position: relative;
+  }
+
+  /* ★ ドラッグハンドルを絶対固定（画像に影響されない） */
+  .viewer-drag-handle {
+    width: 50px;
+    height: 6px;
+    background: #666;
+    border-radius: 999px;
+    margin: 0 auto;
+    position: absolute;
+    top: 8px;
+    left: 0;
+    right: 0;
+    z-index: 9999;
   }
 
   /* フリックで展開（80%） */
@@ -447,14 +462,6 @@ body.admin-mode .admin-only { display: block; }
     height: 80%;
     max-height: 80%;
     overflow-y: auto;
-  }
-
-  .viewer-drag-handle {
-    width: 40px;
-    height: 5px;
-    background: #555;
-    border-radius: 999px;
-    margin: 0 auto 12px;
   }
 }
 
