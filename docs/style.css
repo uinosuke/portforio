@@ -448,7 +448,7 @@ body.admin-mode .admin-only { display: block; }
 
   /* 展開時 */
   .viewer-right.active {
-    height: 80%;
+    height: 60%;
     overflow-y: auto;
   }
 
