@@ -1,41 +1,30 @@
-/* ===============================
-   画像ビューア（赤枠内表示版）
-=============================== */
-.image-viewer {
-  position: relative;        /* fixed → relative に変更 */
-  width: 100%;
-  background: rgba(0,0,0,0.65);
-  border-radius: 8px;
-  padding: 20px;
-  margin-top: 20px;
-  opacity: 1;                /* オーバーレイの fade を無効化 */
-  transform: none;           /* これも無効化 */
-  pointer-events: auto;      /* クリック可能に */
-  display: none;             /* 初期は非表示 */
+// ===============================
+// viewer を dropzone の「下」に移動
+// ===============================
+dropzone.insertAdjacentElement("afterend", viewer);
+
+// viewer を開く
+function openViewer(index) {
+  currentIndex = index;
+  const item = works[index];
+
+  viewerImage.src = item.image;
+  viewerTitle.textContent = item.title;
+
+  const tagsArray = Array.isArray(item.tags)
+    ? item.tags
+    : item.tags.split(" ").filter(t => t.trim() !== "");
+
+  viewerTags.innerHTML = tagsArray
+    .map(tag => `<span class="tag">${tag}</span>`)
+    .join("");
+
+  viewerDescription.textContent = item.description;
+
+  viewer.classList.add("open");
 }
 
-.image-viewer.open {
-  display: block;            /* 開いたら表示 */
-}
-
-.viewer-left {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.viewer-image {
-  max-width: 100%;
-  max-height: 70vh;
-  border-radius: 8px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-}
-
-.viewer-right {
-  width: 100%;
-  background: #1a1a1a;
-  border-top: 1px solid #333;
-  padding: 20px;
-  margin-top: 20px;
+// viewer を閉じる
+function closeViewer() {
+  viewer.classList.remove("open");
 }
