@@ -353,7 +353,7 @@ body.admin-mode .admin-only { display: block; }
 }
 
 /* ===============================
-   スマホ：画像ビューア
+   スマホ：画像ビューア（完全修正版）
 =============================== */
 @media (max-width: 768px) {
 
@@ -374,7 +374,9 @@ body.admin-mode .admin-only { display: block; }
   }
 
   .image-viewer {
+    display: flex;
     flex-direction: column;
+    height: calc(100vh - 56px);
     overflow: hidden;
   }
 
@@ -395,23 +397,23 @@ body.admin-mode .admin-only { display: block; }
     cursor: pointer;
   }
 
+  /* 画像エリアを 75% に固定 → 中央寄せ安定 */
   .viewer-left {
-    flex: 1;
-    min-height: 0;
+    height: 75%;
     display: flex;
     justify-content: center;
     align-items: center;
   }
 
   .viewer-image {
-    width: 100%;
-    height: auto;
-    max-height: 80vh;
+    max-height: 100%;
+    width: auto;
     object-fit: contain;
   }
 
+  /* 下のちょこん（ボトムシート）を 25% に固定 */
   .viewer-right {
-    width: 100%;
+    height: 25%;
     max-height: 25%;
     background: #1a1a1a;
     border-radius: 16px 16px 0 0;
@@ -420,8 +422,10 @@ body.admin-mode .admin-only { display: block; }
     transition: max-height 0.3s ease;
   }
 
+  /* フリックで展開（80%） */
   .viewer-right.open-full {
     max-height: 80%;
+    height: 80%;
     overflow-y: auto;
   }
 
