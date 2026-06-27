@@ -310,19 +310,23 @@ body.admin-mode .admin-only { display: block; }
   pointer-events: auto;
 }
 
+/* ★ PCでも viewer-left を全面にして中央寄せ */
 .viewer-left {
-  width: 80%;
+  width: 100%;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
 }
 
+/* ★ 画像を縦横ともに中央に固定 */
 .viewer-image {
-  max-width: 90%;
-  max-height: 90%;
-  border-radius: 8px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  margin: auto;
+  display: block;
 }
 
 .viewer-arrow {
