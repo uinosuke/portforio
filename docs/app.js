@@ -168,7 +168,6 @@ function openViewer(index) {
 
   viewer.classList.add("open");
 
-  // ★ スマホ時：viewer-left を確実に表示する
   if (window.innerWidth <= 768) {
     viewerLeft.style.display = "flex";
     viewerRight.classList.remove("open-full");
@@ -237,6 +236,8 @@ let currentY = 0;
 let isDragging = false;
 
 function enableDragSheet() {
+  if (!viewerRight) return; // ★ これが重要！
+
   viewerRight.addEventListener("touchstart", (e) => {
     startY = e.touches[0].clientY;
     isDragging = true;
@@ -248,15 +249,8 @@ function enableDragSheet() {
     currentY = e.touches[0].clientY;
     const diff = startY - currentY;
 
-    // 上にフリック → 全開
-    if (diff > 30) {
-      viewerRight.classList.add("open-full");
-    }
-
-    // 下にフリック → 閉じる
-    if (diff < -30) {
-      viewerRight.classList.remove("open-full");
-    }
+    if (diff > 30) viewerRight.classList.add("open-full");
+    if (diff < -30) viewerRight.classList.remove("open-full");
   });
 
   viewerRight.addEventListener("touchend", () => {
@@ -264,7 +258,7 @@ function enableDragSheet() {
   });
 }
 
-if (window.innerWidth <= 768) {
+if (window.innerWidth <= 768 && viewerRight) {
   enableDragSheet();
 }
 
