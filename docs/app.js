@@ -18,10 +18,7 @@ const btnPrev = document.getElementById("viewer-prev");
 const btnNext = document.getElementById("viewer-next");
 const viewerCloseBtn = document.getElementById("viewer-close-btn");
 
-const dropzone = document.getElementById("dropzone");
-
 // PC検索
-const searchBox = document.querySelector(".search-box");
 const searchInput = document.getElementById("search-input");
 const searchClear = document.getElementById("search-clear");
 
@@ -41,7 +38,6 @@ const mobileMenuBtn = document.querySelector(".mobile-menu-btn");
 const mobileMenuPanel = document.querySelector(".mobile-menu-panel");
 const viewerRight = document.querySelector(".viewer-right");
 const viewerLeft = document.querySelector(".viewer-left");
-const viewerDragHandle = document.querySelector(".viewer-drag-handle");
 
 let adminMode = false;
 let works = [];
@@ -57,32 +53,11 @@ document.addEventListener("dblclick", () => {
 });
 
 // ===============================
-// スマホ：検索バーをメニュー内へ移動
-// ===============================
-function moveSearchToMobileMenu() {
-  if (window.innerWidth <= 768) {
-    if (!mobileMenuPanel.contains(searchBox)) {
-      mobileMenuPanel.appendChild(searchBox);
-    }
-  } else {
-    const header = document.querySelector(".header");
-    if (!header.contains(searchBox)) {
-      header.appendChild(searchBox);
-    }
-  }
-}
-
-window.addEventListener("resize", moveSearchToMobileMenu);
-window.addEventListener("load", moveSearchToMobileMenu);
-
-// ===============================
 // スマホ：ハンバーガー開閉
 // ===============================
-if (mobileMenuBtn) {
-  mobileMenuBtn.addEventListener("click", () => {
-    mobileMenuPanel.classList.toggle("open");
-  });
-}
+mobileMenuBtn.addEventListener("click", () => {
+  mobileMenuPanel.classList.toggle("open");
+});
 
 // ===============================
 // ハッシュURLでページ切替
@@ -100,7 +75,9 @@ window.addEventListener("load", () => {
   showView(view);
 });
 
-// PC / スマホ共通：画像一覧押したらフィルター解除
+// ===============================
+// 画像一覧押したらフィルター解除
+// ===============================
 document.querySelectorAll(".nav-item[data-view='gallery']").forEach(btn => {
   btn.addEventListener("click", () => {
     searchInput.value = "";
@@ -154,7 +131,7 @@ async function loadWorks() {
 }
 
 // ===============================
-// ビューアを開く（スマホ対応）
+// ビューアを開く
 // ===============================
 function openViewer(index) {
   currentIndex = index;
@@ -182,7 +159,7 @@ function openViewer(index) {
 }
 
 // ===============================
-// ビューアを閉じる（×ボタン）
+// viewer × ボタンで閉じる
 // ===============================
 viewerCloseBtn.addEventListener("click", () => {
   viewer.classList.remove("open");
@@ -204,21 +181,6 @@ viewer.addEventListener("click", (e) => {
 // ESC で閉じる
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape") viewer.classList.remove("open");
-});
-
-// 左右キーで画像切り替え
-document.addEventListener("keydown", (e) => {
-  if (!viewer.classList.contains("open")) return;
-
-  if (e.key === "ArrowLeft") {
-    currentIndex = (currentIndex - 1 + works.length) % works.length;
-    openViewer(currentIndex);
-  }
-
-  if (e.key === "ArrowRight") {
-    currentIndex = (currentIndex + 1) % works.length;
-    openViewer(currentIndex);
-  }
 });
 
 // ===============================
@@ -244,8 +206,6 @@ let currentY = 0;
 let isDragging = false;
 
 function enableDragSheet() {
-  if (!viewerRight) return;
-
   viewerRight.addEventListener("touchstart", (e) => {
     startY = e.touches[0].clientY;
     isDragging = true;
@@ -267,7 +227,7 @@ function enableDragSheet() {
 }
 
 window.addEventListener("load", () => {
-  if (window.innerWidth <= 768 && viewerRight) {
+  if (window.innerWidth <= 768) {
     enableDragSheet();
   }
 });
@@ -325,15 +285,6 @@ function filterWorks(keyword) {
 }
 
 // ===============================
-// 初期ロード
-// ===============================
-window.addEventListener("load", () => {
-  loadWorks();
-  loadAbout();
-  loadInfo();
-});
-
-// ===============================
 // ABOUT / INFO 読み込み
 // ===============================
 async function loadAbout() {
@@ -351,7 +302,7 @@ async function loadInfo() {
 }
 
 // ===============================
-// 編集
+// 編集モーダル
 // ===============================
 function openModal(type, currentHTML) {
   currentEditType = type;
@@ -386,18 +337,21 @@ modalSave.addEventListener("click", async () => {
   modal.classList.remove("open");
 });
 
-const btnEditAbout = document.getElementById("edit-about");
-if (btnEditAbout) {
-  btnEditAbout.addEventListener("click", () => {
-    const current = document.getElementById("about-content").innerHTML;
-    openModal("about", current);
-  });
-}
+document.getElementById("edit-about")?.addEventListener("click", () => {
+  const current = document.getElementById("about-content").innerHTML;
+  openModal("about", current);
+});
 
-const btnEditInfo = document.getElementById("edit-info");
-if (btnEditInfo) {
-  btnEditInfo.addEventListener("click", () => {
-    const current = document.getElementById("info-content").innerHTML;
-    openModal("info", current);
-  });
-}
+document.getElementById("edit-info")?.addEventListener("click", () => {
+  const current = document.getElementById("info-content").innerHTML;
+  openModal("info", current);
+});
+
+// ===============================
+// 初期ロード
+// ===============================
+window.addEventListener("load", () => {
+  loadWorks();
+  loadAbout();
+  loadInfo();
+});
