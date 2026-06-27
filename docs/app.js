@@ -236,7 +236,7 @@ let currentY = 0;
 let isDragging = false;
 
 function enableDragSheet() {
-  if (!viewerRight) return; // ★ これが重要！
+  if (!viewerRight) return;
 
   viewerRight.addEventListener("touchstart", (e) => {
     startY = e.touches[0].clientY;
@@ -258,9 +258,11 @@ function enableDragSheet() {
   });
 }
 
-if (window.innerWidth <= 768 && viewerRight) {
-  enableDragSheet();
-}
+window.addEventListener("load", () => {
+  if (window.innerWidth <= 768 && viewerRight) {
+    enableDragSheet();
+  }
+});
 
 // ===============================
 // 削除
@@ -307,7 +309,7 @@ async function editWork(item) {
 
 // ===============================
 // アップロード（ドラッグ＆ドロップ）
-=============================== */
+// ===============================
 if (dropzone) {
   dropzone.addEventListener("dragover", (e) => {
     e.preventDefault();
@@ -461,6 +463,8 @@ function filterWorks(keyword) {
 // ===============================
 // 初期ロード
 // ===============================
-loadWorks();
-loadAbout();
-loadInfo();
+window.addEventListener("load", () => {
+  loadWorks();
+  loadAbout();
+  loadInfo();
+});
