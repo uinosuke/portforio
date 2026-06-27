@@ -441,7 +441,7 @@ body.admin-mode .admin-only { display: block; }
     padding: 16px;
     overflow: hidden;
     transition: height 0.3s ease;
-    touch-action: none;
+    /* touch-action: none; ← 削除 */
   }
 
   /* フリックで展開（80%） */
@@ -450,12 +450,14 @@ body.admin-mode .admin-only { display: block; }
     overflow-y: auto;
   }
 
+  /* ★ フリック開始は drag-handle のみに限定 */
   .viewer-drag-handle {
     width: 50px;
     height: 6px;
     background: #666;
     border-radius: 999px;
     margin: 0 auto 12px;
+    touch-action: none; /* ← ここに移動 */
   }
 }
 
