@@ -19,7 +19,7 @@ const btnNext = document.getElementById("viewer-next");
 
 const dropzone = document.getElementById("dropzone");
 
-// 検索（スマホ用に移動させる）
+// 検索
 const searchBox = document.querySelector(".search-box");
 const searchInput = document.getElementById("search-input");
 const searchClear = document.getElementById("search-clear");
@@ -35,7 +35,7 @@ const modalCancel = document.getElementById("modal-cancel");
 const mobileMenuBtn = document.querySelector(".mobile-menu-btn");
 const mobileMenuPanel = document.querySelector(".mobile-menu-panel");
 
-// スマホ viewer（ボトムシート）
+// viewer-right（スマホボトムシート）
 const viewerRight = document.querySelector(".viewer-right");
 
 let adminMode = false;
@@ -147,7 +147,12 @@ async function loadWorks() {
 }
 
 // ===============================
-// ビューアを開く（スマホ対応）
+// viewer を赤い部分（dropzone）に移動
+// ===============================
+dropzone.appendChild(viewer);
+
+// ===============================
+// viewer を開く
 // ===============================
 function openViewer(index) {
   currentIndex = index;
@@ -168,12 +173,11 @@ function openViewer(index) {
 
   viewer.classList.add("open");
 
-  // ★ スマホでも画像は viewer-left に置いたまま！
   viewerRight.classList.remove("open-full");
 }
 
 // ===============================
-// ビューアを閉じる
+// viewer を閉じる
 // ===============================
 function closeViewer() {
   viewer.classList.remove("open");
@@ -183,12 +187,12 @@ function closeViewer() {
 // 暗い部分クリックで閉じる
 // ===============================
 viewer.addEventListener("click", (e) => {
-  const clickedInside =
+  const inside =
     e.target === viewerImage ||
     e.target.closest(".viewer-right") ||
     e.target.closest(".viewer-arrow");
 
-  if (!clickedInside) closeViewer();
+  if (!inside) closeViewer();
 });
 
 // ESC で閉じる
@@ -353,7 +357,7 @@ async function loadInfo() {
 
 // ===============================
 // ABOUT / INFO 編集（モーダル版）
-// ===============================
+=============================== */
 function openModal(type, currentHTML) {
   currentEditType = type;
   modalTitle.textContent = type === "about" ? "ABOUT を編集" : "制作について を編集";
@@ -404,7 +408,7 @@ if (btnEditInfo) {
 }
 
 // ===============================
-// 🔍 検索機能（タイトル / タグ / 概要）
+// 🔍 検索機能
 // ===============================
 searchInput.addEventListener("input", () => {
   const keyword = searchInput.value.trim();
@@ -441,8 +445,6 @@ function filterWorks(keyword) {
   });
 }
 
-// ===============================
-// 初期ロード
 // ===============================
 loadWorks();
 loadAbout();
