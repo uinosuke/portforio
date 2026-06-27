@@ -213,16 +213,13 @@ let isDragging = false;
 
 function enableDragSheet() {
 
-  // ★ viewer-right の上端判定を完全削除
-  // ★ drag-handle に触れたら必ずフリック開始
-
-  viewerRight.addEventListener("touchstart", (e) => {
-    if (e.target.closest(".viewer-drag-handle")) {
-      startY = e.touches[0].clientY;
-      isDragging = true;
-    }
+  // drag-handle に触れたらドラッグ開始
+  dragHandle.addEventListener("touchstart", (e) => {
+    startY = e.touches[0].clientY;
+    isDragging = true;
   });
 
+  // viewer-right 全体でドラッグ量を監視
   viewerRight.addEventListener("touchmove", (e) => {
     if (!isDragging) return;
 
