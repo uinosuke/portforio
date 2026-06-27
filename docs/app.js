@@ -60,7 +60,7 @@ mobileMenuBtn.addEventListener("click", () => {
 });
 
 // ===============================
-// ハッシュURLでページ切替
+// ハッシュURLでページ切替（★修正済み）
 // ===============================
 function showView(view) {
   document.querySelectorAll(".view").forEach(v => v.classList.add("hidden"));
@@ -70,7 +70,14 @@ function showView(view) {
   mobileMenuPanel.classList.remove("open");
 }
 
+// 初回ロード
 window.addEventListener("load", () => {
+  const view = location.hash.replace("#", "") || "gallery";
+  showView(view);
+});
+
+// ★ハッシュ変化を監視（これが無いと切り替わらない）
+window.addEventListener("hashchange", () => {
   const view = location.hash.replace("#", "") || "gallery";
   showView(view);
 });
@@ -199,13 +206,15 @@ btnNext.addEventListener("click", (e) => {
 });
 
 // ===============================
-// スマホ：viewer-right をドラッグで開閉
+// スマホ：viewer-right をドラッグで開閉（★修正済み）
 // ===============================
 let startY = 0;
 let currentY = 0;
 let isDragging = false;
 
 function enableDragSheet() {
+  viewerRight.style.touchAction = "none"; // ★追加：イベント吸われ防止
+
   viewerRight.addEventListener("touchstart", (e) => {
     startY = e.touches[0].clientY;
     isDragging = true;
@@ -302,7 +311,7 @@ async function loadInfo() {
 }
 
 // ===============================
-// 編集モーダル
+/* 編集モーダル */
 // ===============================
 function openModal(type, currentHTML) {
   currentEditType = type;
