@@ -372,7 +372,7 @@ body.admin-mode .admin-only { display: block; }
 }
 
 /* ===============================
-   スマホ：画像ビューア（完全固定）
+   スマホ：画像ビューア（完全修正版）
 =============================== */
 @media (max-width: 768px) {
 
@@ -390,7 +390,6 @@ body.admin-mode .admin-only { display: block; }
     column-count: 2;
   }
 
-  /* ★ viewer を画面に固定してズレ防止 */
   .image-viewer {
     position: fixed;
     top: 56px;
@@ -399,15 +398,12 @@ body.admin-mode .admin-only { display: block; }
     height: calc(100vh - 56px);
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
     overflow: hidden;
   }
 
-  /* ★ 画像エリアを自動伸縮 */
   .viewer-left {
     flex: 1;
-    width: 100%;
+    min-height: 0;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -416,11 +412,10 @@ body.admin-mode .admin-only { display: block; }
   .viewer-image {
     width: 100%;
     height: auto;
-    max-height: 100%;
+    max-height: 80vh;
     object-fit: contain;
   }
 
-  /* ★ 下のちょこっと出るやつを固定 */
   .viewer-right {
     width: 100%;
     max-height: 25%;
