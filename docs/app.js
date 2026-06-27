@@ -168,11 +168,7 @@ function openViewer(index) {
 
   viewer.classList.add("open");
 
-  // スマホ時は画像を viewer-right の上に表示
-  if (window.innerWidth <= 768) {
-    viewerRight.prepend(viewerImage);
-  }
-
+  // ★ スマホでも画像は viewer-left に置いたまま！
   viewerRight.classList.remove("open-full");
 }
 
