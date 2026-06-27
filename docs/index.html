@@ -8,7 +8,6 @@
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
-
 </head>
 <body>
 
@@ -24,7 +23,21 @@
       <span id="search-clear" class="search-clear">×</span>
     </div>
 
+    <!-- ★ スマホ用ハンバーガー -->
+    <div class="mobile-menu-btn">
+      <span></span><span></span><span></span>
+    </div>
   </header>
+
+  <!-- ★ スマホ用メニュー（上から降りる） -->
+  <div class="mobile-menu-panel">
+    <a class="nav-item" data-view="gallery">画像一覧</a>
+    <a class="nav-item" data-view="about">ABOUT</a>
+    <a class="nav-item" data-view="info">制作について</a>
+    <a class="nav-item" href="https://himawari-fukushikai.org/" target="_blank">法人HP</a>
+
+    <button class="consult-btn">ご相談はこちら</button>
+  </div>
 
   <!-- ===============================
        レイアウト（サイドバー＋メイン）
@@ -32,7 +45,7 @@
   <div class="layout">
 
     <!-- ===============================
-         左サイドバー
+         PC用サイドバー
     =============================== -->
     <aside id="sidebar" class="sidebar">
 
@@ -87,17 +100,21 @@
   </div>
 
   <!-- ===============================
-       右側：画像ビューア
+       画像ビューア（PC：右側 / スマホ：下から）
   =============================== -->
   <div id="image-viewer" class="image-viewer">
 
+    <!-- PC用：左側の大画像 -->
     <div class="viewer-left">
       <button id="viewer-prev" class="viewer-arrow left">‹</button>
       <img id="viewer-image" class="viewer-image" src="" alt="" />
       <button id="viewer-next" class="viewer-arrow right">›</button>
     </div>
 
+    <!-- PC：右側 / スマホ：下から出るボトムシート -->
     <div class="viewer-right">
+
+      <div class="viewer-drag-handle"></div>
 
       <h4 class="viewer-section-title">TITLE</h4>
       <h3 id="viewer-title" class="viewer-title"></h3>
