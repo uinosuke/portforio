@@ -419,6 +419,7 @@ body.admin-mode .admin-only { display: block; }
 
   /* ★ 画像エリアは70%固定（スマホ専用） */
   .viewer-left {
+    width: 100%;
     height: 70%;
     display: flex;
     justify-content: center;
