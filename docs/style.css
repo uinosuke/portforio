@@ -402,6 +402,7 @@ body.admin-mode .admin-only { display: block; }
   }
 
   .viewer-left {
+    width: 100%;
     flex: 1;
     min-height: 0;
     display: flex;
