@@ -372,7 +372,7 @@ async function loadInfo() {
 
 // ===============================
 // ABOUT / INFO 編集（モーダル版）
-=============================== */
+// ===============================
 function openModal(type, currentHTML) {
   currentEditType = type;
   modalTitle.textContent = type === "about" ? "ABOUT を編集" : "制作について を編集";
