@@ -160,7 +160,7 @@ function openViewer(index) {
 
   if (window.innerWidth <= 768) {
     viewerLeft.style.display = "flex";
-    viewerRight.classList.remove("open-full");
+    viewerRight.classList.remove("active");
   }
 }
 
@@ -205,56 +205,43 @@ btnNext.addEventListener("click", (e) => {
 });
 
 // ===============================
-// スマホ：viewer-right スワイプで展開/縮小
+// スマホ：viewer-right スワイプで展開/縮小（active クラスのみ）
 // ===============================
-let startY = 0;
-let currentY = 0;
-let isDragging = false;
-
 function enableDragSheet() {
   if (!viewerRight) return;
 
-  // 上端付近（drag-handle 付近）からのスワイプだけを有効にする
-  viewerRight.addEventListener("touchstart", (e) => {
-    const touch = e.touches[0];
-    const rect = viewerRight.getBoundingClientRect();
-    const offsetY = touch.clientY - rect.top;
+  let startY = 0;
+  let isDragging = false;
 
-    // 上から 60px 以内（ハンドル周辺）で開始したときだけドラッグ扱い
+  viewerRight.addEventListener("touchstart", (e) => {
+    const touchY = e.touches[0].clientY;
+    const rect = viewerRight.getBoundingClientRect();
+    const offsetY = touchY - rect.top;
+
+    // 上端60px以内で開始したときだけドラッグ扱い
     if (offsetY <= 60) {
-      startY = touch.clientY;
+      startY = touchY;
       isDragging = true;
-    } else {
-      isDragging = false;
     }
   });
 
   viewerRight.addEventListener("touchmove", (e) => {
     if (!isDragging) return;
 
-    const touch = e.touches[0];
-    currentY = touch.clientY;
-    const diff = startY - currentY;
+    const diff = startY - e.touches[0].clientY;
 
-    // 上方向へ 20px 以上 → 展開
-    if (diff > 20) {
-      viewerRight.classList.add("open-full");
-    }
-
-    // 下方向へ 20px 以上 → 閉じる
-    if (diff < -20) {
-      viewerRight.classList.remove("open-full");
-    }
+    if (diff > 20) viewerRight.classList.add("active");
+    if (diff < -20) viewerRight.classList.remove("active");
   });
 
   viewerRight.addEventListener("touchend", () => {
     isDragging = false;
   });
 
-  // タップでもトグルしたい場合（お好みで）
+  // ハンドルタップでも展開トグル（使いやすい）
   if (dragHandle) {
     dragHandle.addEventListener("click", () => {
-      viewerRight.classList.toggle("open-full");
+      viewerRight.classList.toggle("active");
     });
   }
 }
