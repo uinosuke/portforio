@@ -394,8 +394,22 @@ body.admin-mode .admin-only { display: block; }
     align-items: flex-end;
   }
 
+  /* ★★★ スマホでも画像を表示するために削除した部分 ★★★ */
+  /* .viewer-left { display: none; } ← 削除 */
+
+  /* ★★★ スマホで画像を画面いっぱいに表示 ★★★ */
   .viewer-left {
-    display: none;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .viewer-image {
+    width: 100%;
+    height: auto;
+    max-height: 80vh;
+    object-fit: contain;
   }
 
   .viewer-right {
