@@ -35,6 +35,7 @@ const modalCancel = document.getElementById("modal-cancel");
 const mobileMenuBtn = document.querySelector(".mobile-menu-btn");
 const mobileMenuPanel = document.querySelector(".mobile-menu-panel");
 const viewerRight = document.querySelector(".viewer-right");
+const viewerLeft = document.querySelector(".viewer-left");
 const viewerDragHandle = document.querySelector(".viewer-drag-handle");
 
 let adminMode = false;
@@ -167,8 +168,9 @@ function openViewer(index) {
 
   viewer.classList.add("open");
 
-  // スマホ：ボトムシート初期状態（25%）
+  // ★ スマホ時：viewer-left を確実に表示する
   if (window.innerWidth <= 768) {
+    viewerLeft.style.display = "flex";
     viewerRight.classList.remove("open-full");
   }
 }
