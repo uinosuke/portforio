@@ -205,7 +205,7 @@ btnNext.addEventListener("click", (e) => {
 });
 
 // ===============================
-// スマホ：viewer-right フリック（上端40px + drag-handle）
+// スマホ：viewer-right フリック（drag-handle のみ）
 // ===============================
 let startY = 0;
 let currentY = 0;
@@ -213,23 +213,13 @@ let isDragging = false;
 
 function enableDragSheet() {
 
-  // ★★★ ここを削除したのが今回の修正点 ★★★
-  // viewerRight.style.touchAction = "none";
+  // ★ viewer-right の上端判定を完全削除
+  // ★ drag-handle に触れたら必ずフリック開始
 
   viewerRight.addEventListener("touchstart", (e) => {
-    const y = e.touches[0].clientY;
-    const rect = viewerRight.getBoundingClientRect();
-
     if (e.target.closest(".viewer-drag-handle")) {
-      startY = y;
+      startY = e.touches[0].clientY;
       isDragging = true;
-      return;
-    }
-
-    if (y < rect.top + 40) {
-      startY = y;
-      isDragging = true;
-      return;
     }
   });
 
@@ -239,8 +229,8 @@ function enableDragSheet() {
     currentY = e.touches[0].clientY;
     const diff = startY - currentY;
 
-    if (diff > 30) viewerRight.classList.add("open-full");
-    if (diff < -30) viewerRight.classList.remove("open-full");
+    if (diff > 20) viewerRight.classList.add("open-full");
+    if (diff < -20) viewerRight.classList.remove("open-full");
   });
 
   viewerRight.addEventListener("touchend", () => {
