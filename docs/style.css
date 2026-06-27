@@ -414,9 +414,9 @@ body.admin-mode .admin-only { display: block; }
     background: rgba(0,0,0,0.75);
   }
 
-  /* 上の画像エリアを 70% に固定 → 中央寄せ安定 */
+  /* ★ フリック安定化：画像エリアを 65% にする */
   .viewer-left {
-    height: 70%;
+    height: 65%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -430,15 +430,16 @@ body.admin-mode .admin-only { display: block; }
     display: block;
   }
 
-  /* 下のボトムシートを 30% に固定 */
+  /* ★ フリック安定化：ボトムシートを 35% にする */
   .viewer-right {
-    height: 30%;
-    max-height: 30%;
+    height: 35%;
+    max-height: 35%;
     background: #1a1a1a;
     border-radius: 16px 16px 0 0;
     padding: 16px;
     overflow: hidden;
     transition: max-height 0.3s ease;
+    touch-action: none; /* ★フリック復活の決定打 */
   }
 
   /* フリックで展開（80%） */
