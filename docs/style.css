@@ -417,10 +417,12 @@ body.admin-mode .admin-only { display: block; }
     background: rgba(0,0,0,0.75);
   }
 
-  /* ★ 画像エリアは70%固定（スマホ専用） */
+  /* ★ 画像エリアは70%固定（縦長でも暴れない） */
   .viewer-left {
     width: 100%;
     height: 70%;
+    min-height: 70%;
+    max-height: 70%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -433,20 +435,23 @@ body.admin-mode .admin-only { display: block; }
     object-fit: contain;
   }
 
-  /* ★ 下のエリアは30%固定（スマホ専用） */
+  /* ★ 下のエリアは30%固定（絶対にズレない） */
   .viewer-right {
     height: 30%;
+    min-height: 30%;
+    max-height: 30%;
     background: #1a1a1a;
     border-radius: 16px 16px 0 0;
     padding: 16px;
     overflow: hidden;
     transition: height 0.3s ease;
-    /* touch-action: none; ← 削除 */
   }
 
-  /* フリックで展開（80%） */
+  /* フリックで展開（80%固定） */
   .viewer-right.open-full {
     height: 80%;
+    min-height: 80%;
+    max-height: 80%;
     overflow-y: auto;
   }
 
@@ -457,7 +462,7 @@ body.admin-mode .admin-only { display: block; }
     background: #666;
     border-radius: 999px;
     margin: 0 auto 12px;
-    touch-action: none; /* ← ここに移動 */
+    touch-action: none;
   }
 }
 
