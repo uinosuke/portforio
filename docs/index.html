@@ -8,9 +8,13 @@
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+
 </head>
 <body>
 
+  <!-- ===============================
+       ヘッダー
+  =============================== -->
   <header class="header">
     <h1 id="site-title">MyPortfolio</h1>
 
@@ -19,24 +23,18 @@
       <input id="search-input" type="text" placeholder="検索…" />
       <span id="search-clear" class="search-clear">×</span>
     </div>
-
-    <div class="mobile-menu-btn">
-      <span></span><span></span><span></span>
-    </div>
   </header>
 
-  <div class="mobile-menu-panel">
-    <a class="nav-item" data-view="gallery">画像一覧</a>
-    <a class="nav-item" data-view="about">ABOUT</a>
-    <a class="nav-item" data-view="info">制作について</a>
-    <a class="nav-item" href="https://himawari-fukushikai.org/" target="_blank">法人HP</a>
-    <button class="consult-btn">ご相談はこちら</button>
-    <div class="search-box mobile-search"></div>
-  </div>
-
+  <!-- ===============================
+       レイアウト（サイドバー＋メイン）
+  =============================== -->
   <div class="layout">
 
+    <!-- ===============================
+         左サイドバー（PC）
+    =============================== -->
     <aside id="sidebar" class="sidebar">
+
       <a class="nav-item" data-view="gallery">画像一覧</a>
       <a class="nav-item" data-view="about">ABOUT</a>
       <a class="nav-item" data-view="info">制作について</a>
@@ -46,19 +44,27 @@
         <button class="consult-btn">ご相談はこちら</button>
       </div>
 
-      <div id="admin-panel" class="admin-only">管理者モード中</div>
+      <div id="admin-panel" class="admin-only">
+        管理者モード中
+      </div>
     </aside>
 
+    <!-- ===============================
+         メイン領域
+    =============================== -->
     <main class="main">
 
-      <div id="dropzone" class="dropzone">
+      <!-- ドロップゾーン（管理者のみ） -->
+      <div id="dropzone" class="dropzone admin-only">
         ここに画像をドラッグ＆ドロップ
       </div>
 
+      <!-- ====== VIEW: ギャラリー ====== -->
       <div id="view-gallery" class="view">
         <div id="works-list" class="works-grid"></div>
       </div>
 
+      <!-- ====== VIEW: ABOUT ====== -->
       <div id="view-about" class="view hidden">
         <div class="section-header">
           <h2>ABOUT</h2>
@@ -67,6 +73,7 @@
         <div id="about-content" class="editable-block"></div>
       </div>
 
+      <!-- ====== VIEW: 制作について ====== -->
       <div id="view-info" class="view hidden">
         <div class="section-header">
           <h2>制作について</h2>
@@ -75,25 +82,47 @@
         <div id="info-content" class="editable-block"></div>
       </div>
 
-      <!-- ★ viewer を dropzone の下に固定配置 -->
-      <div id="image-viewer" class="image-viewer">
-        <div class="viewer-left">
-          <img id="viewer-image" class="viewer-image" src="" alt="" />
-        </div>
-
-        <div class="viewer-right">
-          <h4 class="viewer-section-title">TITLE</h4>
-          <h3 id="viewer-title" class="viewer-title"></h3>
-
-          <h4 class="viewer-section-title">TAGS</h4>
-          <div id="viewer-tags" class="viewer-tags"></div>
-
-          <h4 class="viewer-section-title">DESCRIPTION</h4>
-          <p id="viewer-description" class="viewer-description"></p>
-        </div>
-      </div>
-
     </main>
+  </div>
+
+  <!-- ===============================
+       右側：画像ビューア（PC）
+  =============================== -->
+  <div id="image-viewer" class="image-viewer">
+
+    <div class="viewer-left">
+      <button id="viewer-prev" class="viewer-arrow left">‹</button>
+      <img id="viewer-image" class="viewer-image" src="" alt="" />
+      <button id="viewer-next" class="viewer-arrow right">›</button>
+    </div>
+
+    <div class="viewer-right">
+
+      <h4 class="viewer-section-title">TITLE</h4>
+      <h3 id="viewer-title" class="viewer-title"></h3>
+
+      <h4 class="viewer-section-title">TAGS</h4>
+      <div id="viewer-tags" class="viewer-tags"></div>
+
+      <h4 class="viewer-section-title">DESCRIPTION</h4>
+      <p id="viewer-description" class="viewer-description"></p>
+
+    </div>
+  </div>
+
+  <!-- ===============================
+       HTML編集モーダル
+  =============================== -->
+  <div id="edit-modal" class="modal">
+    <div class="modal-content">
+      <h3 id="modal-title"></h3>
+      <textarea id="modal-textarea"></textarea>
+
+      <div class="modal-buttons">
+        <button id="modal-save" class="modal-btn save">保存</button>
+        <button id="modal-cancel" class="modal-btn cancel">キャンセル</button>
+      </div>
+    </div>
   </div>
 
   <script src="app.js"></script>
