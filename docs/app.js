@@ -205,34 +205,58 @@ btnNext.addEventListener("click", (e) => {
 });
 
 // ===============================
-// スマホ：viewer-right フリック（drag-handle のみ）
+// スマホ：viewer-right スワイプで展開/縮小
 // ===============================
 let startY = 0;
 let currentY = 0;
 let isDragging = false;
 
 function enableDragSheet() {
+  if (!viewerRight) return;
 
-  // drag-handle に触れたらドラッグ開始
-  dragHandle.addEventListener("touchstart", (e) => {
-    startY = e.touches[0].clientY;
-    isDragging = true;
+  // 上端付近（drag-handle 付近）からのスワイプだけを有効にする
+  viewerRight.addEventListener("touchstart", (e) => {
+    const touch = e.touches[0];
+    const rect = viewerRight.getBoundingClientRect();
+    const offsetY = touch.clientY - rect.top;
+
+    // 上から 60px 以内（ハンドル周辺）で開始したときだけドラッグ扱い
+    if (offsetY <= 60) {
+      startY = touch.clientY;
+      isDragging = true;
+    } else {
+      isDragging = false;
+    }
   });
 
-  // viewer-right 全体でドラッグ量を監視
   viewerRight.addEventListener("touchmove", (e) => {
     if (!isDragging) return;
 
-    currentY = e.touches[0].clientY;
+    const touch = e.touches[0];
+    currentY = touch.clientY;
     const diff = startY - currentY;
 
-    if (diff > 20) viewerRight.classList.add("open-full");
-    if (diff < -20) viewerRight.classList.remove("open-full");
+    // 上方向へ 20px 以上 → 展開
+    if (diff > 20) {
+      viewerRight.classList.add("open-full");
+    }
+
+    // 下方向へ 20px 以上 → 閉じる
+    if (diff < -20) {
+      viewerRight.classList.remove("open-full");
+    }
   });
 
   viewerRight.addEventListener("touchend", () => {
     isDragging = false;
   });
+
+  // タップでもトグルしたい場合（お好みで）
+  if (dragHandle) {
+    dragHandle.addEventListener("click", () => {
+      viewerRight.classList.toggle("open-full");
+    });
+  }
 }
 
 window.addEventListener("load", () => {
