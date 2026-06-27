@@ -199,6 +199,9 @@ html, body {
 .sidebar-bottom { margin-top: auto; }
 
 .consult-btn {
+  display: block;        /* 中央揃えに必要 */
+  text-decoration: none; /* 下線を消す */
+  text-align: center;    /* テキスト中央揃え */
   width: 90%;
   padding: 10px 12px;
   border-radius: 4px;
@@ -208,9 +211,9 @@ html, body {
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
-  display: block;
-  margin: 0 auto;
+  margin: 0 auto;        /* 中央寄せ */
 }
+
 
 .consult-btn:hover { background: #7a1937; }
 
