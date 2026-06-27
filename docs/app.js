@@ -212,20 +212,20 @@ let currentY = 0;
 let isDragging = false;
 
 function enableDragSheet() {
-  viewerRight.style.touchAction = "none";
+
+  // ★★★ ここを削除したのが今回の修正点 ★★★
+  // viewerRight.style.touchAction = "none";
 
   viewerRight.addEventListener("touchstart", (e) => {
     const y = e.touches[0].clientY;
     const rect = viewerRight.getBoundingClientRect();
 
-    // drag-handle に触れた場合
     if (e.target.closest(".viewer-drag-handle")) {
       startY = y;
       isDragging = true;
       return;
     }
 
-    // viewer-right の上端40px以内ならフリック開始
     if (y < rect.top + 40) {
       startY = y;
       isDragging = true;
