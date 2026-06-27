@@ -417,7 +417,7 @@ body.admin-mode .admin-only { display: block; }
     background: rgba(0,0,0,0.75);
   }
 
-  /* ★ 画像エリアは70%固定 */
+  /* ★ 画像エリアは70%固定（スマホ専用） */
   .viewer-left {
     height: 70%;
     display: flex;
@@ -432,7 +432,7 @@ body.admin-mode .admin-only { display: block; }
     object-fit: contain;
   }
 
-  /* ★ 下のエリアは30%固定 */
+  /* ★ 下のエリアは30%固定（スマホ専用） */
   .viewer-right {
     height: 30%;
     background: #1a1a1a;
