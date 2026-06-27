@@ -66,6 +66,11 @@ html, body {
 
 #search-clear:hover { color: #fff; }
 
+.search-icon {
+  color: #aaa;
+  font-size: 16px;
+}
+
 /* ===============================
    ハンバーガー
 =============================== */
