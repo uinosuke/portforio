@@ -15,7 +15,7 @@
   <header class="header">
     <h1 id="site-title">MyPortfolio</h1>
 
-    <!-- PC用検索バー（スマホでは非表示） -->
+    <!-- PC用検索バー -->
     <div class="search-box pc-search">
       <span class="search-icon">🔍</span>
       <input id="search-input" type="text" placeholder="検索..." />
@@ -35,12 +35,12 @@
   =============================== -->
   <div class="mobile-menu-panel">
 
-    <div class="nav-item" data-view="gallery">画像一覧</div>
-    <div class="nav-item" data-view="about">ABOUT</div>
-    <div class="nav-item" data-view="info">制作について</div>
+    <a class="nav-item" href="#gallery" data-view="gallery">画像一覧</a>
+    <a class="nav-item" href="#about" data-view="about">ABOUT</a>
+    <a class="nav-item" href="#info" data-view="info">制作について</a>
     <a class="nav-item" href="https://www.himawari-fukushikai.or.jp/" target="_blank">法人HP</a>
 
-    <!-- スマホ専用検索バー（1つだけ） -->
+    <!-- スマホ専用検索バー -->
     <div class="mobile-search-area">
       <div class="mobile-search-box">
         <span class="search-icon">🔍</span>
@@ -59,9 +59,9 @@
 
     <!-- PCサイドバー -->
     <aside class="sidebar">
-      <div class="nav-item" data-view="gallery">画像一覧</div>
-      <div class="nav-item" data-view="about">ABOUT</div>
-      <div class="nav-item" data-view="info">制作について</div>
+      <a class="nav-item" href="#gallery" data-view="gallery">画像一覧</a>
+      <a class="nav-item" href="#about" data-view="about">ABOUT</a>
+      <a class="nav-item" href="#info" data-view="info">制作について</a>
       <a class="nav-item" href="https://www.himawari-fukushikai.or.jp/" target="_blank">法人HP</a>
 
       <div class="sidebar-bottom">
@@ -102,7 +102,7 @@
   =============================== -->
   <div id="image-viewer" class="image-viewer">
 
-    <!-- スマホ専用 × ボタン（PCでは非表示） -->
+    <!-- スマホ専用 × ボタン -->
     <button id="viewer-close-btn" class="viewer-close-btn">×</button>
 
     <div class="viewer-left">
