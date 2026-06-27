@@ -33,7 +33,7 @@ html, body {
   color: #fff;
 }
 
-/* 検索バー */
+/* PC検索バー */
 .search-box {
   display: flex;
   align-items: center;
@@ -58,7 +58,7 @@ html, body {
   font-size: 16px;
 }
 
-.search-clear {
+#search-clear {
   display: none;
   cursor: pointer;
   font-size: 18px;
@@ -66,12 +66,10 @@ html, body {
   padding: 0 6px;
 }
 
-.search-clear:hover {
-  color: #fff;
-}
+#search-clear:hover { color: #fff; }
 
 /* ===============================
-   スマホ：ハンバーガー
+   ハンバーガー
 =============================== */
 .mobile-menu-btn {
   display: none;
@@ -92,7 +90,7 @@ html, body {
   border-radius: 3px;
 }
 
-/* スマホメニュー（上から降りる） */
+/* スマホメニュー */
 .mobile-menu-panel {
   display: none;
   position: fixed;
@@ -119,6 +117,40 @@ html, body {
   width: 100%;
 }
 
+/* スマホ検索バー（検索ボタン付き） */
+.mobile-search-area {
+  margin-top: 20px;
+}
+
+.mobile-search-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #222;
+  border: 1px solid #444;
+  padding: 8px 12px;
+  border-radius: 999px;
+}
+
+#mobile-search-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #eee;
+  font-size: 14px;
+}
+
+#mobile-search-btn {
+  background: #0078ff;
+  color: #fff;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
 /* ===============================
    レイアウト
 =============================== */
@@ -128,7 +160,7 @@ html, body {
 }
 
 /* ===============================
-   左サイドバー（PCのみ）
+   PCサイドバー
 =============================== */
 .sidebar {
   width: 220px;
@@ -136,7 +168,6 @@ html, body {
   border-right: 1px solid #333;
   display: flex;
   flex-direction: column;
-  gap: 0;
   padding: 10px 0 40px 0px;
   position: fixed;
   top: 56px;
@@ -185,28 +216,12 @@ html, body {
 }
 
 /* ===============================
-   メイン領域
+   メイン
 =============================== */
 .main {
   flex: 1;
   padding: 24px;
   margin-left: 220px;
-}
-
-.dropzone {
-  border: 1px dashed #666;
-  border-radius: 8px;
-  padding: 16px;
-  margin-bottom: 16px;
-  font-size: 13px;
-  color: #ccc;
-  text-align: center;
-  background: #181818;
-}
-
-.dropzone.hover {
-  border-color: #ff8a3c;
-  background: #202020;
 }
 
 .view.hidden { display: none; }
@@ -226,14 +241,8 @@ html, body {
   border-radius: 8px;
   border: 1px solid #333;
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
   position: relative;
   overflow: hidden;
-}
-
-.work-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
 }
 
 .work-image {
@@ -274,15 +283,6 @@ html, body {
 .work-card:hover::after,
 .work-card:hover .work-title {
   opacity: 1;
-}
-
-.work-tags,
-.work-description {
-  display: none;
-}
-
-.work-actions {
-  display: none;
 }
 
 /* ===============================
@@ -401,8 +401,23 @@ body.admin-mode .admin-only { display: block; }
     overflow: hidden;
   }
 
+  /* × ボタン */
+  .viewer-close-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 9800;
+    background: rgba(0,0,0,0.6);
+    color: #fff;
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    font-size: 20px;
+    cursor: pointer;
+  }
+
   .viewer-left {
-    width: 100%;
     flex: 1;
     min-height: 0;
     display: flex;
