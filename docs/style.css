@@ -71,6 +71,55 @@ html, body {
 }
 
 /* ===============================
+   スマホ：ハンバーガー
+=============================== */
+.mobile-menu-btn {
+  display: none;
+  position: fixed;
+  top: 14px;
+  right: 14px;
+  width: 28px;
+  height: 22px;
+  z-index: 20000;
+  cursor: pointer;
+}
+
+.mobile-menu-btn span {
+  display: block;
+  height: 3px;
+  background: #fff;
+  margin-bottom: 5px;
+  border-radius: 3px;
+}
+
+/* スマホメニュー（上から降りる） */
+.mobile-menu-panel {
+  display: none;
+  position: fixed;
+  top: -100%;
+  left: 0;
+  width: 100%;
+  background: #181818;
+  padding: 20px;
+  z-index: 15000;
+  transition: top 0.3s ease;
+}
+
+.mobile-menu-panel.open {
+  top: 56px;
+}
+
+.mobile-menu-panel .nav-item {
+  padding: 16px;
+  font-size: 16px;
+}
+
+.mobile-menu-panel .consult-btn {
+  margin-top: 20px;
+  width: 100%;
+}
+
+/* ===============================
    レイアウト
 =============================== */
 .layout {
@@ -79,7 +128,7 @@ html, body {
 }
 
 /* ===============================
-   左サイドバー
+   左サイドバー（PCのみ）
 =============================== */
 .sidebar {
   width: 220px;
@@ -87,7 +136,6 @@ html, body {
   border-right: 1px solid #333;
   display: flex;
   flex-direction: column;
-  gap: 0;
   padding: 10px 0 40px 0px;
   position: fixed;
   top: 56px;
@@ -100,7 +148,6 @@ html, body {
   display: block;
   width: 100%;
   padding: 14px 28px;
-  background: transparent;
   color: #eee;
   font-size: 14px;
   text-decoration: none;
@@ -130,11 +177,6 @@ html, body {
 
 .consult-btn:hover { background: #7a1937; }
 
-#admin-panel {
-  font-size: 12px;
-  color: #ccc;
-}
-
 /* ===============================
    メイン領域
 =============================== */
@@ -163,7 +205,7 @@ html, body {
 .view.hidden { display: none; }
 
 /* ===============================
-   画像グリッド（Masonry風）
+   画像グリッド（Masonry）
 =============================== */
 .works-grid {
   column-count: 4;
@@ -178,8 +220,6 @@ html, body {
   border: 1px solid #333;
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-
-  /* 画像に重ねるために必要 */
   position: relative;
   overflow: hidden;
 }
@@ -189,15 +229,13 @@ html, body {
   box-shadow: 0 4px 12px rgba(0,0,0,0.4);
 }
 
-/* 画像 */
 .work-image {
   width: 100%;
-  height: auto;
   display: block;
   background: #000;
 }
 
-/* タイトル（最初は透明） */
+/* タイトル（ホバー時のみ） */
 .work-title {
   position: absolute;
   bottom: 8px;
@@ -211,7 +249,7 @@ html, body {
   transition: opacity 0.2s ease;
 }
 
-/* 黒グラデ（疑似要素で重ねる） */
+/* 黒グラデ */
 .work-card::after {
   content: "";
   position: absolute;
@@ -225,33 +263,13 @@ html, body {
   z-index: 1;
 }
 
-/* ホバー時に黒グラデ＋タイトル表示 */
-.work-card:hover::after {
-  opacity: 1;
-}
-
+.work-card:hover::after,
 .work-card:hover .work-title {
   opacity: 1;
 }
 
-/* タグと説明は非表示 */
-.work-tags,
-.work-description {
-  display: none;
-}
-
-.work-actions {
-  display: none; /* ギャラリーでは非表示（管理者モードでJSが表示） */
-}
-
 /* ===============================
-   管理者モード
-=============================== */
-.admin-only { display: none; }
-body.admin-mode .admin-only { display: block; }
-
-/* ===============================
-   画像ビューア
+   画像ビューア（PC）
 =============================== */
 .image-viewer {
   position: fixed;
@@ -289,32 +307,6 @@ body.admin-mode .admin-only { display: block; }
   box-shadow: 0 4px 20px rgba(0,0,0,0.5);
 }
 
-.viewer-arrow {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  border: none;
-  background: rgba(0,0,0,0.35);
-  color: #fff;
-  font-size: 28px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background 0.2s ease;
-  z-index: 9700;
-}
-
-.viewer-arrow:hover {
-  background: rgba(0,0,0,0.55);
-}
-
-.viewer-arrow.left { left: 20px; }
-.viewer-arrow.right { right: 20px; }
-
 .viewer-right {
   width: 20%;
   background: #1a1a1a;
@@ -323,31 +315,61 @@ body.admin-mode .admin-only { display: block; }
   overflow-y: auto;
 }
 
-/* 見出し */
-.viewer-section-title {
-  font-size: 12px;
-  color: #aaa;
-  margin: 16px 0 6px;
-  letter-spacing: 1px;
-}
+/* ===============================
+   スマホ：ボトムシート viewer
+=============================== */
+@media (max-width: 768px) {
 
-/* タグ（丸ポチ） */
-.viewer-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
+  .sidebar { display: none; }
 
-.viewer-tags .tag {
-  padding: 4px 10px;
-  background: #333;
-  border-radius: 999px;
-  font-size: 12px;
-  color: #eee;
+  .mobile-menu-btn { display: block; }
+
+  .mobile-menu-panel { display: block; }
+
+  .main {
+    margin-left: 0;
+    padding: 16px;
+  }
+
+  .works-grid {
+    column-count: 2;
+  }
+
+  /* viewer を下から出す */
+  .image-viewer {
+    align-items: flex-end;
+  }
+
+  .viewer-left {
+    display: none;
+  }
+
+  .viewer-right {
+    width: 100%;
+    max-height: 25%;
+    background: #1a1a1a;
+    border-radius: 16px 16px 0 0;
+    padding: 16px;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+  }
+
+  .viewer-right.open-full {
+    max-height: 80%;
+    overflow-y: auto;
+  }
+
+  .viewer-drag-handle {
+    width: 40px;
+    height: 5px;
+    background: #555;
+    border-radius: 999px;
+    margin: 0 auto 12px;
+  }
 }
 
 /* ===============================
-   モーダル（HTML編集）
+   モーダル
 =============================== */
 .modal {
   position: fixed;
@@ -359,9 +381,7 @@ body.admin-mode .admin-only { display: block; }
   z-index: 20000;
 }
 
-.modal.open {
-  display: flex;
-}
+.modal.open { display: flex; }
 
 .modal-content {
   width: 70%;
@@ -382,31 +402,6 @@ body.admin-mode .admin-only { display: block; }
   padding: 10px;
   border: 1px solid #aaa;
   border-radius: 6px;
-}
-
-.modal-buttons {
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-  margin-top: 12px;
-}
-
-.modal-btn {
-  padding: 8px 16px;
-  border-radius: 6px;
-  border: none;
-  cursor: pointer;
-  font-size: 14px;
-}
-
-.modal-btn.save {
-  background: #0078ff;
-  color: #fff;
-}
-
-.modal-btn.cancel {
-  background: #ccc;
-  color: #000;
 }
 
 /* ===============================
