@@ -15,8 +15,8 @@
   <header class="header">
     <h1 id="site-title">MyPortfolio</h1>
 
-    <!-- PC用検索バー -->
-    <div class="search-box">
+    <!-- PC用検索バー（スマホでは非表示） -->
+    <div class="search-box pc-search">
       <span class="search-icon">🔍</span>
       <input id="search-input" type="text" placeholder="検索..." />
       <span id="search-clear">×</span>
@@ -40,7 +40,7 @@
     <div class="nav-item" data-view="info">制作について</div>
     <a class="nav-item" href="https://www.himawari-fukushikai.or.jp/" target="_blank">法人HP</a>
 
-    <!-- スマホ用検索バー（検索ボタン付き） -->
+    <!-- スマホ専用検索バー（1つだけ） -->
     <div class="mobile-search-area">
       <div class="mobile-search-box">
         <span class="search-icon">🔍</span>
@@ -102,7 +102,7 @@
   =============================== -->
   <div id="image-viewer" class="image-viewer">
 
-    <!-- × ボタン（スマホ用） -->
+    <!-- スマホ専用 × ボタン（PCでは非表示） -->
     <button id="viewer-close-btn" class="viewer-close-btn">×</button>
 
     <div class="viewer-left">
