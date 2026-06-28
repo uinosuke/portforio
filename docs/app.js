@@ -1,4 +1,4 @@
-// ===============================
+  // ===============================
 // 設定
 // ===============================
 const API_BASE = "https://delicate-sunset-ea8a.d08084222816.workers.dev";
@@ -40,12 +40,25 @@ const viewerRight = document.querySelector(".viewer-right");
 const viewerLeft = document.querySelector(".viewer-left");
 const dragHandle = document.querySelector(".viewer-drag-handle");
 
+// ★ アップロード関連
+const uploadDropzone = document.getElementById("upload-dropzone");
+const uploadForm = document.getElementById("upload-form");
+const uploadTitle = document.getElementById("upload-title");
+const uploadTags = document.getElementById("upload-tags");
+const uploadDescription = document.getElementById("upload-description");
+const uploadSubmit = document.getElementById("upload-submit");
+const uploadCancel = document.getElementById("upload-cancel");
+
 let adminMode = false;
 let works = [];
 let currentIndex = 0;
 let currentEditType = ""; // "about" or "info"
+let uploadFile = null;
 
 
+// ===============================
+// 管理者モード（4回クリック）
+// ===============================
 let adminClickCount = 0;
 let adminClickTimer = null;
 
@@ -59,7 +72,6 @@ document.addEventListener("click", () => {
     clearTimeout(adminClickTimer);
     return;
   }
-
 
   clearTimeout(adminClickTimer);
   adminClickTimer = setTimeout(() => {
@@ -365,7 +377,7 @@ async function loadInfo() {
 }
 
 // ===============================
-/* 編集モーダル */
+// 編集モーダル
 // ===============================
 function openModal(type, currentHTML) {
   currentEditType = type;
@@ -408,6 +420,65 @@ document.getElementById("edit-about")?.addEventListener("click", () => {
 document.getElementById("edit-info")?.addEventListener("click", () => {
   const current = document.getElementById("info-content").innerHTML;
   openModal("info", current);
+});
+
+// ===============================
+// ★ アップロード：ドラッグ＆ドロップ
+// ===============================
+uploadDropzone.addEventListener("dragover", (e) => {
+  e.preventDefault();
+  uploadDropzone.classList.add("dragover");
+});
+
+uploadDropzone.addEventListener("dragleave", () => {
+  uploadDropzone.classList.remove("dragover");
+});
+
+uploadDropzone.addEventListener("drop", (e) => {
+  e.preventDefault();
+  uploadDropzone.classList.remove("dragover");
+
+  uploadFile = e.dataTransfer.files[0];
+  if (!uploadFile) return;
+
+  uploadForm.style.display = "block";
+});
+
+// ===============================
+// ★ アップロード送信
+// ===============================
+uploadSubmit.addEventListener("click", async () => {
+  if (!uploadFile) return;
+
+  const formData = new FormData();
+  formData.append("image", uploadFile);
+  formData.append("title", uploadTitle.value.trim());
+  formData.append("tags", uploadTags.value.trim());
+  formData.append("description", uploadDescription.value.trim());
+
+  await fetch(`${API_BASE}/upload`, {
+    method: "POST",
+    body: formData
+  });
+
+  uploadForm.style.display = "none";
+  uploadFile = null;
+  uploadTitle.value = "";
+  uploadTags.value = "";
+  uploadDescription.value = "";
+
+  loadWorks();
+});
+
+// ===============================
+// ★ アップロードキャンセル
+// ===============================
+uploadCancel.addEventListener("click", () => {
+  uploadForm.style.display = "none";
+  uploadFile = null;
+  uploadTitle.value = "";
+  uploadTags.value = "";
+  uploadDescription.value = "";
 });
 
 // ===============================
