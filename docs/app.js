@@ -1,4 +1,4 @@
-  // ===============================
+// ===============================
 // 設定
 // ===============================
 const API_BASE = "https://delicate-sunset-ea8a.d08084222816.workers.dev";
@@ -42,7 +42,7 @@ const dragHandle = document.querySelector(".viewer-drag-handle");
 
 // ★ アップロード関連
 const uploadDropzone = document.getElementById("upload-dropzone");
-const uploadForm = document.getElementById("upload-form");
+const uploadModal = document.getElementById("upload-modal");
 const uploadTitle = document.getElementById("upload-title");
 const uploadTags = document.getElementById("upload-tags");
 const uploadDescription = document.getElementById("upload-description");
@@ -320,8 +320,8 @@ mobileSearchBtn.addEventListener("click", () => {
 });
 
 // ===============================
-// PC検索
-// ===============================
+/* PC検索 */
+=============================== */
 searchInput.addEventListener("input", () => {
   const keyword = searchInput.value.trim();
   searchClear.style.display = keyword ? "block" : "none";
@@ -335,8 +335,8 @@ searchClear.addEventListener("click", () => {
 });
 
 // ===============================
-// フィルタ処理
-// ===============================
+/* フィルタ処理 */
+=============================== */
 function filterWorks(keyword) {
   const cards = document.querySelectorAll(".work-card");
   const k = keyword.toLowerCase();
@@ -360,8 +360,8 @@ function filterWorks(keyword) {
 }
 
 // ===============================
-// ABOUT / INFO 読み込み
-// ===============================
+/* ABOUT / INFO 読み込み */
+=============================== */
 async function loadAbout() {
   const res = await fetch(`${API_BASE}/about`);
   const html = await res.text();
@@ -377,8 +377,8 @@ async function loadInfo() {
 }
 
 // ===============================
-// 編集モーダル
-// ===============================
+/* 編集モーダル */
+=============================== */
 function openModal(type, currentHTML) {
   currentEditType = type;
   modalTitle.textContent = type === "about" ? "ABOUT を編集" : "制作について を編集";
@@ -441,7 +441,7 @@ uploadDropzone.addEventListener("drop", (e) => {
   uploadFile = e.dataTransfer.files[0];
   if (!uploadFile) return;
 
-  uploadForm.style.display = "block";
+  uploadModal.classList.add("open");
 });
 
 // ===============================
@@ -461,7 +461,7 @@ uploadSubmit.addEventListener("click", async () => {
     body: formData
   });
 
-  uploadForm.style.display = "none";
+  uploadModal.classList.remove("open");
   uploadFile = null;
   uploadTitle.value = "";
   uploadTags.value = "";
@@ -474,7 +474,7 @@ uploadSubmit.addEventListener("click", async () => {
 // ★ アップロードキャンセル
 // ===============================
 uploadCancel.addEventListener("click", () => {
-  uploadForm.style.display = "none";
+  uploadModal.classList.remove("open");
   uploadFile = null;
   uploadTitle.value = "";
   uploadTags.value = "";
@@ -482,8 +482,8 @@ uploadCancel.addEventListener("click", () => {
 });
 
 // ===============================
-// 初期ロード
-// ===============================
+/* 初期ロード */
+=============================== */
 window.addEventListener("load", () => {
   loadWorks();
   loadAbout();
