@@ -283,3 +283,68 @@ window.addEventListener("load", () => {
   loadAbout();
   loadInfo();
 });
+// ===============================
+// ステップ式アップロードモーダルを開く
+// ===============================
+function openUploadStepModal() {
+  uploadStepModal.classList.add("open");
+
+  uploadStepInput.style.display = "none";
+  uploadStepMonth.style.display = "none";
+  uploadStepTextarea.style.display = "none";
+  uploadStepOk.style.display = "block";
+
+  if (uploadStep === 0) {
+    uploadStepTitle.textContent = "タイトルを入力してください";
+    uploadStepInput.style.display = "block";
+    uploadStepInput.value = uploadData.title;
+  }
+
+  if (uploadStep === 1) {
+    uploadStepTitle.textContent = "タグを入力してください（スペース区切り）";
+    uploadStepInput.style.display = "block";
+    uploadStepInput.value = uploadData.tags;
+  }
+
+  if (uploadStep === 2) {
+    uploadStepTitle.textContent = "月を選択してください";
+    uploadStepMonth.style.display = "block";
+    uploadStepMonth.value = uploadData.date;
+  }
+
+  if (uploadStep === 3) {
+    uploadStepTitle.textContent = "概要を入力してください";
+    uploadStepTextarea.style.display = "block";
+    uploadStepTextarea.value = uploadData.description;
+  }
+
+  if (uploadStep === 4) {
+    uploadStepTitle.textContent = "アップロード中…";
+    uploadStepInput.style.display = "none";
+    uploadStepMonth.style.display = "none";
+    uploadStepTextarea.style.display = "none";
+    uploadStepOk.style.display = "none";
+
+    uploadWork();
+  }
+}
+
+// ===============================
+// ABOUT 読み込み
+// ===============================
+async function loadAbout() {
+  const res = await fetch(`${API_BASE}/about`);
+  const html = await res.text();
+  const el = document.getElementById("about-content");
+  if (el) el.innerHTML = html;
+}
+
+// ===============================
+// INFO 読み込み
+// ===============================
+async function loadInfo() {
+  const res = await fetch(`${API_BASE}/works-info`);
+  const html = await res.text();
+  const el = document.getElementById("info-content");
+  if (el) el.innerHTML = html;
+}
