@@ -133,7 +133,8 @@ async function loadWorks() {
   const res = await fetch(`${API_BASE}/works`);
   works = await res.json();
 
-  works.reverse(); // ★ 最新順
+  // ★ 最新順（左上が最新）
+  works.reverse();
 
   worksList.innerHTML = "";
 
@@ -409,6 +410,52 @@ async function loadInfo() {
 }
 
 // ===============================
+// ★ ステップ式アップロードモーダルを開く
+// ===============================
+function openUploadStepModal() {
+  uploadStepModal.classList.add("open");
+
+  uploadStepInput.style.display = "none";
+  uploadStepMonth.style.display = "none";
+  uploadStepTextarea.style.display = "none";
+  uploadStepOk.style.display = "block";
+
+  if (uploadStep === 0) {
+    uploadStepTitle.textContent = "タイトルを入力してください";
+    uploadStepInput.style.display = "block";
+    uploadStepInput.value = uploadData.title;
+  }
+
+  if (uploadStep === 1) {
+    uploadStepTitle.textContent = "タグを入力してください（スペース区切り）";
+    uploadStepInput.style.display = "block";
+    uploadStepInput.value = uploadData.tags;
+  }
+
+  if (uploadStep === 2) {
+    uploadStepTitle.textContent = "月を選択してください";
+    uploadStepMonth.style.display = "block";
+    uploadStepMonth.value = uploadData.date;
+  }
+
+  if (uploadStep === 3) {
+    uploadStepTitle.textContent = "概要を入力してください";
+    uploadStepTextarea.style.display = "block";
+    uploadStepTextarea.value = uploadData.description;
+  }
+
+  if (uploadStep === 4) {
+    uploadStepTitle.textContent = "アップロード中…";
+    uploadStepInput.style.display = "none";
+    uploadStepMonth.style.display = "none";
+    uploadStepTextarea.style.display = "none";
+    uploadStepOk.style.display = "none";
+
+    uploadAllFiles();
+  }
+}
+
+// ===============================
 // ★ ステップ式アップロード：OK ボタンで進める
 // ===============================
 uploadStepOk.addEventListener("click", () => {
@@ -442,7 +489,7 @@ uploadStepOk.addEventListener("click", () => {
   }
 
   if (uploadStep === 4) {
-    uploadAllFiles();   // ★ 複数ファイルアップロード
+    openUploadStepModal();
   }
 });
 
