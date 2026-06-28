@@ -235,7 +235,7 @@ html, body {
 .view.hidden { display: none; }
 
 /* ===============================
-   ★ アップロード：ドラッグ＆ドロップエリア
+   ★ ドラッグ＆ドロップエリア
 =============================== */
 .upload-dropzone {
   width: 100%;
@@ -257,25 +257,37 @@ html, body {
 }
 
 /* ===============================
-   ★ アップロード：入力フォーム
+   ★ アップロードモーダル（ウインドウ）
 =============================== */
-.upload-form {
+.upload-modal {
   display: none;
-  background: #fff;
-  border: 1px solid #ddd;
-  border-radius: 12px;
-  padding: 20px;
-  margin-bottom: 24px;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 20000;
+  align-items: center;
+  justify-content: center;
 }
 
-.upload-form h3 {
+.upload-modal.open {
+  display: flex;
+}
+
+.upload-modal-content {
+  width: 420px;
+  background: #fff;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+}
+
+.upload-modal-content h3 {
   margin-top: 0;
   font-size: 18px;
   color: #111;
 }
 
-.upload-form label {
+.upload-modal-content label {
   display: block;
   margin-top: 12px;
   margin-bottom: 4px;
@@ -283,8 +295,8 @@ html, body {
   color: #333;
 }
 
-.upload-form input,
-.upload-form textarea {
+.upload-modal-content input,
+.upload-modal-content textarea {
   width: 100%;
   padding: 10px;
   border: 1px solid #ccc;
@@ -293,7 +305,7 @@ html, body {
   background: #fafafa;
 }
 
-.upload-form textarea {
+.upload-modal-content textarea {
   resize: vertical;
   min-height: 80px;
 }
