@@ -6,7 +6,6 @@
   <title>MyPortfolio</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
 </head>
 
 <body>
@@ -40,7 +39,7 @@
     <a class="nav-item" href="#gallery" data-view="gallery">画像一覧</a>
     <a class="nav-item" href="#about" data-view="about">ABOUT</a>
     <a class="nav-item" href="#info" data-view="info">制作について</a>
-    <a class="nav-item" href="https://himawari-fukushikai.org//" target="_blank">法人HP</a>
+    <a class="nav-item" href="https://himawari-fukushikai.org/" target="_blank">法人HP</a>
 
     <!-- スマホ専用検索バー -->
     <div class="mobile-search-area">
@@ -67,7 +66,7 @@
       <a class="nav-item" href="#gallery" data-view="gallery">画像一覧</a>
       <a class="nav-item" href="#about" data-view="about">ABOUT</a>
       <a class="nav-item" href="#info" data-view="info">制作について</a>
-      <a class="nav-item" href="https://himawari-fukushikai.org//" target="_blank">法人HP</a>
+      <a class="nav-item" href="https://himawari-fukushikai.org/" target="_blank">法人HP</a>
 
       <div class="sidebar-bottom">
         <a class="consult-btn" href="https://works.do/R/ti/p/300885@himawari-fukushikai" target="_blank">
@@ -82,6 +81,28 @@
          メイン
     =============================== -->
     <main class="main">
+
+      <!-- ★★★ 管理者モード：ドラッグ＆ドロップエリア ★★★ -->
+      <div id="upload-dropzone" class="upload-dropzone admin-only">
+        ここに画像をドラッグ＆ドロップしてください
+      </div>
+
+      <!-- ★★★ アップロード入力フォーム（ドロップ後に表示） ★★★ -->
+      <div id="upload-form" class="upload-form admin-only">
+        <h3>画像情報を入力</h3>
+
+        <label>タイトル</label>
+        <input type="text" id="upload-title" />
+
+        <label>タグ（スペース区切り）</label>
+        <input type="text" id="upload-tags" />
+
+        <label>概要</label>
+        <textarea id="upload-description"></textarea>
+
+        <button id="upload-submit" class="upload-submit-btn">アップロード</button>
+        <button id="upload-cancel" class="upload-cancel-btn">キャンセル</button>
+      </div>
 
       <!-- 画像一覧 -->
       <section id="view-gallery" class="view">
