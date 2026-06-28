@@ -1,565 +1,94 @@
 /* ===============================
-   全体
+   アップロード：ドラッグ＆ドロップエリア
 =============================== */
-* { box-sizing: border-box; }
-
-html, body {
-  margin: 0;
-  padding: 0;
-  font-family: 'Noto Sans', system-ui, sans-serif;
-  background: #fff;
-  color: #111;
-  overflow-x: hidden;
-}
-
-/* ===============================
-   ヘッダー（高さ10%）
-=============================== */
-.header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 10vh;
-  padding: 0 24px;
-  border-bottom: 1px solid #ddd;
-  background: #fafafa;
-  position: fixed;
-  top: 0;
-  left: 0;
+.upload-dropzone {
   width: 100%;
-  z-index: 10000;
-}
-
-#site-title {
-  margin: 0;
-  font-size: 20px;
-  color: #111;
-  user-select: none;
-}
-
-/* PC検索バー */
-.pc-search {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 10px;
-  border-radius: 999px;
-  background: #f2f2f2;
-  border: 1px solid #ddd;
-}
-
-.pc-search input {
-  border: none;
-  outline: none;
-  background: transparent;
-  color: #111;
-  font-size: 13px;
-  min-width: 180px;
-}
-
-#search-clear {
-  display: none;
-  cursor: pointer;
-  font-size: 18px;
-  color: #666;
-  padding: 0 6px;
-}
-
-#search-clear:hover { color: #000; }
-
-.search-icon {
-  color: #666;
-  font-size: 16px;
-}
-
-/* ===============================
-   ハンバーガー
-=============================== */
-.mobile-menu-btn {
-  display: none;
-  position: fixed;
-  top: 14px;
-  right: 14px;
-  width: 28px;
-  height: 22px;
-  z-index: 20000;
-  cursor: pointer;
-}
-
-.mobile-menu-btn span {
-  display: block;
-  height: 3px;
-  background: #111;
-  margin-bottom: 5px;
-  border-radius: 3px;
-}
-
-/* スマホメニュー */
-.mobile-menu-panel {
-  display: none;
-  position: fixed;
-  top: -100%;
-  left: 0;
-  width: 100%;
-  background: #fafafa;
-  padding: 20px;
-  z-index: 15000;
-  transition: top 0.3s ease;
-}
-
-.mobile-menu-panel.open {
-  top: 10vh;
-}
-
-.mobile-menu-panel .nav-item {
-  padding: 16px;
-  font-size: 16px;
-  color: #111;
-}
-
-.mobile-menu-panel .consult-btn {
-  margin-top: 20px;
-  width: 100%;
-}
-
-/* スマホ検索バー */
-.mobile-search-area {
-  margin-top: 20px;
-}
-
-.mobile-search-box {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: #f2f2f2;
-  border: 1px solid #ddd;
-  padding: 8px 12px;
-  border-radius: 999px;
-}
-
-#mobile-search-input {
-  flex: 1;
-  border: none;
-  outline: none;
-  background: transparent;
-  color: #111;
-  font-size: 14px;
-}
-
-#mobile-search-btn {
-  background: #ccc;
-  color: #fff;
-  border: none;
-  padding: 6px 12px;
-  border-radius: 999px;
-  cursor: pointer;
-  font-size: 13px;
-}
-
-/* ===============================
-   レイアウト
-=============================== */
-.layout {
-  display: flex;
-  min-height: 90vh;
-  padding-top: 10vh;
-}
-
-/* ===============================
-   PCサイドバー
-=============================== */
-.sidebar {
-  width: 220px;
-  background: #fafafa;
-  border-right: 1px solid #ddd;
-  display: flex;
-  flex-direction: column;
-  padding: 10px 0 40px 0px;
-  position: fixed;
-  top: 10vh;
-  bottom: 0;
-  left: 0;
-  z-index: 9000;
-}
-
-.nav-item {
-  display: block;
-  width: 100%;
-  padding: 14px 28px;
-  background: transparent;
-  color: #111;
-  font-size: 14px;
-  text-decoration: none;
-  cursor: pointer;
-  transition: background 0.15s ease;
-}
-
-.nav-item:hover {
-  background: rgba(0,0,0,0.08);
-}
-
-.sidebar-bottom { margin-top: auto; }
-
-.consult-btn {
-  display: block;
-  text-decoration: none;
+  padding: 40px;
+  margin-bottom: 24px;
+  border: 2px dashed #bbb;
+  border-radius: 12px;
   text-align: center;
-  width: 90%;
-  padding: 10px 12px;
-  border-radius: 4px;
-  background: #8b1e3f;
-  color: #fff;
-  border: none;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  margin: 0 auto;
-}
-
-.consult-btn:hover { background: #7a1937; }
-
-#admin-panel {
-  font-size: 12px;
+  font-size: 16px;
   color: #666;
-}
-
-/* ===============================
-   メイン
-=============================== */
-.main {
-  flex: 1;
-  padding: 24px;
-  margin-left: 220px;
-}
-
-.view.hidden { display: none; }
-
-/* ===============================
-   画像グリッド（Masonry）
-=============================== */
-.works-grid {
-  column-count: 4;
-  column-gap: 16px;
-}
-
-.work-card {
-  break-inside: avoid;
-  margin-bottom: 16px;
   background: #fafafa;
-  border-radius: 8px;
-  border: 1px solid #ddd;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
+  transition: background 0.2s ease, border-color 0.2s ease;
 }
 
-.work-image {
-  width: 100%;
-  height: auto;
-  display: block;
-  background: #eee;
-}
-
-/* タイトル（ホバー時のみ） */
-.work-title {
-  position: absolute;
-  bottom: 8px;
-  left: 12px;
-  margin: 0;
-  font-weight: 600;
-  font-size: 14px;
-  color: #fff;
-  opacity: 0;
-  z-index: 2;
-  transition: opacity 0.2s ease;
-}
-
-/* 黒グラデ */
-.work-card::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 40%;
-  background: linear-gradient(to top, rgba(0,0,0,0.6), transparent);
-  opacity: 0;
-  transition: opacity 0.2s ease;
-  z-index: 1;
-}
-
-.work-card:hover::after,
-.work-card:hover .work-title {
-  opacity: 1;
+.upload-dropzone.dragover {
+  background: #f0f0f0;
+  border-color: #8b1e3f;
+  color: #8b1e3f;
 }
 
 /* ===============================
-   管理者モード
+   アップロード：入力フォーム
 =============================== */
-.admin-only { display: none; }
-body.admin-mode .admin-only { display: block; }
-
-/* ===============================
-   画像ビューア（PC）
-=============================== */
-.image-viewer {
-  position: fixed;
-  top: 10vh;
-  left: 0;
-  width: 100%;
-  height: 90vh;
-  display: flex;
-  background: rgba(0,0,0,0.3);
-  transform: translateY(20px);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.25s ease, transform 0.25s ease;
-  z-index: 9600;
-}
-
-.image-viewer.open {
-  opacity: 1;
-  transform: translateY(0);
-  pointer-events: auto;
-}
-
-/* PC画像中央寄せ */
-.viewer-left {
-  width: 80%;
-  height: 90%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  margin: auto 0;
-}
-
-.viewer-image {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
-  margin: auto;
-  display: block;
-}
-
-.viewer-arrow {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  border: none;
-  background: rgba(0,0,0,0.35);
-  color: #fff;
-  font-size: 28px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background 0.2s ease;
-  z-index: 9700;
-}
-
-.viewer-arrow.left { left: 20px; }
-.viewer-arrow.right { right: 20px; }
-
-/* PCでは × ボタン非表示 */
-.viewer-close-btn {
-  display: none;
-}
-
-/* ===============================
-   ★ PC viewer-right（白ベース＋影）
-=============================== */
-.viewer-right {
-  width: 20%;
-  height: 100%;
-  background: #ffffff;
-  border-left: 1px solid #e5e5e5;
-  padding: 20px;
-  overflow-y: auto;
-
-  /* ふわっと浮く影 */
-  box-shadow: -4px 0 20px rgba(0,0,0,0.06);
-}
-
-/* ===============================
-   スマホ：画像ビューア（ボトムシート）
-=============================== */
-@media (max-width: 768px) {
-
-  .sidebar { display: none; }
-
-  .mobile-menu-btn { display: block; }
-  .mobile-menu-panel { display: block; }
-
-  .pc-search { display: none; }
-
-  .main {
-    margin-left: 0;
-    padding: 16px;
-  }
-
-  .works-grid {
-    column-count: 2;
-  }
-
-  /* viewer 全体 */
-  .image-viewer {
-    position: fixed;
-    top: 10vh;
-    left: 0;
-    width: 100%;
-    height: calc(100dvh - 10vh);
-    display: flex;
-    flex-direction: column;
-  }
-
-  /* 浮かせた × ボタン */
-  .viewer-close-btn {
-    display: block;
-    position: absolute;
-    top: 16px;
-    right: 16px;
-    z-index: 9999;
-    background: rgba(0,0,0,0.55);
-    backdrop-filter: blur(4px);
-    color: #fff;
-    border: none;
-    width: 42px;
-    height: 42px;
-    border-radius: 50%;
-    font-size: 22px;
-    cursor: pointer;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-    transition: background 0.2s ease, transform 0.15s ease;
-  }
-
-  .viewer-close-btn:active {
-    transform: scale(0.92);
-    background: rgba(0,0,0,0.75);
-  }
-
-  /* 画像エリア */
-  .viewer-left {
-    width: 100%;
-    height: 70%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    margin: 0;
-  }
-
-  .viewer-image {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
-    padding: 10px;
-  }
-
-  /* 下のエリア（ボトムシート） */
-  .viewer-right {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 30%;
-    background: #ffffff;
-    border-radius: 16px 16px 0 0;
-    padding: 16px;
-    overflow: hidden;
-    transition: height 0.3s ease;
-
-    box-shadow: 0 -6px 20px rgba(0,0,0,0.08);
-    border-top: 1px solid #e5e5e5;
-  }
-
-  /* 展開時 */
-  .viewer-right.active {
-    height: 60%;
-    overflow-y: auto;
-  }
-
-  .viewer-drag-handle {
-    width: 50px;
-    height: 6px;
-    background: #ccc;
-    border-radius: 999px;
-    margin: 0 auto 12px;
-    touch-action: none;
-  }
-}
-
-/* ===============================
-   モーダル
-=============================== */
-.modal {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.4);
-  display: none;
-  align-items: center;
-  justify-content: center;
-  z-index: 20000;
-}
-
-.modal.open {
-  display: flex;
-}
-
-.modal-content {
-  width: 70%;
-  height: 70%;
+.upload-form {
+  display: none; /* ドロップ後に JS で表示 */
   background: #fff;
-  color: #111;
-  border-radius: 8px;
+  border: 1px solid #ddd;
+  border-radius: 12px;
   padding: 20px;
-  display: flex;
-  flex-direction: column;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
 }
 
-#modal-textarea {
-  flex: 1;
-  width: 100%;
-  resize: none;
+.upload-form h3 {
+  margin-top: 0;
+  font-size: 18px;
+  color: #111;
+}
+
+.upload-form label {
+  display: block;
+  margin-top: 12px;
+  margin-bottom: 4px;
   font-size: 14px;
+  color: #333;
+}
+
+.upload-form input,
+.upload-form textarea {
+  width: 100%;
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 6px;
+  font-size: 14px;
+  background: #fafafa;
 }
 
-.modal-buttons {
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-  margin-top: 12px;
+.upload-form textarea {
+  resize: vertical;
+  min-height: 80px;
 }
 
-.modal-btn {
-  padding: 8px 16px;
-  border-radius: 6px;
+.upload-submit-btn {
+  margin-top: 16px;
+  background: #8b1e3f;
+  color: #fff;
   border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
   cursor: pointer;
   font-size: 14px;
 }
 
-.modal-btn.save {
-  background: #0078ff;
-  color: #fff;
+.upload-submit-btn:hover {
+  background: #7a1937;
 }
 
-.modal-btn.cancel {
+.upload-cancel-btn {
+  margin-top: 16px;
+  margin-left: 10px;
   background: #ccc;
   color: #000;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
 }
 
-/* ===============================
-   スクロールバー
-=============================== */
-::-webkit-scrollbar { width: 8px; }
-::-webkit-scrollbar-thumb {
-  background: #ccc;
-  border-radius: 4px;
+.upload-cancel-btn:hover {
+  background: #bbb;
 }
