@@ -56,7 +56,7 @@ let currentIndex = 0;
 
 let uploadStep = 0;
 let uploadData = {
-  files: [],        // ★ 複数ファイル対応
+  files: [],
   title: "",
   tags: "",
   date: "",
@@ -133,8 +133,7 @@ async function loadWorks() {
   const res = await fetch(`${API_BASE}/works`);
   works = await res.json();
 
-  // ★ 最新順にする（左上が最新）
-  works.reverse();
+  works.reverse(); // ★ 最新順
 
   worksList.innerHTML = "";
 
@@ -466,7 +465,7 @@ uploadDropzone.addEventListener("drop", (e) => {
   const files = Array.from(e.dataTransfer.files);
   if (files.length === 0) return;
 
-  uploadData.files = files;   // ★ 複数ファイルセット
+  uploadData.files = files;
   uploadStep = 0;
   openUploadStepModal();
 });
