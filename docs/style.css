@@ -250,7 +250,9 @@ html, body {
   border: 1px solid #ddd;
   cursor: pointer;
   position: relative;
-  overflow: hidden;
+
+  /* ★ 修正：編集・削除ボタンが押せるようにする */
+  overflow: visible;
 }
 
 .work-image {
@@ -294,7 +296,7 @@ html, body {
 }
 
 /* ===============================
-   ★ 管理者モード：ホバー演出を透明化（DOMを壊さない）
+   ★ 管理者モード：ホバー演出を透明化
 =============================== */
 body.admin-mode .work-card::after {
   opacity: 0 !important;
@@ -310,8 +312,28 @@ body.admin-mode .work-title {
 .admin-only { display: none; }
 body.admin-mode .admin-only { display: block; }
 
+/* 編集・削除ボタンのクリック優先度UP */
+.work-actions {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  z-index: 9999;
+}
+
+.edit-button,
+.delete-button {
+  position: relative;
+  z-index: 10000;
+  padding: 6px 10px;
+  font-size: 12px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  background: #fff;
+}
+
 /* ===============================
-   ドロップゾーン（管理者モード）
+   ドロップゾーン
 =============================== */
 .upload-dropzone {
   margin-bottom: 24px;
@@ -330,7 +352,7 @@ body.admin-mode .admin-only { display: block; }
 }
 
 /* ===============================
-   画像ビューア（PC）
+   viewer（PC）
 =============================== */
 .image-viewer {
   position: fixed;
@@ -353,7 +375,6 @@ body.admin-mode .admin-only { display: block; }
   pointer-events: auto;
 }
 
-/* PC画像中央寄せ */
 .viewer-left {
   width: 80%;
   height: 90%;
@@ -394,14 +415,11 @@ body.admin-mode .admin-only { display: block; }
 .viewer-arrow.left { left: 20px; }
 .viewer-arrow.right { right: 20px; }
 
-/* PCでは × ボタン非表示 */
 .viewer-close-btn {
   display: none;
 }
 
-/* ===============================
-   ★ PC viewer-right（白ベース＋影）
-=============================== */
+/* viewer-right（PC） */
 .viewer-right {
   width: 20%;
   height: 100%;
@@ -413,7 +431,7 @@ body.admin-mode .admin-only { display: block; }
 }
 
 /* ===============================
-   スマホ：画像ビューア（ボトムシート）
+   viewer（スマホ）
 =============================== */
 @media (max-width: 768px) {
 
@@ -433,7 +451,6 @@ body.admin-mode .admin-only { display: block; }
     column-count: 2;
   }
 
-  /* viewer 全体 */
   .image-viewer {
     position: fixed;
     top: 10vh;
@@ -444,7 +461,6 @@ body.admin-mode .admin-only { display: block; }
     flex-direction: column;
   }
 
-  /* 浮かせた × ボタン */
   .viewer-close-btn {
     display: block;
     position: absolute;
@@ -469,7 +485,6 @@ body.admin-mode .admin-only { display: block; }
     background: rgba(0,0,0,0.75);
   }
 
-  /* 画像エリア */
   .viewer-left {
     width: 100%;
     height: 70%;
@@ -487,7 +502,6 @@ body.admin-mode .admin-only { display: block; }
     padding: 10px;
   }
 
-  /* 下のエリア（ボトムシート） */
   .viewer-right {
     position: fixed;
     bottom: 0;
@@ -503,7 +517,6 @@ body.admin-mode .admin-only { display: block; }
     border-top: 1px solid #e5e5e5;
   }
 
-  /* 展開時 */
   .viewer-right.active {
     height: 60%;
     overflow-y: auto;
@@ -583,7 +596,7 @@ body.admin-mode .admin-only { display: block; }
 }
 
 /* ===============================
-   ★ ステップ式アップロードモーダル
+   ステップ式アップロードモーダル
 =============================== */
 #upload-step-modal {
   position: fixed;
