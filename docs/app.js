@@ -210,6 +210,22 @@ viewerCloseBtn.addEventListener("click", () => {
 });
 
 // ===============================
+// キーボード左右で画像切り替え
+// ===============================
+document.addEventListener("keydown", (e) => {
+  if (!viewer.classList.contains("open")) return;
+
+  if (e.key === "ArrowLeft") {
+    currentIndex = (currentIndex - 1 + works.length) % works.length;
+    openViewer(currentIndex);
+  }
+
+  if (e.key === "ArrowRight") {
+    currentIndex = (currentIndex + 1) % works.length;
+    openViewer(currentIndex);
+  }
+});
+// ===============================
 // 暗い部分クリックで閉じる
 // ===============================
 viewer.addEventListener("click", (e) => {
