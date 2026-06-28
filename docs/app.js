@@ -12,6 +12,7 @@ const viewer = document.getElementById("image-viewer");
 const viewerImage = document.getElementById("viewer-image");
 const viewerTitle = document.getElementById("viewer-title");
 const viewerTags = document.getElementById("viewer-tags");
+const viewerDate = document.getElementById("viewer-date");
 const viewerDescription = document.getElementById("viewer-description");
 
 const btnPrev = document.getElementById("viewer-prev");
@@ -26,7 +27,7 @@ const searchClear = document.getElementById("search-clear");
 const mobileSearchInput = document.getElementById("mobile-search-input");
 const mobileSearchBtn = document.getElementById("mobile-search-btn");
 
-// モーダル
+// 編集モーダル
 const modal = document.getElementById("edit-modal");
 const modalTitle = document.getElementById("modal-title");
 const modalTextarea = document.getElementById("modal-textarea");
@@ -45,6 +46,7 @@ const uploadDropzone = document.getElementById("upload-dropzone");
 const uploadStepModal = document.getElementById("upload-step-modal");
 const uploadStepTitle = document.getElementById("upload-step-title");
 const uploadStepInput = document.getElementById("upload-step-input");
+const uploadStepMonth = document.getElementById("upload-step-month");
 const uploadStepTextarea = document.getElementById("upload-step-textarea");
 const uploadStepOk = document.getElementById("upload-step-ok");
 
@@ -59,6 +61,7 @@ let uploadData = {
   file: null,
   title: "",
   tags: "",
+  date: "",
   description: ""
 };
 
@@ -185,6 +188,8 @@ function openViewer(index) {
   viewerTags.innerHTML = tagsArray
     .map(tag => `<span class="tag">${tag}</span>`)
     .join("");
+
+  viewerDate.textContent = item.date || "";
 
   viewerDescription.textContent = item.description;
 
@@ -354,11 +359,13 @@ function filterWorks(keyword) {
       ? item.tags.join(" ").toLowerCase()
       : item.tags.toLowerCase();
     const desc = item.description.toLowerCase();
+    const date = (item.date || "").toLowerCase();
 
     const match =
       title.includes(k) ||
       tags.includes(k) ||
-      desc.includes(k);
+      desc.includes(k) ||
+      date.includes(k);
 
     card.style.display = match ? "block" : "none";
   });
@@ -459,6 +466,7 @@ function openUploadStepModal() {
   uploadStepModal.classList.add("open");
 
   uploadStepInput.style.display = "none";
+  uploadStepMonth.style.display = "none";
   uploadStepTextarea.style.display = "none";
 
   if (uploadStep === 0) {
@@ -474,14 +482,21 @@ function openUploadStepModal() {
   }
 
   if (uploadStep === 2) {
+    uploadStepTitle.textContent = "月を選択してください";
+    uploadStepMonth.style.display = "block";
+    uploadStepMonth.value = uploadData.date;
+  }
+
+  if (uploadStep === 3) {
     uploadStepTitle.textContent = "概要を入力してください";
     uploadStepTextarea.style.display = "block";
     uploadStepTextarea.value = uploadData.description;
   }
 
-  if (uploadStep === 3) {
+  if (uploadStep === 4) {
     uploadStepTitle.textContent = "アップロード中…";
     uploadStepInput.style.display = "none";
+    uploadStepMonth.style.display = "none";
     uploadStepTextarea.style.display = "none";
     uploadStepOk.style.display = "none";
 
@@ -497,6 +512,9 @@ uploadStepOk.addEventListener("click", () => {
     uploadData.tags = uploadStepInput.value.trim();
   }
   if (uploadStep === 2) {
+    uploadData.date = uploadStepMonth.value;
+  }
+  if (uploadStep === 3) {
     uploadData.description = uploadStepTextarea.value.trim();
   }
 
@@ -520,6 +538,7 @@ async function uploadWork() {
   formData.append("image", uploadData.file);
   formData.append("title", uploadData.title);
   formData.append("tags", uploadData.tags);
+  formData.append("date", uploadData.date);
   formData.append("description", uploadData.description);
 
   await fetch(`${API_BASE}/upload`, {
@@ -530,7 +549,7 @@ async function uploadWork() {
   uploadStepModal.classList.remove("open");
   uploadStepOk.style.display = "block";
 
-  uploadData = { file: null, title: "", tags: "", description: "" };
+  uploadData = { file: null, title: "", tags: "", date: "", description: "" };
   uploadStep = 0;
 
   loadWorks();
