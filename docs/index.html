@@ -78,23 +78,6 @@
         ここに画像をドラッグ＆ドロップしてください
       </div>
 
-      <!-- ★★★ アップロードフォーム（旧方式に完全復元） -->
-      <div id="upload-form" class="upload-form admin-only">
-        <h3>画像情報を入力</h3>
-
-        <label>タイトル</label>
-        <input type="text" id="upload-title" />
-
-        <label>タグ（スペース区切り）</label>
-        <input type="text" id="upload-tags" />
-
-        <label>概要</label>
-        <textarea id="upload-description"></textarea>
-
-        <button id="upload-submit" class="upload-submit-btn">アップロード</button>
-        <button id="upload-cancel" class="upload-cancel-btn">キャンセル</button>
-      </div>
-
       <!-- 画像一覧 -->
       <section id="view-gallery" class="view">
         <div id="works-list" class="works-grid"></div>
@@ -154,6 +137,18 @@
         <button class="modal-btn save" id="modal-save">保存</button>
         <button class="modal-btn cancel" id="modal-cancel">キャンセル</button>
       </div>
+    </div>
+  </div>
+
+  <!-- =============================== -->
+  <!-- ★ ステップ式アップロードモーダル -->
+  <!-- =============================== -->
+  <div id="upload-step-modal" class="modal">
+    <div class="upload-step-content">
+      <h3 id="upload-step-title"></h3>
+      <input id="upload-step-input" type="text" />
+      <textarea id="upload-step-textarea"></textarea>
+      <button id="upload-step-ok">OK</button>
     </div>
   </div>
 
