@@ -1,5 +1,4 @@
 // ===============================
-  // ===============================
 // 設定
 // ===============================
 const API_BASE = "https://delicate-sunset-ea8a.d08084222816.workers.dev";
@@ -41,21 +40,27 @@ const viewerRight = document.querySelector(".viewer-right");
 const viewerLeft = document.querySelector(".viewer-left");
 const dragHandle = document.querySelector(".viewer-drag-handle");
 
-// ★ アップロード関連
+// ★ アップロード関連（新ステップ式）
 const uploadDropzone = document.getElementById("upload-dropzone");
-const uploadForm = document.getElementById("upload-form");
-const uploadTitle = document.getElementById("upload-title");
-const uploadTags = document.getElementById("upload-tags");
-const uploadDescription = document.getElementById("upload-description");
-const uploadSubmit = document.getElementById("upload-submit");
-const uploadCancel = document.getElementById("upload-cancel");
+const uploadStepModal = document.getElementById("upload-step-modal");
+const uploadStepTitle = document.getElementById("upload-step-title");
+const uploadStepInput = document.getElementById("upload-step-input");
+const uploadStepTextarea = document.getElementById("upload-step-textarea");
+const uploadStepOk = document.getElementById("upload-step-ok");
 
 let adminMode = false;
 let works = [];
 let currentIndex = 0;
-let currentEditType = ""; // "about" or "info"
-let uploadFile = null;
+let currentEditType = "";
 
+let uploadFile = null;
+let uploadStep = 0;
+let uploadData = {
+  file: null,
+  title: "",
+  tags: "",
+  description: ""
+};
 
 // ===============================
 // 管理者モード（4回クリック）
@@ -74,13 +79,11 @@ document.addEventListener("click", () => {
     return;
   }
 
-
   clearTimeout(adminClickTimer);
   adminClickTimer = setTimeout(() => {
     adminClickCount = 0;
   }, 500);
 });
-
 
 // ===============================
 // スマホ：ハンバーガー開閉
@@ -426,7 +429,7 @@ document.getElementById("edit-info")?.addEventListener("click", () => {
 });
 
 // ===============================
-// ★ アップロード：ドラッグ＆ドロップ
+// ★ ステップ式アップロード：ドラッグ＆ドロップ
 // ===============================
 uploadDropzone.addEventListener("dragover", (e) => {
   e.preventDefault();
@@ -444,45 +447,94 @@ uploadDropzone.addEventListener("drop", (e) => {
   uploadFile = e.dataTransfer.files[0];
   if (!uploadFile) return;
 
-  uploadForm.style.display = "block";
+  uploadData.file = uploadFile;
+  uploadStep = 0;
+  openUploadStepModal();
+});
+
+// ===============================
+// ★ ステップ式アップロードモーダル
+// ===============================
+function openUploadStepModal() {
+  uploadStepModal.classList.add("open");
+
+  uploadStepInput.style.display = "none";
+  uploadStepTextarea.style.display = "none";
+
+  if (uploadStep === 0) {
+    uploadStepTitle.textContent = "タイトルを入力してください";
+    uploadStepInput.style.display = "block";
+    uploadStepInput.value = uploadData.title;
+  }
+
+  if (uploadStep === 1) {
+    uploadStepTitle.textContent = "タグを入力してください（スペース区切り）";
+    uploadStepInput.style.display = "block";
+    uploadStepInput.value = uploadData.tags;
+  }
+
+  if (uploadStep === 2) {
+    uploadStepTitle.textContent = "概要を入力してください";
+    uploadStepTextarea.style.display = "block";
+    uploadStepTextarea.value = uploadData.description;
+  }
+
+  if (uploadStep === 3) {
+    uploadStepTitle.textContent = "アップロード中…";
+    uploadStepInput.style.display = "none";
+    uploadStepTextarea.style.display = "none";
+    uploadStepOk.style.display = "none";
+
+    uploadWork();
+  }
+}
+
+uploadStepOk.addEventListener("click", () => {
+  if (uploadStep === 0) {
+    uploadData.title = uploadStepInput.value.trim();
+  }
+  if (uploadStep === 1) {
+    uploadData.tags = uploadStepInput.value.trim();
+  }
+  if (uploadStep === 2) {
+    uploadData.description = uploadStepTextarea.value.trim();
+  }
+
+  uploadStep++;
+  openUploadStepModal();
+});
+
+// 外側クリックで閉じる
+uploadStepModal.addEventListener("click", (e) => {
+  if (e.target === uploadStepModal) {
+    uploadStepModal.classList.remove("open");
+    uploadStepOk.style.display = "block";
+  }
 });
 
 // ===============================
 // ★ アップロード送信
 // ===============================
-uploadSubmit.addEventListener("click", async () => {
-  if (!uploadFile) return;
-
+async function uploadWork() {
   const formData = new FormData();
-  formData.append("image", uploadFile);
-  formData.append("title", uploadTitle.value.trim());
-  formData.append("tags", uploadTags.value.trim());
-  formData.append("description", uploadDescription.value.trim());
+  formData.append("image", uploadData.file);
+  formData.append("title", uploadData.title);
+  formData.append("tags", uploadData.tags);
+  formData.append("description", uploadData.description);
 
   await fetch(`${API_BASE}/upload`, {
     method: "POST",
     body: formData
   });
 
-  uploadForm.style.display = "none";
-  uploadFile = null;
-  uploadTitle.value = "";
-  uploadTags.value = "";
-  uploadDescription.value = "";
+  uploadStepModal.classList.remove("open");
+  uploadStepOk.style.display = "block";
+
+  uploadData = { file: null, title: "", tags: "", description: "" };
+  uploadStep = 0;
 
   loadWorks();
-});
-
-// ===============================
-// ★ アップロードキャンセル
-// ===============================
-uploadCancel.addEventListener("click", () => {
-  uploadForm.style.display = "none";
-  uploadFile = null;
-  uploadTitle.value = "";
-  uploadTags.value = "";
-  uploadDescription.value = "";
-});
+}
 
 // ===============================
 // 初期ロード
