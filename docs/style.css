@@ -294,6 +294,17 @@ html, body {
 }
 
 /* ===============================
+   ★ 管理者モード：ホバー演出を無効化（重要）
+=============================== */
+body.admin-mode .work-card::after {
+  display: none !important;
+}
+
+body.admin-mode .work-title {
+  display: none !important;
+}
+
+/* ===============================
    管理者モード
 =============================== */
 .admin-only { display: none; }
