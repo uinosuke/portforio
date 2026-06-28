@@ -605,6 +605,7 @@ body.admin-mode .admin-only { display: block; }
 }
 
 #upload-step-input,
+#upload-step-month,
 #upload-step-textarea {
   width: 100%;
   font-size: 14px;
