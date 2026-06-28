@@ -294,14 +294,14 @@ html, body {
 }
 
 /* ===============================
-   ★ 管理者モード：ホバー演出を無効化（重要）
+   ★ 管理者モード：ホバー演出を透明化（DOMを壊さない）
 =============================== */
 body.admin-mode .work-card::after {
-  display: none !important;
+  opacity: 0 !important;
 }
 
 body.admin-mode .work-title {
-  display: none !important;
+  opacity: 0 !important;
 }
 
 /* ===============================
