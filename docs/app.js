@@ -153,21 +153,16 @@ async function loadWorks() {
       </div>
     `;
 
-    // ★ カードクリック → viewer を開く（ボタンは除外）
     card.addEventListener("click", (e) => {
-      if (e.target.closest(".edit-button") || e.target.closest(".delete-button")) {
-        return;
-      }
+      if (e.target.closest(".edit-button") || e.target.closest(".delete-button")) return;
       openViewer(index);
     });
 
-    // ★ 編集ボタン
     card.querySelector(".edit-button").addEventListener("click", (e) => {
       e.stopPropagation();
       editWork(item);
     });
 
-    // ★ 削除ボタン
     card.querySelector(".delete-button").addEventListener("click", (e) => {
       e.stopPropagation();
       deleteWork(item.id);
@@ -179,33 +174,269 @@ async function loadWorks() {
   filterWorks(searchInput.value.trim());
 }
 // ===============================
-// ステップ式アップロード：入力確定ボタン
+// viewer を開く
 // ===============================
-uploadStepOk.addEventListener("click", () => {
+function openViewer(index) {
+  currentIndex = index;
+  const item = works[index];
+
+  viewerImage.src = item.image;
+  viewerTitle.textContent = item.title;
+
+  const tagsArray = Array.isArray(item.tags)
+    ? item.tags
+    : item.tags.split(" ").filter(t => t.trim() !== "");
+
+  viewerTags.innerHTML = tagsArray
+    .map(tag => `<span class="tag">${tag}</span>`)
+    .join("");
+
+  viewerDate.textContent = item.date || "";
+  viewerDescription.textContent = item.description;
+
+  viewer.classList.add("open");
+
+  if (window.innerWidth <= 768) {
+    viewerLeft.style.display = "flex";
+    viewerRight.classList.remove("active");
+  }
+}
+
+// ===============================
+// viewer × ボタンで閉じる
+// ===============================
+viewerCloseBtn.addEventListener("click", () => {
+  viewer.classList.remove("open");
+});
+
+// ===============================
+// 暗い部分クリックで閉じる
+// ===============================
+viewer.addEventListener("click", (e) => {
+  const clickedInside =
+    e.target === viewerImage ||
+    e.target.closest(".viewer-right") ||
+    e.target.closest(".viewer-arrow") ||
+    e.target === viewerCloseBtn;
+
+  if (!clickedInside) viewer.classList.remove("open");
+});
+
+// ESC で閉じる
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") viewer.classList.remove("open");
+});
+
+// ===============================
+// 前後の画像へ（PC）
+// ===============================
+btnPrev.addEventListener("click", (e) => {
+  e.stopPropagation();
+  currentIndex = (currentIndex - 1 + works.length) % works.length;
+  openViewer(currentIndex);
+});
+
+btnNext.addEventListener("click", (e) => {
+  e.stopPropagation();
+  currentIndex = (currentIndex + 1) % works.length;
+  openViewer(currentIndex);
+});
+
+// ===============================
+// スマホ：viewer-right スワイプで展開/縮小
+// ===============================
+function enableDragSheet() {
+  if (!viewerRight) return;
+
+  let startY = 0;
+  let isDragging = false;
+
+  viewerRight.addEventListener("touchstart", (e) => {
+    const touchY = e.touches[0].clientY;
+    const rect = viewerRight.getBoundingClientRect();
+    const offsetY = touchY - rect.top;
+
+    if (offsetY <= 60) {
+      startY = touchY;
+      isDragging = true;
+    }
+  });
+
+  viewerRight.addEventListener("touchmove", (e) => {
+    if (!isDragging) return;
+
+    const diff = startY - e.touches[0].clientY;
+
+    if (diff > 20) viewerRight.classList.add("active");
+    if (diff < -20) viewerRight.classList.remove("active");
+  });
+
+  viewerRight.addEventListener("touchend", () => {
+    isDragging = false;
+  });
+
+  if (dragHandle) {
+    dragHandle.addEventListener("click", () => {
+      viewerRight.classList.toggle("active");
+    });
+  }
+}
+
+// ===============================
+// スマホ：左右スワイプで画像切り替え
+// ===============================
+function enableSwipeNavigation() {
+  if (!viewerLeft) return;
+
+  let startX = 0;
+  let endX = 0;
+
+  viewerLeft.addEventListener("touchstart", (e) => {
+    startX = e.touches[0].clientX;
+  });
+
+  viewerLeft.addEventListener("touchend", (e) => {
+    endX = e.changedTouches[0].clientX;
+    const diff = endX - startX;
+
+    if (diff < -50) {
+      currentIndex = (currentIndex + 1) % works.length;
+      openViewer(currentIndex);
+    }
+
+    if (diff > 50) {
+      currentIndex = (currentIndex - 1 + works.length) % works.length;
+      openViewer(currentIndex);
+    }
+  });
+}
+
+window.addEventListener("load", () => {
+  if (window.innerWidth <= 768) {
+    enableDragSheet();
+    enableSwipeNavigation();
+  }
+});
+
+// ===============================
+// スマホ検索ボタン
+// ===============================
+mobileSearchBtn.addEventListener("click", () => {
+  const keyword = mobileSearchInput.value.trim();
+  searchInput.value = keyword;
+  filterWorks(keyword);
+
+  mobileMenuPanel.classList.remove("open");
+  showView("gallery");
+});
+
+// ===============================
+// PC検索
+// ===============================
+searchInput.addEventListener("input", () => {
+  const keyword = searchInput.value.trim();
+  searchClear.style.display = keyword ? "block" : "none";
+  filterWorks(keyword);
+});
+
+searchClear.addEventListener("click", () => {
+  searchInput.value = "";
+  searchClear.style.display = "none";
+  filterWorks("");
+});
+
+// ===============================
+// フィルタ処理
+// ===============================
+function filterWorks(keyword) {
+  const cards = document.querySelectorAll(".work-card");
+  const k = keyword.toLowerCase();
+
+  cards.forEach((card, index) => {
+    const item = works[index];
+
+    const title = item.title.toLowerCase();
+    const tags = Array.isArray(item.tags)
+      ? item.tags.join(" ").toLowerCase()
+      : item.tags.toLowerCase();
+    const desc = item.description.toLowerCase();
+    const date = (item.date || "").toLowerCase();
+
+    const match =
+      title.includes(k) ||
+      tags.includes(k) ||
+      desc.includes(k) ||
+      date.includes(k);
+
+    card.style.display = match ? "block" : "none";
+  });
+}
+
+// ===============================
+// ABOUT 読み込み
+// ===============================
+async function loadAbout() {
+  const res = await fetch(`${API_BASE}/about`);
+  const html = await res.text();
+  const el = document.getElementById("about-content");
+  if (el) el.innerHTML = html;
+}
+
+// ===============================
+// INFO 読み込み
+// ===============================
+async function loadInfo() {
+  const res = await fetch(`${API_BASE}/works-info`);
+  const html = await res.text();
+  const el = document.getElementById("info-content");
+  if (el) el.innerHTML = html;
+}
+
+// ===============================
+// ステップ式アップロードモーダルを開く
+// ===============================
+function openUploadStepModal() {
+  uploadStepModal.classList.add("open");
+
+  uploadStepInput.style.display = "none";
+  uploadStepMonth.style.display = "none";
+  uploadStepTextarea.style.display = "none";
+  uploadStepOk.style.display = "block";
+
   if (uploadStep === 0) {
-    uploadData.title = uploadStepInput.value.trim();
+    uploadStepTitle.textContent = "タイトルを入力してください";
+    uploadStepInput.style.display = "block";
+    uploadStepInput.value = uploadData.title;
   }
+
   if (uploadStep === 1) {
-    uploadData.tags = uploadStepInput.value.trim();
+    uploadStepTitle.textContent = "タグを入力してください（スペース区切り）";
+    uploadStepInput.style.display = "block";
+    uploadStepInput.value = uploadData.tags;
   }
+
   if (uploadStep === 2) {
-    uploadData.date = uploadStepMonth.value;
+    uploadStepTitle.textContent = "月を選択してください";
+    uploadStepMonth.style.display = "block";
+    uploadStepMonth.value = uploadData.date;
   }
+
   if (uploadStep === 3) {
-    uploadData.description = uploadStepTextarea.value.trim();
+    uploadStepTitle.textContent = "概要を入力してください";
+    uploadStepTextarea.style.display = "block";
+    uploadStepTextarea.value = uploadData.description;
   }
 
-  uploadStep++;
-  openUploadStepModal();
-});
+  if (uploadStep === 4) {
+    uploadStepTitle.textContent = "アップロード中…";
+    uploadStepInput.style.display = "none";
+    uploadStepMonth.style.display = "none";
+    uploadStepTextarea.style.display = "none";
+    uploadStepOk.style.display = "none";
 
-// 外側クリックで閉じる
-uploadStepModal.addEventListener("click", (e) => {
-  if (e.target === uploadStepModal) {
-    uploadStepModal.classList.remove("open");
-    uploadStepOk.style.display = "block";
+    uploadWork();
   }
-});
+}
 
 // ===============================
 // ★ アップロード送信（Workers 仕様）
@@ -283,68 +514,3 @@ window.addEventListener("load", () => {
   loadAbout();
   loadInfo();
 });
-// ===============================
-// ステップ式アップロードモーダルを開く
-// ===============================
-function openUploadStepModal() {
-  uploadStepModal.classList.add("open");
-
-  uploadStepInput.style.display = "none";
-  uploadStepMonth.style.display = "none";
-  uploadStepTextarea.style.display = "none";
-  uploadStepOk.style.display = "block";
-
-  if (uploadStep === 0) {
-    uploadStepTitle.textContent = "タイトルを入力してください";
-    uploadStepInput.style.display = "block";
-    uploadStepInput.value = uploadData.title;
-  }
-
-  if (uploadStep === 1) {
-    uploadStepTitle.textContent = "タグを入力してください（スペース区切り）";
-    uploadStepInput.style.display = "block";
-    uploadStepInput.value = uploadData.tags;
-  }
-
-  if (uploadStep === 2) {
-    uploadStepTitle.textContent = "月を選択してください";
-    uploadStepMonth.style.display = "block";
-    uploadStepMonth.value = uploadData.date;
-  }
-
-  if (uploadStep === 3) {
-    uploadStepTitle.textContent = "概要を入力してください";
-    uploadStepTextarea.style.display = "block";
-    uploadStepTextarea.value = uploadData.description;
-  }
-
-  if (uploadStep === 4) {
-    uploadStepTitle.textContent = "アップロード中…";
-    uploadStepInput.style.display = "none";
-    uploadStepMonth.style.display = "none";
-    uploadStepTextarea.style.display = "none";
-    uploadStepOk.style.display = "none";
-
-    uploadWork();
-  }
-}
-
-// ===============================
-// ABOUT 読み込み
-// ===============================
-async function loadAbout() {
-  const res = await fetch(`${API_BASE}/about`);
-  const html = await res.text();
-  const el = document.getElementById("about-content");
-  if (el) el.innerHTML = html;
-}
-
-// ===============================
-// INFO 読み込み
-// ===============================
-async function loadInfo() {
-  const res = await fetch(`${API_BASE}/works-info`);
-  const html = await res.text();
-  const el = document.getElementById("info-content");
-  if (el) el.innerHTML = html;
-}
