@@ -153,18 +153,21 @@ async function loadWorks() {
       </div>
     `;
 
-    // ★ 画像クリック → viewer を開く
-    card.querySelector(".work-image").addEventListener("click", () => {
+    // ★ カードクリック → viewer を開く（ボタンは除外）
+    card.addEventListener("click", (e) => {
+      if (e.target.closest(".edit-button") || e.target.closest(".delete-button")) {
+        return;
+      }
       openViewer(index);
     });
 
-    // ★ 編集ボタン（伝播止める）
+    // ★ 編集ボタン
     card.querySelector(".edit-button").addEventListener("click", (e) => {
       e.stopPropagation();
       editWork(item);
     });
 
-    // ★ 削除ボタン（伝播止める）
+    // ★ 削除ボタン
     card.querySelector(".delete-button").addEventListener("click", (e) => {
       e.stopPropagation();
       deleteWork(item.id);
@@ -519,57 +522,4 @@ uploadStepOk.addEventListener("click", () => {
     uploadData.date = uploadStepMonth.value;
   }
   if (uploadStep === 3) {
-    uploadData.description = uploadStepTextarea.value.trim();
-  }
-
-  uploadStep++;
-  openUploadStepModal();
-});
-
-// 外側クリックで閉じる
-uploadStepModal.addEventListener("click", (e) => {
-  if (e.target === uploadStepModal) {
-    uploadStepModal.classList.remove("open");
-    uploadStepOk.style.display = "block";
-  }
-});
-
-// ===============================
-// ★ アップロード送信（Workers 仕様に完全対応）
-// ===============================
-async function uploadWork() {
-  const formData = new FormData();
-
-  // Workers が要求しているキー名に合わせる
-  formData.append("file", uploadData.file);
-
-  // meta を JSON で送る（Workers の仕様）
-  formData.append("meta", JSON.stringify({
-    title: uploadData.title,
-    tags: uploadData.tags,
-    date: uploadData.date,
-    description: uploadData.description
-  }));
-
-  await fetch(`${API_BASE}/upload`, {
-    method: "POST",
-    body: formData
-  });
-
-  uploadStepModal.classList.remove("open");
-  uploadStepOk.style.display = "block";
-
-  uploadData = { file: null, title: "", tags: "", date: "", description: "" };
-  uploadStep = 0;
-
-  loadWorks();
-}
-
-// ===============================
-// 初期ロード
-// ===============================
-window.addEventListener("load", () => {
-  loadWorks();
-  loadAbout();
-  loadInfo();
-});
+    uploadData
