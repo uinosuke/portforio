@@ -153,16 +153,21 @@ async function loadWorks() {
       </div>
     `;
 
+    // ★ カードクリック → viewer を開く（ボタンは除外）
     card.addEventListener("click", (e) => {
-      if (e.target.closest(".edit-button") || e.target.closest(".delete-button")) return;
+      if (e.target.closest(".edit-button") || e.target.closest(".delete-button")) {
+        return;
+      }
       openViewer(index);
     });
 
+    // ★ 編集ボタン
     card.querySelector(".edit-button").addEventListener("click", (e) => {
       e.stopPropagation();
       editWork(item);
     });
 
+    // ★ 削除ボタン
     card.querySelector(".delete-button").addEventListener("click", (e) => {
       e.stopPropagation();
       deleteWork(item.id);
@@ -173,6 +178,7 @@ async function loadWorks() {
 
   filterWorks(searchInput.value.trim());
 }
+
 // ===============================
 // viewer を開く
 // ===============================
@@ -210,22 +216,6 @@ viewerCloseBtn.addEventListener("click", () => {
 });
 
 // ===============================
-// キーボード左右で画像切り替え
-// ===============================
-document.addEventListener("keydown", (e) => {
-  if (!viewer.classList.contains("open")) return;
-
-  if (e.key === "ArrowLeft") {
-    currentIndex = (currentIndex - 1 + works.length) % works.length;
-    openViewer(currentIndex);
-  }
-
-  if (e.key === "ArrowRight") {
-    currentIndex = (currentIndex + 1) % works.length;
-    openViewer(currentIndex);
-  }
-});
-// ===============================
 // 暗い部分クリックで閉じる
 // ===============================
 viewer.addEventListener("click", (e) => {
@@ -256,6 +246,23 @@ btnNext.addEventListener("click", (e) => {
   e.stopPropagation();
   currentIndex = (currentIndex + 1) % works.length;
   openViewer(currentIndex);
+});
+
+// ===============================
+// キーボード左右で画像切り替え
+// ===============================
+document.addEventListener("keydown", (e) => {
+  if (!viewer.classList.contains("open")) return;
+
+  if (e.key === "ArrowLeft") {
+    currentIndex = (currentIndex - 1 + works.length) % works.length;
+    openViewer(currentIndex);
+  }
+
+  if (e.key === "ArrowRight") {
+    currentIndex = (currentIndex + 1) % works.length;
+    openViewer(currentIndex);
+  }
 });
 
 // ===============================
