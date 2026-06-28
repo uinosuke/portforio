@@ -435,10 +435,9 @@ uploadDropzone.addEventListener("drop", (e) => {
   if (!file) return;
 
   uploadData.file = file;   // ★ ファイルをセット
-  uploadStep = 0;           // ★ ステップを初期化
+  uploadStep = 0;           // ★ ステップ初期化
   openUploadStepModal();    // ★ ステップ式モーダル開始
 });
-
 
 // ===============================
 // ステップ式アップロードモーダルを開く
