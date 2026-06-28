@@ -153,15 +153,20 @@ async function loadWorks() {
       </div>
     `;
 
+    // ★ 画像クリック → viewer を開く
     card.querySelector(".work-image").addEventListener("click", () => {
       openViewer(index);
     });
 
-    card.querySelector(".edit-button").addEventListener("click", () => {
+    // ★ 編集ボタン（伝播止める）
+    card.querySelector(".edit-button").addEventListener("click", (e) => {
+      e.stopPropagation();
       editWork(item);
     });
 
-    card.querySelector(".delete-button").addEventListener("click", () => {
+    // ★ 削除ボタン（伝播止める）
+    card.querySelector(".delete-button").addEventListener("click", (e) => {
+      e.stopPropagation();
       deleteWork(item.id);
     });
 
