@@ -416,6 +416,31 @@ async function loadInfo() {
 }
 
 // ===============================
+// ★ ドロップゾーン：ドラッグ＆ドロップでファイル取得
+// ===============================
+uploadDropzone.addEventListener("dragover", (e) => {
+  e.preventDefault();
+  uploadDropzone.classList.add("dragover");
+});
+
+uploadDropzone.addEventListener("dragleave", () => {
+  uploadDropzone.classList.remove("dragover");
+});
+
+uploadDropzone.addEventListener("drop", (e) => {
+  e.preventDefault();
+  uploadDropzone.classList.remove("dragover");
+
+  const file = e.dataTransfer.files[0];
+  if (!file) return;
+
+  uploadData.file = file;   // ★ ファイルをセット
+  uploadStep = 0;           // ★ ステップを初期化
+  openUploadStepModal();    // ★ ステップ式モーダル開始
+});
+
+
+// ===============================
 // ステップ式アップロードモーダルを開く
 // ===============================
 function openUploadStepModal() {
