@@ -416,6 +416,44 @@ async function loadInfo() {
 }
 
 // ===============================
+// ★ ステップ式アップロード：OK ボタンで進める
+// ===============================
+uploadStepOk.addEventListener("click", () => {
+
+  if (uploadStep === 0) {
+    uploadData.title = uploadStepInput.value.trim();
+    uploadStep++;
+    openUploadStepModal();
+    return;
+  }
+
+  if (uploadStep === 1) {
+    uploadData.tags = uploadStepInput.value.trim();
+    uploadStep++;
+    openUploadStepModal();
+    return;
+  }
+
+  if (uploadStep === 2) {
+    uploadData.date = uploadStepMonth.value;
+    uploadStep++;
+    openUploadStepModal();
+    return;
+  }
+
+  if (uploadStep === 3) {
+    uploadData.description = uploadStepTextarea.value.trim();
+    uploadStep++;
+    openUploadStepModal();
+    return;
+  }
+
+  if (uploadStep === 4) {
+    uploadWork();
+  }
+});
+
+// ===============================
 // ★ ドロップゾーン：ドラッグ＆ドロップでファイル取得
 // ===============================
 uploadDropzone.addEventListener("dragover", (e) => {
@@ -438,6 +476,7 @@ uploadDropzone.addEventListener("drop", (e) => {
   uploadStep = 0;           // ★ ステップ初期化
   openUploadStepModal();    // ★ ステップ式モーダル開始
 });
+
 
 // ===============================
 // ステップ式アップロードモーダルを開く
