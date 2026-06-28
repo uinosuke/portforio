@@ -389,7 +389,6 @@ async function loadInfo() {
 }
 
 // ===============================
-/* 編集モーダル */
 // 編集モーダル
 // ===============================
 function openModal(type, currentHTML) {
@@ -531,15 +530,21 @@ uploadStepModal.addEventListener("click", (e) => {
 });
 
 // ===============================
-// ★ アップロード送信
+// ★ アップロード送信（Workers 仕様に完全対応）
 // ===============================
 async function uploadWork() {
   const formData = new FormData();
-  formData.append("image", uploadData.file);
-  formData.append("title", uploadData.title);
-  formData.append("tags", uploadData.tags);
-  formData.append("date", uploadData.date);
-  formData.append("description", uploadData.description);
+
+  // Workers が要求しているキー名に合わせる
+  formData.append("file", uploadData.file);
+
+  // meta を JSON で送る（Workers の仕様）
+  formData.append("meta", JSON.stringify({
+    title: uploadData.title,
+    tags: uploadData.tags,
+    date: uploadData.date,
+    description: uploadData.description
+  }));
 
   await fetch(`${API_BASE}/upload`, {
     method: "POST",
