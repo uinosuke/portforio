@@ -6,43 +6,36 @@
   <title>MyPortfolio</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
 </head>
 
 <body>
 
-  <!-- ===============================
-       ヘッダー
-  =============================== -->
+  <!-- =============================== -->
+  <!-- ヘッダー -->
+  <!-- =============================== -->
   <header class="header">
     <h1 id="site-title">MyPortfolio</h1>
 
-    <!-- PC用検索バー -->
     <div class="search-box pc-search">
       <i class="fa-solid fa-magnifying-glass search-icon"></i>
       <input id="search-input" type="text" placeholder="検索..." />
       <span id="search-clear">×</span>
     </div>
 
-    <!-- ハンバーガー -->
     <div class="mobile-menu-btn">
-      <span></span>
-      <span></span>
-      <span></span>
+      <span></span><span></span><span></span>
     </div>
   </header>
 
-  <!-- ===============================
-       スマホメニュー
-  =============================== -->
+  <!-- =============================== -->
+  <!-- スマホメニュー -->
+  <!-- =============================== -->
   <div class="mobile-menu-panel">
-
     <a class="nav-item" href="#gallery" data-view="gallery">画像一覧</a>
     <a class="nav-item" href="#about" data-view="about">ABOUT</a>
     <a class="nav-item" href="#info" data-view="info">制作について</a>
-    <a class="nav-item" href="https://himawari-fukushikai.org//" target="_blank">法人HP</a>
+    <a class="nav-item" href="https://himawari-fukushikai.org/" target="_blank">法人HP</a>
 
-    <!-- スマホ専用検索バー -->
     <div class="mobile-search-area">
       <div class="mobile-search-box">
         <i class="fa-solid fa-magnifying-glass search-icon"></i>
@@ -54,34 +47,53 @@
     <a class="consult-btn" href="https://works.do/R/ti/p/300885@himawari-fukushikai" target="_blank">
       ご相談はこちら
     </a>
-
   </div>
 
-  <!-- ===============================
-       レイアウト
-  =============================== -->
+  <!-- =============================== -->
+  <!-- レイアウト -->
+  <!-- =============================== -->
   <div class="layout">
 
-    <!-- PCサイドバー -->
     <aside class="sidebar">
       <a class="nav-item" href="#gallery" data-view="gallery">画像一覧</a>
       <a class="nav-item" href="#about" data-view="about">ABOUT</a>
       <a class="nav-item" href="#info" data-view="info">制作について</a>
-      <a class="nav-item" href="https://himawari-fukushikai.org//" target="_blank">法人HP</a>
+      <a class="nav-item" href="https://himawari-fukushikai.org/" target="_blank">法人HP</a>
 
       <div class="sidebar-bottom">
         <a class="consult-btn" href="https://works.do/R/ti/p/300885@himawari-fukushikai" target="_blank">
           ご相談はこちら
         </a>
-
         <div id="admin-panel" class="admin-only">管理者モード</div>
       </div>
     </aside>
 
-    <!-- ===============================
-         メイン
-    =============================== -->
+    <!-- =============================== -->
+    <!-- メイン -->
+    <!-- =============================== -->
     <main class="main">
+
+      <!-- ★★★ ドロップゾーン（管理者モード） -->
+      <div id="upload-dropzone" class="upload-dropzone admin-only">
+        ここに画像をドラッグ＆ドロップしてください
+      </div>
+
+      <!-- ★★★ アップロードフォーム（旧方式に完全復元） -->
+      <div id="upload-form" class="upload-form admin-only">
+        <h3>画像情報を入力</h3>
+
+        <label>タイトル</label>
+        <input type="text" id="upload-title" />
+
+        <label>タグ（スペース区切り）</label>
+        <input type="text" id="upload-tags" />
+
+        <label>概要</label>
+        <textarea id="upload-description"></textarea>
+
+        <button id="upload-submit" class="upload-submit-btn">アップロード</button>
+        <button id="upload-cancel" class="upload-cancel-btn">キャンセル</button>
+      </div>
 
       <!-- 画像一覧 -->
       <section id="view-gallery" class="view">
@@ -105,12 +117,10 @@
     </main>
   </div>
 
-  <!-- ===============================
-       画像ビューア
-  =============================== -->
+  <!-- =============================== -->
+  <!-- viewer -->
+  <!-- =============================== -->
   <div id="image-viewer" class="image-viewer">
-
-    <!-- スマホ専用 × ボタン -->
     <button id="viewer-close-btn" class="viewer-close-btn">×</button>
 
     <div class="viewer-left">
@@ -133,9 +143,9 @@
     </div>
   </div>
 
-  <!-- ===============================
-       モーダル
-  =============================== -->
+  <!-- =============================== -->
+  <!-- 編集モーダル -->
+  <!-- =============================== -->
   <div id="edit-modal" class="modal">
     <div class="modal-content">
       <h3 id="modal-title"></h3>
