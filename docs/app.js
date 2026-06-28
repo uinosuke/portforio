@@ -53,12 +53,10 @@ const uploadStepOk = document.getElementById("upload-step-ok");
 let adminMode = false;
 let works = [];
 let currentIndex = 0;
-let currentEditType = "";
 
-let uploadFile = null;
 let uploadStep = 0;
 let uploadData = {
-  file: null,
+  files: [],        // ★ 複数ファイル対応
   title: "",
   tags: "",
   date: "",
@@ -129,11 +127,14 @@ document.querySelectorAll(".nav-item[data-view='gallery']").forEach(btn => {
 });
 
 // ===============================
-// 作品一覧を取得
+// 作品一覧を取得（最新順）
 // ===============================
 async function loadWorks() {
   const res = await fetch(`${API_BASE}/works`);
   works = await res.json();
+
+  // ★ 最新順にする（左上が最新）
+  works.reverse();
 
   worksList.innerHTML = "";
 
@@ -153,21 +154,16 @@ async function loadWorks() {
       </div>
     `;
 
-    // ★ カードクリック → viewer を開く（ボタンは除外）
     card.addEventListener("click", (e) => {
-      if (e.target.closest(".edit-button") || e.target.closest(".delete-button")) {
-        return;
-      }
+      if (e.target.closest(".edit-button") || e.target.closest(".delete-button")) return;
       openViewer(index);
     });
 
-    // ★ 編集ボタン
     card.querySelector(".edit-button").addEventListener("click", (e) => {
       e.stopPropagation();
       editWork(item);
     });
 
-    // ★ 削除ボタン
     card.querySelector(".delete-button").addEventListener("click", (e) => {
       e.stopPropagation();
       deleteWork(item.id);
@@ -193,9 +189,7 @@ function openViewer(index) {
     ? item.tags
     : item.tags.split(" ").filter(t => t.trim() !== "");
 
-  viewerTags.innerHTML = tagsArray
-    .map(tag => `<span class="tag">${tag}</span>`)
-    .join("");
+  viewerTags.innerHTML = tagsArray.map(tag => `<span class="tag">${tag}</span>`).join("");
 
   viewerDate.textContent = item.date || "";
   viewerDescription.textContent = item.description;
@@ -449,12 +443,12 @@ uploadStepOk.addEventListener("click", () => {
   }
 
   if (uploadStep === 4) {
-    uploadWork();
+    uploadAllFiles();   // ★ 複数ファイルアップロード
   }
 });
 
 // ===============================
-// ★ ドロップゾーン：ドラッグ＆ドロップでファイル取得
+// ★ ドロップゾーン：複数ファイル取得
 // ===============================
 uploadDropzone.addEventListener("dragover", (e) => {
   e.preventDefault();
@@ -469,85 +463,41 @@ uploadDropzone.addEventListener("drop", (e) => {
   e.preventDefault();
   uploadDropzone.classList.remove("dragover");
 
-  const file = e.dataTransfer.files[0];
-  if (!file) return;
+  const files = Array.from(e.dataTransfer.files);
+  if (files.length === 0) return;
 
-  uploadData.file = file;   // ★ ファイルをセット
-  uploadStep = 0;           // ★ ステップ初期化
-  openUploadStepModal();    // ★ ステップ式モーダル開始
+  uploadData.files = files;   // ★ 複数ファイルセット
+  uploadStep = 0;
+  openUploadStepModal();
 });
 
-
 // ===============================
-// ステップ式アップロードモーダルを開く
+// ★ 複数ファイルアップロード処理
 // ===============================
-function openUploadStepModal() {
-  uploadStepModal.classList.add("open");
+async function uploadAllFiles() {
 
-  uploadStepInput.style.display = "none";
-  uploadStepMonth.style.display = "none";
-  uploadStepTextarea.style.display = "none";
-  uploadStepOk.style.display = "block";
+  for (const file of uploadData.files) {
+    const formData = new FormData();
 
-  if (uploadStep === 0) {
-    uploadStepTitle.textContent = "タイトルを入力してください";
-    uploadStepInput.style.display = "block";
-    uploadStepInput.value = uploadData.title;
+    formData.append("file", file);
+
+    formData.append("meta", JSON.stringify({
+      title: uploadData.title,
+      tags: uploadData.tags,
+      date: uploadData.date,
+      description: uploadData.description
+    }));
+
+    await fetch(`${API_BASE}/upload`, {
+      method: "POST",
+      body: formData
+    });
   }
-
-  if (uploadStep === 1) {
-    uploadStepTitle.textContent = "タグを入力してください（スペース区切り）";
-    uploadStepInput.style.display = "block";
-    uploadStepInput.value = uploadData.tags;
-  }
-
-  if (uploadStep === 2) {
-    uploadStepTitle.textContent = "月を選択してください";
-    uploadStepMonth.style.display = "block";
-    uploadStepMonth.value = uploadData.date;
-  }
-
-  if (uploadStep === 3) {
-    uploadStepTitle.textContent = "概要を入力してください";
-    uploadStepTextarea.style.display = "block";
-    uploadStepTextarea.value = uploadData.description;
-  }
-
-  if (uploadStep === 4) {
-    uploadStepTitle.textContent = "アップロード中…";
-    uploadStepInput.style.display = "none";
-    uploadStepMonth.style.display = "none";
-    uploadStepTextarea.style.display = "none";
-    uploadStepOk.style.display = "none";
-
-    uploadWork();
-  }
-}
-
-// ===============================
-// ★ アップロード送信（Workers 仕様）
-// ===============================
-async function uploadWork() {
-  const formData = new FormData();
-
-  formData.append("file", uploadData.file);
-
-  formData.append("meta", JSON.stringify({
-    title: uploadData.title,
-    tags: uploadData.tags,
-    date: uploadData.date,
-    description: uploadData.description
-  }));
-
-  await fetch(`${API_BASE}/upload`, {
-    method: "POST",
-    body: formData
-  });
 
   uploadStepModal.classList.remove("open");
   uploadStepOk.style.display = "block";
 
-  uploadData = { file: null, title: "", tags: "", date: "", description: "" };
+  uploadData = { files: [], title: "", tags: "", date: "", description: "" };
   uploadStep = 0;
 
   loadWorks();
