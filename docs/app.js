@@ -37,6 +37,10 @@ const viewerRight = document.querySelector(".viewer-right");
 const viewerLeft = document.querySelector(".viewer-left");
 const dragHandle = document.querySelector(".viewer-drag-handle");
 
+const uploadStepBack = document.getElementById("upload-step-back");
+const viewerEditWork = document.getElementById("viewer-edit-work");
+const viewerDeleteWork = document.getElementById("viewer-delete-work");
+
 const uploadDropzone = document.getElementById("upload-dropzone");
 const uploadStepModal = document.getElementById("upload-step-modal");
 const uploadStepTitle = document.getElementById("upload-step-title");
