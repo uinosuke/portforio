@@ -184,35 +184,40 @@ filterWorks("");
 });
 });
 
-// ===============================
-// 作品一覧取得
-// ===============================
 async function loadWorks() {
-const res = await fetch(`${API_BASE}/works`);
-works = await res.json();
+  const res = await fetch(`${API_BASE}/works`);
+  works = await res.json();
 
-works.reverse();
-worksList.innerHTML = "";
+  works.reverse();
+  worksList.innerHTML = "";
 
-works.forEach((item, index) => {
-const card = document.createElement("div");
-card.className = "work-card";
+  const columnCount = window.innerWidth <= 768 ? 2 : 6;
+  const columns = Array.from({ length: columnCount }, () => {
+    const col = document.createElement("div");
+    col.style.display = "flex";
+    col.style.flexDirection = "column";
+    col.style.gap = "16px";
+    col.style.flex = "1";
+    worksList.appendChild(col);
+    return col;
+  });
 
-card.innerHTML = `
-     <img class="work-image" src="${item.image}" alt="">
-     <div class="work-body">
-       <p class="work-title">${item.title}</p>
-     </div>
-   `;
+  works.forEach((item, index) => {
+    const card = document.createElement("div");
+    card.className = "work-card";
+    card.innerHTML = `
+      <img class="work-image" src="${item.image}" alt="">
+      <div class="work-body">
+        <p class="work-title">${item.title}</p>
+      </div>
+    `;
+    card.addEventListener("click", () => {
+      openViewer(index);
+    });
+    columns[index % columnCount].appendChild(card);  // ← ここが重要！
+  });
 
-card.addEventListener("click", () => {
-openViewer(index);
-});
-
-worksList.appendChild(card);
-});
-
-filterWorks(searchInput.value.trim());
+  filterWorks(searchInput.value.trim());
 }
 
 // ===============================
