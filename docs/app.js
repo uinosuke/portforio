@@ -614,4 +614,15 @@ modalBack.addEventListener("click", () => {
 });
 
 // 編集モーダル：キャンセル（既存）
-modalCancel.addEventListener("click
+modalCancel.addEventListener("click", () => {
+  modal.classList.remove("open");
+});
+
+// ===============================
+// 初期ロード
+// ===============================
+window.addEventListener("load", () => {
+  loadWorks();
+  loadAbout();
+  loadInfo();
+});
