@@ -69,7 +69,7 @@
     </aside>
 
     <!-- =============================== -->
-    <!-- メイン -->
+    <!-- メイン（★ viewer をここに移動） -->
     <!-- =============================== -->
     <main class="main">
 
@@ -97,36 +97,36 @@
         <button id="edit-info" class="admin-only">編集</button>
       </section>
 
+      <!-- =============================== -->
+      <!-- ★ viewer（main の中に移動） -->
+      <!-- =============================== -->
+      <div id="image-viewer" class="image-viewer">
+        <button id="viewer-close-btn" class="viewer-close-btn">×</button>
+
+        <div class="viewer-left">
+          <button class="viewer-arrow left" id="viewer-prev">‹</button>
+          <img id="viewer-image" class="viewer-image" src="" alt="" />
+          <button class="viewer-arrow right" id="viewer-next">›</button>
+        </div>
+
+        <div class="viewer-right">
+          <div class="viewer-drag-handle"></div>
+
+          <h3 class="viewer-section-title">TITLE</h3>
+          <p id="viewer-title"></p>
+
+          <h3 class="viewer-section-title">TAGS</h3>
+          <div id="viewer-tags"></div>
+
+          <h3 class="viewer-section-title">DATE</h3>
+          <p id="viewer-date"></p>
+
+          <h3 class="viewer-section-title">DESCRIPTION</h3>
+          <p id="viewer-description"></p>
+        </div>
+      </div>
+
     </main>
-  </div>
-
-  <!-- =============================== -->
-  <!-- viewer -->
-  <!-- =============================== -->
-  <div id="image-viewer" class="image-viewer">
-    <button id="viewer-close-btn" class="viewer-close-btn">×</button>
-
-    <div class="viewer-left">
-      <button class="viewer-arrow left" id="viewer-prev">‹</button>
-      <img id="viewer-image" class="viewer-image" src="" alt="" />
-      <button class="viewer-arrow right" id="viewer-next">›</button>
-    </div>
-
-    <div class="viewer-right">
-      <div class="viewer-drag-handle"></div>
-
-      <h3 class="viewer-section-title">TITLE</h3>
-      <p id="viewer-title"></p>
-
-      <h3 class="viewer-section-title">TAGS</h3>
-      <div id="viewer-tags"></div>
-
-      <h3 class="viewer-section-title">DATE</h3>
-      <p id="viewer-date"></p>
-
-      <h3 class="viewer-section-title">DESCRIPTION</h3>
-      <p id="viewer-description"></p>
-    </div>
   </div>
 
   <!-- =============================== -->
@@ -136,11 +136,11 @@
     <div class="modal-content">
       <h3 id="modal-title"></h3>
       <textarea id="modal-textarea"></textarea>
-        <div class="modal-buttons">
-          <button class="modal-btn back" id="modal-back">戻る</button>
-          <button class="modal-btn save" id="modal-save">保存</button>
-          <button class="modal-btn cancel" id="modal-cancel">キャンセル</button>
-        </div>
+      <div class="modal-buttons">
+        <button class="modal-btn back" id="modal-back">戻る</button>
+        <button class="modal-btn save" id="modal-save">保存</button>
+        <button class="modal-btn cancel" id="modal-cancel">キャンセル</button>
+      </div>
     </div>
   </div>
 
