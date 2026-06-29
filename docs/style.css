@@ -663,3 +663,57 @@ font-size: 14px;
 background: #ccc;
 border-radius: 4px;
 }
+
+.upload-step-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+#upload-step-back,
+#upload-step-ok {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+#upload-step-back {
+  background: #ccc;
+  color: #000;
+}
+
+#upload-step-ok {
+  background: #0078ff;
+  color: #fff;
+}
+
+.viewer-admin-actions {
+  margin-top: 20px;
+  gap: 10px;
+}
+
+body.admin-mode .viewer-admin-actions {
+  display: flex;
+}
+
+#viewer-edit-work,
+#viewer-delete-work {
+  flex: 1;
+  padding: 10px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+#viewer-edit-work {
+  background: #0078ff;
+  color: #fff;
+}
+
+#viewer-delete-work {
+  background: #d93025;
+  color: #fff;
+}
