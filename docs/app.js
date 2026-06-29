@@ -41,6 +41,14 @@ const uploadStepBack = document.getElementById("upload-step-back");
 const viewerEditWork = document.getElementById("viewer-edit-work");
 const viewerDeleteWork = document.getElementById("viewer-delete-work");
 
+const viewerEditForm = document.getElementById("viewer-edit-form");
+const viewerEditTitle = document.getElementById("viewer-edit-title");
+const viewerEditTags = document.getElementById("viewer-edit-tags");
+const viewerEditDate = document.getElementById("viewer-edit-date");
+const viewerEditDescription = document.getElementById("viewer-edit-description");
+const viewerSaveWork = document.getElementById("viewer-save-work");
+const viewerCancelEdit = document.getElementById("viewer-cancel-edit");
+
 const uploadDropzone = document.getElementById("upload-dropzone");
 const uploadStepModal = document.getElementById("upload-step-modal");
 const uploadStepTitle = document.getElementById("upload-step-title");
@@ -186,23 +194,23 @@ async function loadWorks() {
   works.reverse();
   worksList.innerHTML = "";
 
-works.forEach((item, index) => {
-  const card = document.createElement("div");
-  card.className = "work-card";
+  works.forEach((item, index) => {
+    const card = document.createElement("div");
+    card.className = "work-card";
 
-  card.innerHTML = `
-    <img class="work-image" src="${item.image}" alt="">
-    <div class="work-body">
-      <p class="work-title">${item.title}</p>
-    </div>
-  `;
+    card.innerHTML = `
+      <img class="work-image" src="${item.image}" alt="">
+      <div class="work-body">
+        <p class="work-title">${item.title}</p>
+      </div>
+    `;
 
-  card.addEventListener("click", () => {
-    openViewer(index);
+    card.addEventListener("click", () => {
+      openViewer(index);
+    });
+
+    worksList.appendChild(card);
   });
-
-  worksList.appendChild(card);
-});
 
   filterWorks(searchInput.value.trim());
 }
@@ -210,6 +218,24 @@ works.forEach((item, index) => {
 // ===============================
 // viewer
 // ===============================
+function openViewerEditForm() {
+  if (!adminMode || !works[currentIndex]) return;
+
+  const item = works[currentIndex];
+
+  viewerEditTitle.value = item.title || "";
+  viewerEditTags.value = Array.isArray(item.tags) ? item.tags.join(" ") : item.tags || "";
+  viewerEditDate.value = item.date || "";
+  viewerEditDescription.value = item.description || "";
+
+  viewerEditForm.classList.remove("hidden");
+}
+
+function closeViewerEditForm() {
+  viewerEditForm.classList.add("hidden");
+}
+  
+
 function openViewer(index) {
   currentIndex = index;
   const item = works[index];
@@ -227,6 +253,7 @@ function openViewer(index) {
   viewerDescription.textContent = item.description || "";
 
   viewer.classList.add("open");
+  closeViewerEditForm();
 
   if (window.innerWidth <= 768) {
     viewerLeft.style.display = "flex";
@@ -279,9 +306,7 @@ document.addEventListener("keydown", (e) => {
 });
 viewerEditWork.addEventListener("click", (e) => {
   e.stopPropagation();
-
-  if (!adminMode || !works[currentIndex]) return;
-  editWork(works[currentIndex]);
+  openViewerEditForm();
 });
 
 viewerDeleteWork.addEventListener("click", (e) => {
@@ -292,6 +317,47 @@ viewerDeleteWork.addEventListener("click", (e) => {
   deleteWork(works[currentIndex].id);
   viewer.classList.remove("open");
 });
+
+viewerCancelEdit.addEventListener("click", (e) => {
+  e.stopPropagation();
+  closeViewerEditForm();
+});
+
+viewerSaveWork.addEventListener("click", async (e) => {
+  e.stopPropagation();
+
+  if (!requireAdminToken() || !works[currentIndex]) return;
+
+  const item = works[currentIndex];
+
+  const res = await fetch(`${API_BASE}/works/${item.id}`, {
+    method: "PUT",
+    headers: authHeaders({ "Content-Type": "application/json" }),
+    body: JSON.stringify({
+      title: viewerEditTitle.value.trim(),
+      tags: viewerEditTags.value.split(" ").filter(tag => tag.trim() !== ""),
+      date: viewerEditDate.value,
+      description: viewerEditDescription.value.trim()
+    })
+  });
+
+  if (!res.ok) {
+    alert("保存に失敗しました");
+    return;
+  }
+
+  const updated = await res.json();
+  works[currentIndex] = updated;
+
+  viewerTitle.textContent = updated.title || "";
+  viewerTags.innerHTML = updated.tags.map(tag => `<span class="tag">${tag}</span>`).join("");
+  viewerDate.textContent = updated.date || "";
+  viewerDescription.textContent = updated.description || "";
+
+  closeViewerEditForm();
+  loadWorks();
+});
+
 // ===============================
 // スマホ viewer 操作
 // ===============================
