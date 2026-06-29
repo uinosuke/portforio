@@ -646,49 +646,7 @@ uploadDropzone.addEventListener("drop", (e) => {
   openUploadStepModal();
 });
 
-async function uploadAllFiles() {
-  if (!requireAdminToken()) return;
-
-await Promise.all(uploadData.files.map(async (file) => {
-    if (file.size > 10 * 1024 * 1024) {
-      alert("10MBを超える画像はアップロードできません: " + file.name);
-    }
-
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("meta", JSON.stringify({
-      title: uploadData.title,
-      tags: uploadData.tags,
-      date: uploadData.date,
-      description: uploadData.description
-    }));
-
-    try {
-      const res = await fetch(`${API_BASE}/upload`, {
-        method: "POST",
-        headers: authHeaders(),
-        body: formData
-      });
-
-      if (!res.ok) {
-        alert("アップロードに失敗しました: " + res.status);
-      }
-    } catch (err) {
-      console.error("通信エラー:", err);
-      alert("通信エラーが発生しました");
-      break;
-    }
- }));
-
-  uploadStepModal.classList.remove("open");
-  uploadStepOk.style.display = "block";
-  uploadStepBack.style.display = "none";
-
-  uploadData = { files: [], title: "", tags: "", date: "", description: "" };
-  uploadStep = 0;
-
-  loadWorks();
-}
+async function uploadAllFiles
 
 // ===============================
 // 作品編集 / 削除
