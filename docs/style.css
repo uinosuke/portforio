@@ -717,3 +717,63 @@ body.admin-mode .viewer-admin-actions {
   background: #d93025;
   color: #fff;
 }
+.viewer-edit-form.hidden {
+  display: none !important;
+}
+
+.viewer-edit-form {
+  margin-top: 20px;
+}
+
+body.admin-mode .viewer-edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.viewer-edit-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #555;
+}
+
+.viewer-edit-form input,
+.viewer-edit-form textarea {
+  width: 100%;
+  font-size: 14px;
+  padding: 9px 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.viewer-edit-form textarea {
+  min-height: 110px;
+  resize: vertical;
+}
+
+.viewer-edit-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+#viewer-save-work,
+#viewer-cancel-edit {
+  flex: 1;
+  padding: 10px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+#viewer-save-work {
+  background: #0078ff;
+  color: #fff;
+}
+
+#viewer-cancel-edit {
+  background: #ccc;
+  color: #000;
+}
