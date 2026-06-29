@@ -523,8 +523,8 @@ uploadDropzone.addEventListener("drop", (e) => {
 async function uploadAllFiles() {
 
   for (const file of uploadData.files) {
-    const formData = new FormData();
 
+    const formData = new FormData();
     formData.append("file", file);
 
     formData.append("meta", JSON.stringify({
@@ -534,10 +534,21 @@ async function uploadAllFiles() {
       description: uploadData.description
     }));
 
-    await fetch(`${API_BASE}/upload`, {
-      method: "POST",
-      body: formData
-    });
+    try {
+      const res = await fetch(`${API_BASE}/upload`, {
+        method: "POST",
+        body: formData
+      });
+
+      if (!res.ok) {
+        console.error("アップロード失敗:", res.status);
+        break; // ★ Worker が落ちたら次の画像は送らない
+      }
+
+    } catch (err) {
+      console.error("通信エラー:", err);
+      break; // ★ Worker が落ちたら次の画像は送らない
+    }
   }
 
   uploadStepModal.classList.remove("open");
@@ -548,6 +559,7 @@ async function uploadAllFiles() {
 
   loadWorks();
 }
+
 
 // ===============================
 // 編集処理
