@@ -163,8 +163,10 @@ mobileMenuPanel.classList.remove("open");
 }
 
 window.addEventListener("load", () => {
+  const overlay = document.getElementById("loading-overlay");
+
   setTimeout(() => {
-    document.getElementById("loading-overlay").classList.add("hidden");
+    overlay.classList.add("hidden");
   }, 1000);
 
   const view = location.hash.replace("#", "") || "gallery";
@@ -183,10 +185,6 @@ window.addEventListener("load", () => {
   loadWorks();
   loadAbout();
   loadInfo();
-});
-window.addEventListener("hashchange", () => {
-  const view = location.hash.replace("#", "") || "gallery";
-  showView(view);
 });
 // ===============================
 // 画像一覧へ戻ったら検索解除
