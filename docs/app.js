@@ -524,6 +524,12 @@ async function uploadAllFiles() {
 
   for (const file of uploadData.files) {
 
+    // ★ 10MB超えたら即停止（Worker保護）
+    if (file.size > 10 * 1024 * 1024) {
+      alert("10MBを超える画像はアップロードできません: " + file.name);
+      break;
+    }
+
     const formData = new FormData();
     formData.append("file", file);
 
@@ -542,12 +548,14 @@ async function uploadAllFiles() {
 
       if (!res.ok) {
         console.error("アップロード失敗:", res.status);
-        break; // ★ Worker が落ちたら次の画像は送らない
+        alert("アップロードに失敗しました（" + res.status + "）");
+        break; // ★ Workerが落ちたら次の画像は送らない
       }
 
     } catch (err) {
       console.error("通信エラー:", err);
-      break; // ★ Worker が落ちたら次の画像は送らない
+      alert("通信エラーが発生しました");
+      break; // ★ Workerが落ちたら次の画像は送らない
     }
   }
 
@@ -559,6 +567,7 @@ async function uploadAllFiles() {
 
   loadWorks();
 }
+
 
 
 // ===============================
