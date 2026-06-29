@@ -4,7 +4,7 @@
 const API_BASE = "https://delicate-sunset-ea8a.d08084222816.workers.dev";
 
 // ===============================
-// DOM 取得
+// DOM取得
 // ===============================
 const worksList = document.getElementById("works-list");
 const viewer = document.getElementById("image-viewer");
@@ -19,29 +19,24 @@ const btnPrev = document.getElementById("viewer-prev");
 const btnNext = document.getElementById("viewer-next");
 const viewerCloseBtn = document.getElementById("viewer-close-btn");
 
-// PC検索
 const searchInput = document.getElementById("search-input");
 const searchClear = document.getElementById("search-clear");
 
-// スマホ検索
 const mobileSearchInput = document.getElementById("mobile-search-input");
 const mobileSearchBtn = document.getElementById("mobile-search-btn");
 
-// 編集モーダル
 const modal = document.getElementById("edit-modal");
 const modalTitle = document.getElementById("modal-title");
 const modalTextarea = document.getElementById("modal-textarea");
 const modalSave = document.getElementById("modal-save");
 const modalCancel = document.getElementById("modal-cancel");
 
-// スマホ viewer（ボトムシート）
 const mobileMenuBtn = document.querySelector(".mobile-menu-btn");
 const mobileMenuPanel = document.querySelector(".mobile-menu-panel");
 const viewerRight = document.querySelector(".viewer-right");
 const viewerLeft = document.querySelector(".viewer-left");
 const dragHandle = document.querySelector(".viewer-drag-handle");
 
-// ★ アップロード関連（新ステップ式）
 const uploadDropzone = document.getElementById("upload-dropzone");
 const uploadStepModal = document.getElementById("upload-step-modal");
 const uploadStepTitle = document.getElementById("upload-step-title");
@@ -50,7 +45,13 @@ const uploadStepMonth = document.getElementById("upload-step-month");
 const uploadStepTextarea = document.getElementById("upload-step-textarea");
 const uploadStepOk = document.getElementById("upload-step-ok");
 
+const siteTitle = document.getElementById("site-title");
+const editAboutBtn = document.getElementById("edit-about");
+const editInfoBtn = document.getElementById("edit-info");
+
 let adminMode = false;
+let adminToken = localStorage.getItem("adminToken") || "";
+
 let works = [];
 let currentIndex = 0;
 
@@ -63,41 +64,86 @@ let uploadData = {
   description: ""
 };
 
-// ===============================
-// 管理者モード（4回クリック）
-// ===============================
-let adminClickCount = 0;
-let adminClickTimer = null;
+let editingPage = null;
 
-document.addEventListener("click", () => {
-  adminClickCount++;
+// ===============================
+// 管理者ログイン
+// ===============================
+async function adminLogin() {
+  const password = prompt("管理者パスワードを入力してください");
+  if (!password) return;
 
-  if (adminClickCount === 4) {
-    adminMode = !adminMode;
-    document.body.classList.toggle("admin-mode", adminMode);
-    adminClickCount = 0;
-    clearTimeout(adminClickTimer);
-    return;
+  try {
+    const res = await fetch(`${API_BASE}/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ password })
+    });
+
+    if (!res.ok) {
+      alert("パスワードが違います");
+      return;
+    }
+
+    const data = await res.json();
+
+    adminToken = data.token;
+    localStorage.setItem("adminToken", adminToken);
+
+    adminMode = true;
+    document.body.classList.add("admin-mode");
+    alert("管理者モードに入りました");
+  } catch (err) {
+    console.error(err);
+    alert("ログインに失敗しました");
   }
+}
 
-  clearTimeout(adminClickTimer);
-  adminClickTimer = setTimeout(() => {
-    adminClickCount = 0;
-  }, 500);
+function adminLogout() {
+  adminToken = "";
+  localStorage.removeItem("adminToken");
+
+  adminMode = false;
+  document.body.classList.remove("admin-mode");
+  alert("管理者モードを終了しました");
+}
+
+function authHeaders(extraHeaders = {}) {
+  return {
+    ...extraHeaders,
+    Authorization: `Bearer ${adminToken}`
+  };
+}
+
+function requireAdminToken() {
+  if (!adminToken) {
+    alert("管理者ログインが必要です");
+    return false;
+  }
+  return true;
+}
+
+siteTitle.addEventListener("dblclick", () => {
+  if (adminMode) {
+    adminLogout();
+  } else {
+    adminLogin();
+  }
 });
 
 // ===============================
-// スマホ：ハンバーガー開閉
+// スマホメニュー
 // ===============================
 mobileMenuBtn.addEventListener("click", () => {
   mobileMenuPanel.classList.toggle("open");
 });
 
 // ===============================
-// ハッシュURLでページ切替
+// ページ切り替え
 // ===============================
 function showView(view) {
   document.querySelectorAll(".view").forEach(v => v.classList.add("hidden"));
+
   const target = document.getElementById(`view-${view}`);
   if (target) target.classList.remove("hidden");
 
@@ -115,7 +161,7 @@ window.addEventListener("hashchange", () => {
 });
 
 // ===============================
-// 画像一覧押したらフィルター解除
+// 画像一覧へ戻ったら検索解除
 // ===============================
 document.querySelectorAll(".nav-item[data-view='gallery']").forEach(btn => {
   btn.addEventListener("click", () => {
@@ -127,15 +173,13 @@ document.querySelectorAll(".nav-item[data-view='gallery']").forEach(btn => {
 });
 
 // ===============================
-// 作品一覧を取得（最新順）
+// 作品一覧取得
 // ===============================
 async function loadWorks() {
   const res = await fetch(`${API_BASE}/works`);
   works = await res.json();
 
-  // ★ 最新順（左上が最新）
   works.reverse();
-
   worksList.innerHTML = "";
 
   works.forEach((item, index) => {
@@ -176,7 +220,7 @@ async function loadWorks() {
 }
 
 // ===============================
-// viewer を開く
+// viewer
 // ===============================
 function openViewer(index) {
   currentIndex = index;
@@ -187,12 +231,12 @@ function openViewer(index) {
 
   const tagsArray = Array.isArray(item.tags)
     ? item.tags
-    : item.tags.split(" ").filter(t => t.trim() !== "");
+    : String(item.tags || "").split(" ").filter(t => t.trim() !== "");
 
   viewerTags.innerHTML = tagsArray.map(tag => `<span class="tag">${tag}</span>`).join("");
 
   viewerDate.textContent = item.date || "";
-  viewerDescription.textContent = item.description;
+  viewerDescription.textContent = item.description || "";
 
   viewer.classList.add("open");
 
@@ -202,16 +246,10 @@ function openViewer(index) {
   }
 }
 
-// ===============================
-// viewer × ボタンで閉じる
-// ===============================
 viewerCloseBtn.addEventListener("click", () => {
   viewer.classList.remove("open");
 });
 
-// ===============================
-// 暗い部分クリックで閉じる
-// ===============================
 viewer.addEventListener("click", (e) => {
   const clickedInside =
     e.target === viewerImage ||
@@ -222,14 +260,10 @@ viewer.addEventListener("click", (e) => {
   if (!clickedInside) viewer.classList.remove("open");
 });
 
-// ESC で閉じる
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape") viewer.classList.remove("open");
 });
 
-// ===============================
-// 前後の画像へ（PC）
-// ===============================
 btnPrev.addEventListener("click", (e) => {
   e.stopPropagation();
   currentIndex = (currentIndex - 1 + works.length) % works.length;
@@ -242,9 +276,6 @@ btnNext.addEventListener("click", (e) => {
   openViewer(currentIndex);
 });
 
-// ===============================
-// キーボード左右で画像切り替え
-// ===============================
 document.addEventListener("keydown", (e) => {
   if (!viewer.classList.contains("open")) return;
 
@@ -260,7 +291,7 @@ document.addEventListener("keydown", (e) => {
 });
 
 // ===============================
-// スマホ：viewer-right スワイプで展開/縮小
+// スマホ viewer 操作
 // ===============================
 function enableDragSheet() {
   if (!viewerRight) return;
@@ -299,9 +330,6 @@ function enableDragSheet() {
   }
 }
 
-// ===============================
-// スマホ：左右スワイプで画像切り替え
-// ===============================
 function enableSwipeNavigation() {
   if (!viewerLeft) return;
 
@@ -328,15 +356,8 @@ function enableSwipeNavigation() {
   });
 }
 
-window.addEventListener("load", () => {
-  if (window.innerWidth <= 768) {
-    enableDragSheet();
-    enableSwipeNavigation();
-  }
-});
-
 // ===============================
-// スマホ検索ボタン
+// 検索
 // ===============================
 mobileSearchBtn.addEventListener("click", () => {
   const keyword = mobileSearchInput.value.trim();
@@ -347,9 +368,6 @@ mobileSearchBtn.addEventListener("click", () => {
   showView("gallery");
 });
 
-// ===============================
-// PC検索
-// ===============================
 searchInput.addEventListener("input", () => {
   const keyword = searchInput.value.trim();
   searchClear.style.display = keyword ? "block" : "none";
@@ -362,9 +380,6 @@ searchClear.addEventListener("click", () => {
   filterWorks("");
 });
 
-// ===============================
-// フィルタ処理
-// ===============================
 function filterWorks(keyword) {
   const cards = document.querySelectorAll(".work-card");
   const k = keyword.toLowerCase();
@@ -372,12 +387,12 @@ function filterWorks(keyword) {
   cards.forEach((card, index) => {
     const item = works[index];
 
-    const title = item.title.toLowerCase();
+    const title = String(item.title || "").toLowerCase();
     const tags = Array.isArray(item.tags)
       ? item.tags.join(" ").toLowerCase()
-      : item.tags.toLowerCase();
-    const desc = item.description.toLowerCase();
-    const date = (item.date || "").toLowerCase();
+      : String(item.tags || "").toLowerCase();
+    const desc = String(item.description || "").toLowerCase();
+    const date = String(item.date || "").toLowerCase();
 
     const match =
       title.includes(k) ||
@@ -390,7 +405,7 @@ function filterWorks(keyword) {
 }
 
 // ===============================
-// ABOUT 読み込み
+// ABOUT / 制作について
 // ===============================
 async function loadAbout() {
   const res = await fetch(`${API_BASE}/about`);
@@ -399,9 +414,6 @@ async function loadAbout() {
   if (el) el.innerHTML = html;
 }
 
-// ===============================
-// INFO 読み込み
-// ===============================
 async function loadInfo() {
   const res = await fetch(`${API_BASE}/works-info`);
   const html = await res.text();
@@ -409,10 +421,60 @@ async function loadInfo() {
   if (el) el.innerHTML = html;
 }
 
+function openTextEditor(type) {
+  if (!requireAdminToken()) return;
+
+  editingPage = type;
+
+  const contentEl = type === "about"
+    ? document.getElementById("about-content")
+    : document.getElementById("info-content");
+
+  modalTitle.textContent = type === "about" ? "ABOUTを編集" : "制作についてを編集";
+  modalTextarea.value = contentEl.innerHTML.trim();
+
+  modal.classList.add("open");
+}
+
+editAboutBtn.addEventListener("click", () => openTextEditor("about"));
+editInfoBtn.addEventListener("click", () => openTextEditor("info"));
+
+modalCancel.addEventListener("click", () => {
+  modal.classList.remove("open");
+  editingPage = null;
+});
+
+modalSave.addEventListener("click", async () => {
+  if (!editingPage || !requireAdminToken()) return;
+
+  const endpoint = editingPage === "about" ? "/about" : "/works-info";
+
+  const res = await fetch(`${API_BASE}${endpoint}`, {
+    method: "PUT",
+    headers: authHeaders({ "Content-Type": "text/html" }),
+    body: modalTextarea.value
+  });
+
+  if (!res.ok) {
+    alert("保存に失敗しました");
+    return;
+  }
+
+  modal.classList.remove("open");
+  editingPage = null;
+
+  await loadAbout();
+  await loadInfo();
+
+  alert("保存しました");
+});
+
 // ===============================
-// ★ ステップ式アップロードモーダルを開く
+// アップロード
 // ===============================
 function openUploadStepModal() {
+  if (!requireAdminToken()) return;
+
   uploadStepModal.classList.add("open");
 
   uploadStepInput.style.display = "none";
@@ -433,7 +495,7 @@ function openUploadStepModal() {
   }
 
   if (uploadStep === 2) {
-    uploadStepTitle.textContent = "月を選択してください";
+    uploadStepTitle.textContent = "年月を選択してください";
     uploadStepMonth.style.display = "block";
     uploadStepMonth.value = uploadData.date;
   }
@@ -445,21 +507,13 @@ function openUploadStepModal() {
   }
 
   if (uploadStep === 4) {
-    uploadStepTitle.textContent = "アップロード中…";
-    uploadStepInput.style.display = "none";
-    uploadStepMonth.style.display = "none";
-    uploadStepTextarea.style.display = "none";
+    uploadStepTitle.textContent = "アップロード中...";
     uploadStepOk.style.display = "none";
-
     uploadAllFiles();
   }
 }
 
-// ===============================
-// ★ ステップ式アップロード：OK ボタンで進める
-// ===============================
 uploadStepOk.addEventListener("click", () => {
-
   if (uploadStep === 0) {
     uploadData.title = uploadStepInput.value.trim();
     uploadStep++;
@@ -485,17 +539,9 @@ uploadStepOk.addEventListener("click", () => {
     uploadData.description = uploadStepTextarea.value.trim();
     uploadStep++;
     openUploadStepModal();
-    return;
-  }
-
-  if (uploadStep === 4) {
-    openUploadStepModal();
   }
 });
 
-// ===============================
-// ★ ドロップゾーン：複数ファイル取得
-// ===============================
 uploadDropzone.addEventListener("dragover", (e) => {
   e.preventDefault();
   uploadDropzone.classList.add("dragover");
@@ -509,6 +555,8 @@ uploadDropzone.addEventListener("drop", (e) => {
   e.preventDefault();
   uploadDropzone.classList.remove("dragover");
 
+  if (!requireAdminToken()) return;
+
   const files = Array.from(e.dataTransfer.files);
   if (files.length === 0) return;
 
@@ -517,14 +565,10 @@ uploadDropzone.addEventListener("drop", (e) => {
   openUploadStepModal();
 });
 
-// ===============================
-// ★ 複数ファイルアップロード処理
-// ===============================
 async function uploadAllFiles() {
+  if (!requireAdminToken()) return;
 
   for (const file of uploadData.files) {
-
-    // ★ 10MB超えたら即停止（Worker保護）
     if (file.size > 10 * 1024 * 1024) {
       alert("10MBを超える画像はアップロードできません: " + file.name);
       break;
@@ -532,7 +576,6 @@ async function uploadAllFiles() {
 
     const formData = new FormData();
     formData.append("file", file);
-
     formData.append("meta", JSON.stringify({
       title: uploadData.title,
       tags: uploadData.tags,
@@ -543,21 +586,18 @@ async function uploadAllFiles() {
     try {
       const res = await fetch(`${API_BASE}/upload`, {
         method: "POST",
+        headers: authHeaders(),
         body: formData
       });
 
       if (!res.ok) {
-        console.error("アップロード失敗:", res.status);
-        break; // ★ Worker が落ちたら次の画像は送らない
-        alert("アップロードに失敗しました（" + res.status + "）");
-        break; // ★ Workerが落ちたら次の画像は送らない
+        alert("アップロードに失敗しました: " + res.status);
+        break;
       }
-
     } catch (err) {
       console.error("通信エラー:", err);
-      break; // ★ Worker が落ちたら次の画像は送らない
       alert("通信エラーが発生しました");
-      break; // ★ Workerが落ちたら次の画像は送らない
+      break;
     }
   }
 
@@ -570,12 +610,12 @@ async function uploadAllFiles() {
   loadWorks();
 }
 
-
-
 // ===============================
-// 編集処理
+// 作品編集 / 削除
 // ===============================
 function editWork(item) {
+  if (!requireAdminToken()) return;
+
   const newTitle = prompt("タイトルを編集", item.title);
   if (newTitle === null) return;
 
@@ -590,31 +630,55 @@ function editWork(item) {
 
   fetch(`${API_BASE}/works/${item.id}`, {
     method: "PUT",
-    headers: { "Content-Type": "application/json" },
+    headers: authHeaders({ "Content-Type": "application/json" }),
     body: JSON.stringify({
       title: newTitle,
-      tags: newTags.split(" "),
+      tags: newTags.split(" ").filter(tag => tag.trim() !== ""),
       date: newDate,
       description: newDesc
     })
-  }).then(() => loadWorks());
+  }).then((res) => {
+    if (!res.ok) {
+      alert("編集に失敗しました");
+      return;
+    }
+
+    loadWorks();
+  });
 }
 
-// ===============================
-// 削除処理
-// ===============================
 function deleteWork(id) {
+  if (!requireAdminToken()) return;
+
   if (!confirm("本当に削除しますか？")) return;
 
   fetch(`${API_BASE}/works/${id}`, {
-    method: "DELETE"
-  }).then(() => loadWorks());
+    method: "DELETE",
+    headers: authHeaders()
+  }).then((res) => {
+    if (!res.ok) {
+      alert("削除に失敗しました");
+      return;
+    }
+
+    loadWorks();
+  });
 }
 
 // ===============================
 // 初期ロード
 // ===============================
 window.addEventListener("load", () => {
+  if (adminToken) {
+    adminMode = true;
+    document.body.classList.add("admin-mode");
+  }
+
+  if (window.innerWidth <= 768) {
+    enableDragSheet();
+    enableSwipeNavigation();
+  }
+
   loadWorks();
   loadAbout();
   loadInfo();
