@@ -186,39 +186,23 @@ async function loadWorks() {
   works.reverse();
   worksList.innerHTML = "";
 
-  works.forEach((item, index) => {
-    const card = document.createElement("div");
-    card.className = "work-card";
+works.forEach((item, index) => {
+  const card = document.createElement("div");
+  card.className = "work-card";
 
-    card.innerHTML = `
-      <img class="work-image" src="${item.image}" alt="">
-      <div class="work-body">
-        <p class="work-title">${item.title}</p>
+  card.innerHTML = `
+    <img class="work-image" src="${item.image}" alt="">
+    <div class="work-body">
+      <p class="work-title">${item.title}</p>
+    </div>
+  `;
 
-        <div class="work-actions admin-only">
-          <button class="edit-button" data-id="${item.id}">編集</button>
-          <button class="delete-button" data-id="${item.id}">削除</button>
-        </div>
-      </div>
-    `;
-
-    card.addEventListener("click", (e) => {
-      if (e.target.closest(".edit-button") || e.target.closest(".delete-button")) return;
-      openViewer(index);
-    });
-
-    card.querySelector(".edit-button").addEventListener("click", (e) => {
-      e.stopPropagation();
-      editWork(item);
-    });
-
-    card.querySelector(".delete-button").addEventListener("click", (e) => {
-      e.stopPropagation();
-      deleteWork(item.id);
-    });
-
-    worksList.appendChild(card);
+  card.addEventListener("click", () => {
+    openViewer(index);
   });
+
+  worksList.appendChild(card);
+});
 
   filterWorks(searchInput.value.trim());
 }
