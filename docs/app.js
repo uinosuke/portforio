@@ -347,9 +347,7 @@ if (!res.ok) {
   return;
 }
 const result = await res.json();
-console.log("result:", result);
 const updated = result.item;
-console.log("updated:", updated);
 works[currentIndex] = updated;
 
 viewerTitle.textContent = updated.title || "";
