@@ -238,9 +238,9 @@ margin-left: 220px;
  画像グリッド（Masonry）
 =============================== */
 .works-grid {
-column-count: 5;
-column-count: 6;
-column-gap: 16px;
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
 }
 
 .work-card {
