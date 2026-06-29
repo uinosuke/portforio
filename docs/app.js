@@ -646,7 +646,48 @@ uploadDropzone.addEventListener("drop", (e) => {
   openUploadStepModal();
 });
 
-async function uploadAllFiles
+async function uploadAllFiles() {
+  if (!requireAdminToken()) return;
+
+  for (const file of uploadData.files) {
+    if (file.size > 10 * 1024 * 1024) {
+      alert("10MBを超える画像はアップロードできません: " + file.name);
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("meta", JSON.stringify({
+      title: uploadData.title,
+      tags: uploadData.tags,
+      date: uploadData.date,
+      description: uploadData.description
+    }));
+
+    try {
+      const res = await fetch(`${API_BASE}/upload`, {
+        method: "POST",
+        headers: authHeaders(),
+        body: formData
+      });
+
+      if (!res.ok) {
+        alert("アップロード失敗: " + res.status);
+        return;
+      }
+    } catch (err) {
+      console.error(err);
+      alert("通信エラー");
+      return;
+    }
+  }
+
+  uploadStepModal.classList.remove("open");
+  uploadData = { files: [], title: "", tags: "", date: "", description: "" };
+  uploadStep = 0;
+
+  loadWorks();
+}
 
 // ===============================
 // 作品編集 / 削除
