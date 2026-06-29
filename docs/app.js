@@ -54,6 +54,9 @@ const uploadStepBack = document.getElementById("upload-step-back");
 
 let adminMode = false;
 
+let uploadData = { files: [], title: "", tags: "", date: "", description: "" };
+let uploadStep = 0;
+
 // ===============================
 // 管理者モード（4回クリック）
 // ===============================
