@@ -186,6 +186,10 @@ window.addEventListener("load", () => {
   loadAbout();
   loadInfo();
 });
+window.addEventListener("hashchange", () => {
+  const view = location.hash.replace("#", "") || "gallery";
+  showView(view);
+});
 // ===============================
 // 画像一覧へ戻ったら検索解除
 // ===============================
