@@ -1,5 +1,5 @@
 /* ===============================
-  全体
+ 全体
 =============================== */
 * { box-sizing: border-box; }
 
@@ -13,7 +13,7 @@ overflow-x: hidden;
 }
 
 /* ===============================
-  ヘッダー（高さ10%）
+ ヘッダー（高さ10%）
 =============================== */
 .header {
 display: flex;
@@ -73,7 +73,7 @@ font-size: 16px;
 }
 
 /* ===============================
-  ハンバーガー
+ ハンバーガー
 =============================== */
 .mobile-menu-btn {
 display: none;
@@ -157,7 +157,7 @@ font-size: 13px;
 }
 
 /* ===============================
-  レイアウト
+ レイアウト
 =============================== */
 .layout {
 display: flex;
@@ -166,7 +166,7 @@ padding-top: 10vh;
 }
 
 /* ===============================
-  PCサイドバー
+ PCサイドバー
 =============================== */
 .sidebar {
 width: 220px;
@@ -224,7 +224,7 @@ color: #666;
 }
 
 /* ===============================
-  メイン
+ メイン
 =============================== */
 .main {
 flex: 1;
@@ -235,11 +235,11 @@ margin-left: 220px;
 .view.hidden { display: none; }
 
 /* ===============================
-  画像グリッド（Masonry）
+ 画像グリッド（Masonry）
 =============================== */
 .works-grid {
-  column-count: 5;
-  column-count: 6;
+column-count: 5;
+column-count: 6;
 column-gap: 16px;
 }
 
@@ -297,7 +297,7 @@ opacity: 1;
 }
 
 /* ===============================
-  ★ 管理者モード：ホバー演出を透明化
+ ★ 管理者モード：ホバー演出を透明化
 =============================== */
 body.admin-mode .work-card::after {
 opacity: 0 !important;
@@ -308,7 +308,7 @@ opacity: 0 !important;
 }
 
 /* ===============================
-  管理者モード
+ 管理者モード
 =============================== */
 .admin-only { display: none; }
 body.admin-mode .admin-only { display: block; }
@@ -334,7 +334,7 @@ background: #fff;
 }
 
 /* ===============================
-  ドロップゾーン
+ ドロップゾーン
 =============================== */
 .upload-dropzone {
 margin-bottom: 24px;
@@ -353,7 +353,7 @@ background: #f0f0f0;
 }
 
 /* ===============================
-  viewer（PC）
+ viewer（PC）
 =============================== */
 .image-viewer {
 position: fixed;
@@ -432,7 +432,7 @@ box-shadow: -4px 0 20px rgba(0,0,0,0.06);
 }
 
 /* ===============================
-  viewer（スマホ）
+ viewer（スマホ）
 =============================== */
 @media (max-width: 768px) {
 
@@ -534,7 +534,7 @@ touch-action: none;
 }
 
 /* ===============================
-  モーダル
+ モーダル
 =============================== */
 .modal {
 position: fixed;
@@ -597,7 +597,7 @@ color: #000;
 }
 
 /* ===============================
-  ステップ式アップロードモーダル
+ ステップ式アップロードモーダル
 =============================== */
 #upload-step-modal {
 position: fixed;
@@ -656,7 +656,7 @@ font-size: 14px;
 }
 
 /* ===============================
-  スクロールバー
+ スクロールバー
 =============================== */
 ::-webkit-scrollbar { width: 8px; }
 ::-webkit-scrollbar-thumb {
@@ -716,64 +716,4 @@ body.admin-mode .viewer-admin-actions {
 #viewer-delete-work {
   background: #d93025;
   color: #fff;
-}
-.viewer-edit-form.hidden {
-  display: none !important;
-}
-
-.viewer-edit-form {
-  margin-top: 20px;
-}
-
-body.admin-mode .viewer-edit-form {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.viewer-edit-form label {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  font-size: 12px;
-  font-weight: 700;
-  color: #555;
-}
-
-.viewer-edit-form input,
-.viewer-edit-form textarea {
-  width: 100%;
-  font-size: 14px;
-  padding: 9px 10px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-}
-
-.viewer-edit-form textarea {
-  min-height: 110px;
-  resize: vertical;
-}
-
-.viewer-edit-buttons {
-  display: flex;
-  gap: 10px;
-}
-
-#viewer-save-work,
-#viewer-cancel-edit {
-  flex: 1;
-  padding: 10px 12px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-#viewer-save-work {
-  background: #0078ff;
-  color: #fff;
-}
-
-#viewer-cancel-edit {
-  background: #ccc;
-  color: #000;
 }
