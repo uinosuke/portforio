@@ -646,7 +646,6 @@ uploadStep = 0;
 openUploadStepModal();
 });
 
-async function uploadAllFiles
 async function uploadAllFiles() {
   if (!requireAdminToken()) return;
 
