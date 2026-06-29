@@ -1,167 +1,169 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MyPortfolio</title>
-  <link rel="stylesheet" href="style.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>MyPortfolio</title>
+<link rel="stylesheet" href="style.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 
 <body>
 
-  <!-- =============================== -->
-  <!-- ヘッダー -->
-  <!-- =============================== -->
-  <header class="header">
-    <h1 id="site-title">MyPortfolio</h1>
+<!-- =============================== -->
+<!-- ヘッダー -->
+<!-- =============================== -->
+<header class="header">
+<h1 id="site-title">MyPortfolio</h1>
 
-    <div class="search-box pc-search">
-      <i class="fa-solid fa-magnifying-glass search-icon"></i>
-      <input id="search-input" type="text" placeholder="検索..." />
-      <span id="search-clear">×</span>
-    </div>
+<div class="search-box pc-search">
+<i class="fa-solid fa-magnifying-glass search-icon"></i>
+<input id="search-input" type="text" placeholder="検索..." />
+<span id="search-clear">×</span>
+</div>
 
-    <div class="mobile-menu-btn">
-      <span></span><span></span><span></span>
-    </div>
-  </header>
+<div class="mobile-menu-btn">
+<span></span><span></span><span></span>
+</div>
+</header>
 
-  <!-- =============================== -->
-  <!-- スマホメニュー -->
-  <!-- =============================== -->
-  <div class="mobile-menu-panel">
-    <a class="nav-item" href="#gallery" data-view="gallery">画像一覧</a>
-    <a class="nav-item" href="#about" data-view="about">ABOUT</a>
-    <a class="nav-item" href="#info" data-view="info">制作について</a>
-    <a class="nav-item" href="https://himawari-fukushikai.org/" target="_blank">法人HP</a>
+<!-- =============================== -->
+<!-- スマホメニュー -->
+<!-- =============================== -->
+<div class="mobile-menu-panel">
+<a class="nav-item" href="#gallery" data-view="gallery">画像一覧</a>
+<a class="nav-item" href="#about" data-view="about">ABOUT</a>
+<a class="nav-item" href="#info" data-view="info">制作について</a>
+<a class="nav-item" href="https://himawari-fukushikai.org/" target="_blank">法人HP</a>
 
-    <div class="mobile-search-area">
-      <div class="mobile-search-box">
-        <i class="fa-solid fa-magnifying-glass search-icon"></i>
-        <input id="mobile-search-input" type="text" placeholder="検索..." />
-        <button id="mobile-search-btn">検索</button>
-      </div>
-    </div>
+<div class="mobile-search-area">
+<div class="mobile-search-box">
+<i class="fa-solid fa-magnifying-glass search-icon"></i>
+<input id="mobile-search-input" type="text" placeholder="検索..." />
+<button id="mobile-search-btn">検索</button>
+</div>
+</div>
 
-    <a class="consult-btn" href="https://works.do/R/ti/p/300885@himawari-fukushikai" target="_blank">
-      ご相談はこちら
-    </a>
-  </div>
+<a class="consult-btn" href="https://works.do/R/ti/p/300885@himawari-fukushikai" target="_blank">
+ご相談はこちら
+</a>
+</div>
 
-  <!-- =============================== -->
-  <!-- レイアウト -->
-  <!-- =============================== -->
-  <div class="layout">
+<!-- =============================== -->
+<!-- レイアウト -->
+<!-- =============================== -->
+<div class="layout">
 
-    <aside class="sidebar">
-      <a class="nav-item" href="#gallery" data-view="gallery">画像一覧</a>
-      <a class="nav-item" href="#about" data-view="about">ABOUT</a>
-      <a class="nav-item" href="#info" data-view="info">制作について</a>
-      <a class="nav-item" href="https://himawari-fukushikai.org/" target="_blank">法人HP</a>
+<aside class="sidebar">
+<a class="nav-item" href="#gallery" data-view="gallery">画像一覧</a>
+<a class="nav-item" href="#about" data-view="about">ABOUT</a>
+<a class="nav-item" href="#info" data-view="info">制作について</a>
+<a class="nav-item" href="https://himawari-fukushikai.org/" target="_blank">法人HP</a>
 
-      <div class="sidebar-bottom">
-        <a class="consult-btn" href="https://works.do/R/ti/p/300885@himawari-fukushikai" target="_blank">
-          ご相談はこちら
-        </a>
-        <div id="admin-panel" class="admin-only">管理者モード</div>
-      </div>
-    </aside>
+<div class="sidebar-bottom">
+<a class="consult-btn" href="https://works.do/R/ti/p/300885@himawari-fukushikai" target="_blank">
+ご相談はこちら
+</a>
+<div id="admin-panel" class="admin-only">管理者モード</div>
+</div>
+</aside>
 
-    <!-- =============================== -->
-    <!-- メイン（★ viewer をここに移動） -->
-    <!-- =============================== -->
-    <main class="main">
+<!-- =============================== -->
+<!-- メイン -->
+<!-- =============================== -->
+<main class="main">
 
-      <!-- ★★★ ドロップゾーン（管理者モード） -->
-      <div id="upload-dropzone" class="upload-dropzone admin-only">
-        ここに画像をドラッグ＆ドロップしてください
-      </div>
+<!-- ★★★ ドロップゾーン（管理者モード） -->
+<div id="upload-dropzone" class="upload-dropzone admin-only">
+ここに画像をドラッグ＆ドロップしてください
+</div>
 
-      <!-- 画像一覧 -->
-      <section id="view-gallery" class="view">
-        <div id="works-list" class="works-grid"></div>
-      </section>
+<!-- 画像一覧 -->
+<section id="view-gallery" class="view">
+<div id="works-list" class="works-grid"></div>
+</section>
 
-      <!-- ABOUT -->
-      <section id="view-about" class="view hidden">
-        <h2>ABOUT</h2>
-        <div id="about-content"></div>
-        <button id="edit-about" class="admin-only">編集</button>
-      </section>
+<!-- ABOUT -->
+<section id="view-about" class="view hidden">
+<h2>ABOUT</h2>
+<div id="about-content"></div>
+<button id="edit-about" class="admin-only">編集</button>
+</section>
 
-      <!-- 制作について -->
-      <section id="view-info" class="view hidden">
-        <h2>制作について</h2>
-        <div id="info-content"></div>
-        <button id="edit-info" class="admin-only">編集</button>
-      </section>
+<!-- 制作について -->
+<section id="view-info" class="view hidden">
+<h2>制作について</h2>
+<div id="info-content"></div>
+<button id="edit-info" class="admin-only">編集</button>
+</section>
 
-      <!-- =============================== -->
-      <!-- ★ viewer（main の中に移動） -->
-      <!-- =============================== -->
-      <div id="image-viewer" class="image-viewer">
-        <button id="viewer-close-btn" class="viewer-close-btn">×</button>
+</main>
+</div>
 
-        <div class="viewer-left">
-          <button class="viewer-arrow left" id="viewer-prev">‹</button>
-          <img id="viewer-image" class="viewer-image" src="" alt="" />
-          <button class="viewer-arrow right" id="viewer-next">›</button>
-        </div>
+<!-- =============================== -->
+<!-- viewer -->
+<!-- =============================== -->
+<div id="image-viewer" class="image-viewer">
+<button id="viewer-close-btn" class="viewer-close-btn">×</button>
 
-        <div class="viewer-right">
-          <div class="viewer-drag-handle"></div>
+<div class="viewer-left">
+<button class="viewer-arrow left" id="viewer-prev">‹</button>
+<img id="viewer-image" class="viewer-image" src="" alt="" />
+<button class="viewer-arrow right" id="viewer-next">›</button>
+</div>
 
-          <h3 class="viewer-section-title">TITLE</h3>
-          <p id="viewer-title"></p>
+<div class="viewer-right">
+<div class="viewer-drag-handle"></div>
 
-          <h3 class="viewer-section-title">TAGS</h3>
-          <div id="viewer-tags"></div>
+<h3 class="viewer-section-title">TITLE</h3>
+<p id="viewer-title"></p>
 
-          <h3 class="viewer-section-title">DATE</h3>
-          <p id="viewer-date"></p>
+<h3 class="viewer-section-title">TAGS</h3>
+<div id="viewer-tags"></div>
 
-          <h3 class="viewer-section-title">DESCRIPTION</h3>
-          <p id="viewer-description"></p>
-        </div>
-      </div>
+      <!-- ★★★ DATE（追加） -->
+<h3 class="viewer-section-title">DATE</h3>
+<p id="viewer-date"></p>
 
-    </main>
-  </div>
+<h3 class="viewer-section-title">DESCRIPTION</h3>
+<p id="viewer-description"></p>
+</div>
+</div>
 
-  <!-- =============================== -->
-  <!-- 編集モーダル -->
-  <!-- =============================== -->
-  <div id="edit-modal" class="modal">
-    <div class="modal-content">
-      <h3 id="modal-title"></h3>
-      <textarea id="modal-textarea"></textarea>
-      <div class="modal-buttons">
-        <button class="modal-btn back" id="modal-back">戻る</button>
-        <button class="modal-btn save" id="modal-save">保存</button>
-        <button class="modal-btn cancel" id="modal-cancel">キャンセル</button>
-      </div>
-    </div>
-  </div>
+<!-- =============================== -->
+<!-- 編集モーダル -->
+<!-- =============================== -->
+<div id="edit-modal" class="modal">
+<div class="modal-content">
+<h3 id="modal-title"></h3>
+<textarea id="modal-textarea"></textarea>
+<div class="modal-buttons">
+<button class="modal-btn save" id="modal-save">保存</button>
+<button class="modal-btn cancel" id="modal-cancel">キャンセル</button>
+</div>
+</div>
+</div>
 
-  <!-- =============================== -->
-  <!-- ★ ステップ式アップロードモーダル -->
-  <!-- =============================== -->
-  <div id="upload-step-modal" class="modal">
-    <div class="upload-step-content">
-      <h3 id="upload-step-title"></h3>
+<!-- =============================== -->
+<!-- ★ ステップ式アップロードモーダル -->
+<!-- =============================== -->
+<div id="upload-step-modal" class="modal">
+<div class="upload-step-content">
+<h3 id="upload-step-title"></h3>
 
-      <input id="upload-step-input" type="text" />
-      <input id="upload-step-month" type="month" />
-      <textarea id="upload-step-textarea"></textarea>
+      <!-- テキスト入力 -->
+<input id="upload-step-input" type="text" />
 
-      <div class="upload-step-buttons">
-        <button id="upload-step-back">戻る</button>
-        <button id="upload-step-ok">OK</button>
-      </div>
-    </div>
-  </div>
+      <!-- 月入力（追加） -->
+<input id="upload-step-month" type="month" />
 
-  <script src="app.js"></script>
+      <!-- 概要 -->
+<textarea id="upload-step-textarea"></textarea>
+
+<button id="upload-step-ok">OK</button>
+</div>
+</div>
+
+<script src="app.js"></script>
 </body>
 </html>
