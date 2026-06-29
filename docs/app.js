@@ -349,7 +349,8 @@ alert("保存に失敗しました");
 return;
 }
 
-const updated = await res.json();
+const result = await res.json();
+const updated = result.item;
 works[currentIndex] = updated;
 
 viewerTitle.textContent = updated.title || "";
