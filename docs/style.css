@@ -212,7 +212,7 @@ text-align: center;
 width: 90%;
 padding: 10px 12px;
 border-radius: 6px;
-background: #1a1a1a;
+background: #8b1e3f;
 color: #fff;
 border: none;
 font-size: 13px;
@@ -222,7 +222,7 @@ margin: 0 auto;
 transition: background 0.15s ease;
 }
 
-.consult-btn:hover { background: #333; }
+.consult-btn:hover { background: #7a1937; }
 
 #admin-panel {
 font-size: 12px;
