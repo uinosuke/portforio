@@ -194,13 +194,36 @@ color: #555;
 font-size: 14px;
 text-decoration: none;
 cursor: pointer;
-transition: background 0.15s ease;
 border-left: 2px solid transparent;
+position: relative;
+overflow: hidden;
+transition: color 0.2s ease;
+}
+
+.nav-item::before {
+content: "";
+position: absolute;
+top: 0;
+left: 0;
+width: 0%;
+height: 100%;
+background: #1a1a1a;
+transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+z-index: 0;
+}
+
+.nav-item:hover::before {
+width: 100%;
 }
 
 .nav-item:hover {
-  background: #1a1a1a;
-  color: #fff;
+color: #fff;
+}
+
+.nav-item span,
+.nav-item {
+position: relative;
+z-index: 1;
 }
 
 .sidebar-bottom { margin-top: auto; }
