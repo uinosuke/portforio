@@ -251,7 +251,7 @@ border-radius: 8px;
 border: 1px solid #ddd;
 cursor: pointer;
 position: relative;
-animation: fadeIn 0.4s ease;
+animation: fadeIn 0.8s ease;
 /* ★ 修正：編集・削除ボタンが押せるようにする */
 overflow: visible;
 }
