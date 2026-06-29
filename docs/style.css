@@ -11,6 +11,9 @@ html, body {
   color: #111;
   overflow-x: hidden;
 }
+.admin-only {
+  pointer-events: auto !important;
+}
 
 /* ===============================
    ヘッダー（高さ10%）
