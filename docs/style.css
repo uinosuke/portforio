@@ -199,8 +199,8 @@ border-left: 2px solid transparent;
 }
 
 .nav-item:hover {
-background: #f7f7f5;
-color: #111;
+  background: #1a1a1a;
+  color: #fff;
 }
 
 .sidebar-bottom { margin-top: auto; }
