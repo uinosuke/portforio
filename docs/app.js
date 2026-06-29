@@ -517,7 +517,10 @@ const html = await res.text();
 const el = document.getElementById("about-content");
 if (el) el.innerHTML = html;
 }
-
+#about-content,
+#info-content {
+  animation: fadeIn 0.8s ease;
+}
 async function loadInfo() {
 const res = await fetch(`${API_BASE}/works-info`);
 const html = await res.text();
