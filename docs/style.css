@@ -724,3 +724,7 @@ body.admin-mode .viewer-admin-actions {
   background: #d93025;
   color: #fff;
 }
+#about-content,
+#info-content {
+  animation: fadeIn 0.8s ease;
+}
