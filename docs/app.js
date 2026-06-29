@@ -571,6 +571,25 @@ async function uploadAllFiles() {
 }
 
 // ===============================
+// 削除処理
+// ===============================
+function deleteWork(id) {
+  if (!confirm("本当に削除しますか？")) return;
+
+  fetch(`${API_BASE}/works/${id}`, {
+    method: "DELETE"
+  })
+    .then(() => {
+      loadWorks();
+    })
+    .catch(err => {
+      console.error("削除エラー:", err);
+      alert("削除に失敗しました");
+    });
+}
+
+
+// ===============================
 // 編集処理
 // ===============================
 function editWork(item) {
