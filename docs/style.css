@@ -199,6 +199,22 @@ position: relative;
 overflow: hidden;
 transition: color 0.2s ease;
 }
+.nav-item::after {
+content: "";
+position: absolute;
+top: 50%;
+left: 28px;
+width: 0%;
+height: 1px;
+background: #ffffff;
+transition: width 0.2s ease 0.15s;
+z-index: 3;
+transform: translateY(-50%);
+}
+
+.nav-item:hover::after {
+width: calc(100% - 56px);
+}
 
 .nav-item::before {
 content: "";
