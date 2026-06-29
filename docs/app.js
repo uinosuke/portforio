@@ -489,7 +489,6 @@ function openUploadStepModal() {
   uploadStepMonth.style.display = "none";
   uploadStepTextarea.style.display = "none";
   uploadStepOk.style.display = "block";
-  uploadStepBack.style.display = "none";
   uploadStepBack.style.display = uploadStep === 0 || uploadStep === 4 ? "none" : "block";
 
   if (uploadStep === 0) {
@@ -619,6 +618,7 @@ async function uploadAllFiles() {
 
   uploadStepModal.classList.remove("open");
   uploadStepOk.style.display = "block";
+  uploadStepBack.style.display = "none";
 
   uploadData = { files: [], title: "", tags: "", date: "", description: "" };
   uploadStep = 0;
