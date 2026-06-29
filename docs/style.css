@@ -7,7 +7,7 @@ html, body {
 margin: 0;
 padding: 0;
 font-family: 'Noto Sans', system-ui, sans-serif;
-background: #fff;
+background: #f7f7f5;
 color: #111;
 overflow-x: hidden;
 }
@@ -21,13 +21,14 @@ align-items: center;
 justify-content: space-between;
 height: 10vh;
 padding: 0 24px;
-border-bottom: 1px solid #ddd;
-background: #fafafa;
+border-bottom: 1px solid #e8e8e6;
+background: #ffffff;
 position: fixed;
 top: 0;
 left: 0;
 width: 100%;
 z-index: 10000;
+box-shadow: 0 1px 0 #e8e8e6, 0 2px 8px rgba(0,0,0,0.06);
 }
 
 #site-title {
@@ -44,8 +45,8 @@ align-items: center;
 gap: 8px;
 padding: 6px 10px;
 border-radius: 999px;
-background: #f2f2f2;
-border: 1px solid #ddd;
+background: #f2f2f0;
+border: 1px solid #e2e2e0;
 }
 
 .pc-search input {
@@ -101,10 +102,11 @@ position: fixed;
 top: -100%;
 left: 0;
 width: 100%;
-background: #fafafa;
+background: #ffffff;
 padding: 20px;
 z-index: 15000;
 transition: top 0.3s ease;
+box-shadow: 0 4px 12px rgba(0,0,0,0.08);
 }
 
 .mobile-menu-panel.open {
@@ -131,8 +133,8 @@ margin-top: 20px;
 display: flex;
 align-items: center;
 gap: 8px;
-background: #f2f2f2;
-border: 1px solid #ddd;
+background: #f2f2f0;
+border: 1px solid #e2e2e0;
 padding: 8px 12px;
 border-radius: 999px;
 }
@@ -147,7 +149,7 @@ font-size: 14px;
 }
 
 #mobile-search-btn {
-background: #ccc;
+background: #1a1a1a;
 color: #fff;
 border: none;
 padding: 6px 12px;
@@ -170,8 +172,8 @@ padding-top: 10vh;
 =============================== */
 .sidebar {
 width: 220px;
-background: #fafafa;
-border-right: 1px solid #ddd;
+background: #ffffff;
+border-right: 1px solid #e8e8e6;
 display: flex;
 flex-direction: column;
 padding: 10px 0 40px 0px;
@@ -180,6 +182,7 @@ top: 10vh;
 bottom: 0;
 left: 0;
 z-index: 9000;
+box-shadow: 1px 0 0 #f0f0ee;
 }
 
 .nav-item {
@@ -187,15 +190,17 @@ display: block;
 width: 100%;
 padding: 14px 28px;
 background: transparent;
-color: #111;
+color: #555;
 font-size: 14px;
 text-decoration: none;
 cursor: pointer;
 transition: background 0.15s ease;
+border-left: 2px solid transparent;
 }
 
 .nav-item:hover {
-background: rgba(0,0,0,0.08);
+background: #f7f7f5;
+color: #111;
 }
 
 .sidebar-bottom { margin-top: auto; }
@@ -206,17 +211,18 @@ text-decoration: none;
 text-align: center;
 width: 90%;
 padding: 10px 12px;
-border-radius: 4px;
-background: #8b1e3f;
+border-radius: 6px;
+background: #1a1a1a;
 color: #fff;
 border: none;
 font-size: 13px;
 font-weight: 600;
 cursor: pointer;
 margin: 0 auto;
+transition: background 0.15s ease;
 }
 
-.consult-btn:hover { background: #7a1937; }
+.consult-btn:hover { background: #333; }
 
 #admin-panel {
 font-size: 12px;
@@ -246,15 +252,22 @@ margin-left: 220px;
 .work-card {
 break-inside: avoid;
 margin-bottom: 16px;
-background: #fafafa;
-border-radius: 8px;
-border: 1px solid #ddd;
+background: #ffffff;
+border-radius: 10px;
+border: 1px solid #e8e8e6;
 cursor: pointer;
 position: relative;
 animation: fadeIn 0.8s ease;
-/* ★ 修正：編集・削除ボタンが押せるようにする */
 overflow: visible;
+box-shadow: 0 2px 8px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+transition: box-shadow 0.2s ease, transform 0.2s ease;
 }
+
+.work-card:hover {
+box-shadow: 0 6px 20px rgba(0,0,0,0.10), 0 2px 4px rgba(0,0,0,0.06);
+transform: translateY(-2px);
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -271,6 +284,7 @@ width: 100%;
 height: auto;
 display: block;
 background: #eee;
+border-radius: 10px 10px 0 0;
 }
 
 /* タイトル（ホバー時のみ） */
@@ -299,6 +313,7 @@ background: linear-gradient(to top, rgba(0,0,0,0.6), transparent);
 opacity: 0;
 transition: opacity 0.2s ease;
 z-index: 1;
+border-radius: 0 0 10px 10px;
 }
 
 .work-card:hover::after,
@@ -349,17 +364,17 @@ background: #fff;
 .upload-dropzone {
 margin-bottom: 24px;
 padding: 24px;
-border: 2px dashed #aaa;
-border-radius: 8px;
-background: #fafafa;
-color: #666;
+border: 2px dashed #ccc;
+border-radius: 10px;
+background: #ffffff;
+color: #888;
 text-align: center;
 font-size: 14px;
 }
 
 .upload-dropzone.dragover {
-border-color: #666;
-background: #f0f0f0;
+border-color: #111;
+background: #f7f7f5;
 }
 
 /* ===============================
@@ -372,7 +387,7 @@ left: 0;
 width: 100%;
 height: 90vh;
 display: flex;
-background: rgba(0,0,0,0.3);
+background: rgba(0,0,0,0.4);
 transform: translateY(20px);
 opacity: 0;
 pointer-events: none;
@@ -435,7 +450,7 @@ display: none;
 width: 20%;
 height: 100%;
 background: #ffffff;
-border-left: 1px solid #e5e5e5;
+border-left: 1px solid #e8e8e6;
 padding: 20px;
 overflow-y: auto;
 box-shadow: -4px 0 20px rgba(0,0,0,0.06);
@@ -459,8 +474,8 @@ padding: 16px;
 }
 
 .works-grid {
- display: flex;
- gap: 8px;
+  display: flex;
+  gap: 8px;
 }
 
 .image-viewer {
@@ -526,7 +541,7 @@ padding: 16px;
 overflow: hidden;
 transition: height 0.3s ease;
 box-shadow: 0 -6px 20px rgba(0,0,0,0.08);
-border-top: 1px solid #e5e5e5;
+border-top: 1px solid #e8e8e6;
 }
 
 .viewer-right.active {
@@ -566,10 +581,11 @@ width: 70%;
 height: 70%;
 background: #fff;
 color: #111;
-border-radius: 8px;
+border-radius: 10px;
 padding: 20px;
 display: flex;
 flex-direction: column;
+box-shadow: 0 8px 32px rgba(0,0,0,0.12);
 }
 
 #modal-textarea {
@@ -578,7 +594,7 @@ width: 100%;
 resize: none;
 font-size: 14px;
 padding: 10px;
-border: 1px solid #ccc;
+border: 1px solid #e2e2e0;
 border-radius: 6px;
 }
 
@@ -598,13 +614,13 @@ font-size: 14px;
 }
 
 .modal-btn.save {
-background: #0078ff;
+background: #1a1a1a;
 color: #fff;
 }
 
 .modal-btn.cancel {
-background: #ccc;
-color: #000;
+background: #f2f2f0;
+color: #555;
 }
 
 /* ===============================
@@ -629,10 +645,11 @@ width: 480px;
 background: #fff;
 color: #111;
 padding: 24px;
-border-radius: 8px;
+border-radius: 10px;
 display: flex;
 flex-direction: column;
 gap: 16px;
+box-shadow: 0 8px 32px rgba(0,0,0,0.12);
 }
 
 #upload-step-title {
@@ -646,7 +663,7 @@ font-size: 16px;
 width: 100%;
 font-size: 14px;
 padding: 10px;
-border: 1px solid #ccc;
+border: 1px solid #e2e2e0;
 border-radius: 6px;
 }
 
@@ -658,7 +675,7 @@ resize: none;
 #upload-step-ok {
 align-self: flex-end;
 padding: 10px 16px;
-background: #0078ff;
+background: #1a1a1a;
 color: #fff;
 border: none;
 border-radius: 6px;
@@ -671,7 +688,7 @@ font-size: 14px;
 =============================== */
 ::-webkit-scrollbar { width: 8px; }
 ::-webkit-scrollbar-thumb {
-background: #ccc;
+background: #ddd;
 border-radius: 4px;
 }
 
@@ -691,12 +708,12 @@ border-radius: 4px;
 }
 
 #upload-step-back {
-  background: #ccc;
-  color: #000;
+  background: #f2f2f0;
+  color: #555;
 }
 
 #upload-step-ok {
-  background: #0078ff;
+  background: #1a1a1a;
   color: #fff;
 }
 
@@ -720,7 +737,7 @@ body.admin-mode .viewer-admin-actions {
 }
 
 #viewer-edit-work {
-  background: #0078ff;
+  background: #1a1a1a;
   color: #fff;
 }
 
@@ -728,6 +745,7 @@ body.admin-mode .viewer-admin-actions {
   background: #d93025;
   color: #fff;
 }
+
 /* ===============================
  アバウト/制作について
 =============================== */
@@ -735,13 +753,14 @@ body.admin-mode .viewer-admin-actions {
 #info-content {
   animation: fadeIn 0.8s ease;
 }
+
 /* ===============================
  ローディングアニメーション
 =============================== */
 #loading-overlay {
   position: fixed;
   inset: 0;
-  background: #fff;
+  background: #f7f7f5;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -757,7 +776,7 @@ body.admin-mode .viewer-admin-actions {
 .spinner {
   width: 36px;
   height: 36px;
-  border: 3px solid #ddd;
+  border: 3px solid #e2e2e0;
   border-top-color: #111;
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
