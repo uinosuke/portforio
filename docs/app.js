@@ -324,9 +324,12 @@ closeViewerEditForm();
 });
 
 viewerSaveWork.addEventListener("click", async (e) => {
-e.stopPropagation();
+  e.stopPropagation();
 
-if (!requireAdminToken() || !works[currentIndex]) return;
+  console.log("currentIndex:", currentIndex);
+  console.log("works[currentIndex]:", works[currentIndex]);
+
+  if (!requireAdminToken() || !works[currentIndex]) return;
 
 const item = works[currentIndex];
 
@@ -350,7 +353,8 @@ const updated = await res.json();
 works[currentIndex] = updated;
 
 viewerTitle.textContent = updated.title || "";
-viewerTags.innerHTML = updated.tags.map(tag => `<span class="tag">${tag}</span>`).join("");
+const updatedTags = Array.isArray(updated.tags) ? updated.tags : [];
+viewerTags.innerHTML = updatedTags.map(tag => `<span class="tag">${tag}</span>`).join("");
 viewerDate.textContent = updated.date || "";
 viewerDescription.textContent = updated.description || "";
 
