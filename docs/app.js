@@ -33,6 +33,7 @@ const modalTitle = document.getElementById("modal-title");
 const modalTextarea = document.getElementById("modal-textarea");
 const modalSave = document.getElementById("modal-save");
 const modalCancel = document.getElementById("modal-cancel");
+const modalBack = document.getElementById("modal-back"); // ★追加
 
 // スマホ viewer（ボトムシート）
 const mobileMenuBtn = document.querySelector(".mobile-menu-btn");
@@ -49,6 +50,7 @@ const uploadStepInput = document.getElementById("upload-step-input");
 const uploadStepMonth = document.getElementById("upload-step-month");
 const uploadStepTextarea = document.getElementById("upload-step-textarea");
 const uploadStepOk = document.getElementById("upload-step-ok");
+const uploadStepBack = document.getElementById("upload-step-back"); // ★追加
 
 let adminMode = false;
 let works = [];
@@ -133,8 +135,7 @@ async function loadWorks() {
   const res = await fetch(`${API_BASE}/works`);
   works = await res.json();
 
-  // ★ 最新順（左上が最新）
-  works.reverse();
+  works.reverse(); // ★最新順
 
   worksList.innerHTML = "";
 
@@ -494,6 +495,19 @@ uploadStepOk.addEventListener("click", () => {
 });
 
 // ===============================
+// ★ ステップ式アップロード：戻るボタン（追加）
+// ===============================
+uploadStepBack.addEventListener("click", () => {
+  if (uploadStep === 0) {
+    uploadStepModal.classList.remove("open");
+    return;
+  }
+
+  uploadStep--;
+  openUploadStepModal();
+});
+
+// ===============================
 // ★ ドロップゾーン：複数ファイル取得
 // ===============================
 uploadDropzone.addEventListener("dragover", (e) => {
@@ -524,7 +538,6 @@ async function uploadAllFiles() {
 
   for (const file of uploadData.files) {
 
-    // ★ 10MB超えたら即停止（Worker保護）
     if (file.size > 10 * 1024 * 1024) {
       alert("10MBを超える画像はアップロードできません: " + file.name);
       break;
@@ -549,13 +562,13 @@ async function uploadAllFiles() {
       if (!res.ok) {
         console.error("アップロード失敗:", res.status);
         alert("アップロードに失敗しました（" + res.status + "）");
-        break; // ★ Workerが落ちたら次の画像は送らない
+        break;
       }
 
     } catch (err) {
       console.error("通信エラー:", err);
       alert("通信エラーが発生しました");
-      break; // ★ Workerが落ちたら次の画像は送らない
+      break;
     }
   }
 
@@ -568,52 +581,37 @@ async function uploadAllFiles() {
   loadWorks();
 }
 
-
-
 // ===============================
 // 編集処理
 // ===============================
 function editWork(item) {
-  const newTitle = prompt("タイトルを編集", item.title);
-  if (newTitle === null) return;
+  modal.classList.add("open");
+  modalTitle.textContent = "説明文を編集";
+  modalTextarea.value = item.description;
 
-  const newTags = prompt("タグ（スペース区切り）", Array.isArray(item.tags) ? item.tags.join(" ") : item.tags);
-  if (newTags === null) return;
+  modalSave.onclick = () => {
+    const newDesc = modalTextarea.value.trim();
 
-  const newDate = prompt("年月 (YYYY-MM)", item.date || "");
-  if (newDate === null) return;
-
-  const newDesc = prompt("説明文", item.description);
-  if (newDesc === null) return;
-
-  fetch(`${API_BASE}/works/${item.id}`, {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      title: newTitle,
-      tags: newTags.split(" "),
-      date: newDate,
-      description: newDesc
-    })
-  }).then(() => loadWorks());
+    fetch(`${API_BASE}/works/${item.id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        title: item.title,
+        tags: Array.isArray(item.tags) ? item.tags : item.tags.split(" "),
+        date: item.date,
+        description: newDesc
+      })
+    }).then(() => {
+      modal.classList.remove("open");
+      loadWorks();
+    });
+  };
 }
 
-// ===============================
-// 削除処理
-// ===============================
-function deleteWork(id) {
-  if (!confirm("本当に削除しますか？")) return;
-
-  fetch(`${API_BASE}/works/${id}`, {
-    method: "DELETE"
-  }).then(() => loadWorks());
-}
-
-// ===============================
-// 初期ロード
-// ===============================
-window.addEventListener("load", () => {
-  loadWorks();
-  loadAbout();
-  loadInfo();
+// 編集モーダル：戻る（追加）
+modalBack.addEventListener("click", () => {
+  modal.classList.remove("open");
 });
+
+// 編集モーダル：キャンセル（既存）
+modalCancel.addEventListener("click
