@@ -33,9 +33,9 @@ const modalTitle = document.getElementById("modal-title");
 const modalTextarea = document.getElementById("modal-textarea");
 const modalSave = document.getElementById("modal-save");
 const modalCancel = document.getElementById("modal-cancel");
-const modalBack = document.getElementById("modal-back"); // ★追加
+const modalBack = document.getElementById("modal-back");
 
-// スマホ viewer（ボトムシート）
+// スマホ viewer
 const mobileMenuBtn = document.querySelector(".mobile-menu-btn");
 const mobileMenuPanel = document.querySelector(".mobile-menu-panel");
 const viewerRight = document.querySelector(".viewer-right");
@@ -43,27 +43,15 @@ const viewerLeft = document.querySelector(".viewer-left");
 const dragHandle = document.querySelector(".viewer-drag-handle");
 
 // ★ アップロード関連（新ステップ式）
-const uploadDropzone = document.getElementById("upload-dropzone");
+const uploadDropzone = document.getElementById("upload-dropzone"); // ← これが無いと死ぬ
 const uploadStepModal = document.getElementById("upload-step-modal");
 const uploadStepTitle = document.getElementById("upload-step-title");
 const uploadStepInput = document.getElementById("upload-step-input");
 const uploadStepMonth = document.getElementById("upload-step-month");
 const uploadStepTextarea = document.getElementById("upload-step-textarea");
 const uploadStepOk = document.getElementById("upload-step-ok");
-const uploadStepBack = document.getElementById("upload-step-back"); // ★追加
+const uploadStepBack = document.getElementById("upload-step-back");
 
-let adminMode = false;
-let works = [];
-let currentIndex = 0;
-
-let uploadStep = 0;
-let uploadData = {
-  files: [],
-  title: "",
-  tags: "",
-  date: "",
-  description: ""
-};
 
 // ===============================
 // 管理者モード（4回クリック）
