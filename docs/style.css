@@ -214,7 +214,7 @@ transform: translateY(-50%);
 }
 
 .nav-item:hover::after {
-width: calc(100% - 1s70px);
+width: calc(100% - 170px);
 }
 
 .nav-item::before {
