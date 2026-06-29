@@ -184,25 +184,48 @@ filterWorks("");
 });
 });
 
+let currentPage = 0;
+const PAGE_SIZE = 30;
+let isLoading = false;
+let allLoaded = false;
+
 async function loadWorks() {
   const res = await fetch(`${API_BASE}/works`);
   works = await res.json();
-
   works.reverse();
+
   worksList.innerHTML = "";
+  currentPage = 0;
+  allLoaded = false;
+
+  renderPage();
+}
+
+function renderPage() {
+  if (isLoading || allLoaded) return;
+  isLoading = true;
 
   const columnCount = window.innerWidth <= 768 ? 2 : 6;
-  const columns = Array.from({ length: columnCount }, () => {
-    const col = document.createElement("div");
-    col.style.display = "flex";
-    col.style.flexDirection = "column";
-    col.style.gap = "16px";
-    col.style.flex = "1";
-    worksList.appendChild(col);
-    return col;
-  });
 
-  works.forEach((item, index) => {
+  // 列がなければ作る
+  let columns = Array.from(worksList.children);
+  if (columns.length === 0) {
+    columns = Array.from({ length: columnCount }, () => {
+      const col = document.createElement("div");
+      col.style.display = "flex";
+      col.style.flexDirection = "column";
+      col.style.gap = "16px";
+      col.style.flex = "1";
+      worksList.appendChild(col);
+      return col;
+    });
+  }
+
+  const start = currentPage * PAGE_SIZE;
+  const end = Math.min(start + PAGE_SIZE, works.length);
+
+  for (let i = start; i < end; i++) {
+    const item = works[i];
     const card = document.createElement("div");
     card.className = "work-card";
     card.innerHTML = `
@@ -211,15 +234,21 @@ async function loadWorks() {
         <p class="work-title">${item.title}</p>
       </div>
     `;
-    card.addEventListener("click", () => {
-      openViewer(index);
-    });
-    columns[index % columnCount].appendChild(card);  // ← ここが重要！
-  });
+    card.addEventListener("click", () => openViewer(i));
+    columns[i % columnCount].appendChild(card);
+  }
 
-  filterWorks(searchInput.value.trim());
+  if (end >= works.length) allLoaded = true;
+  currentPage++;
+  isLoading = false;
 }
 
+// 無限スクロール監視
+window.addEventListener("scroll", () => {
+  if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 300) {
+    renderPage();
+  }
+});
 // ===============================
 // viewer
 // ===============================
