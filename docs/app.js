@@ -326,8 +326,6 @@ closeViewerEditForm();
 viewerSaveWork.addEventListener("click", async (e) => {
   e.stopPropagation();
 
-  console.log("currentIndex:", currentIndex);
-  console.log("works[currentIndex]:", works[currentIndex]);
 
   if (!requireAdminToken() || !works[currentIndex]) return;
 
@@ -345,12 +343,13 @@ description: viewerEditDescription.value.trim()
 });
 
 if (!res.ok) {
-alert("保存に失敗しました");
-return;
+  alert("保存に失敗しました");
+  return;
 }
-
 const result = await res.json();
+console.log("result:", result);
 const updated = result.item;
+console.log("updated:", updated);
 works[currentIndex] = updated;
 
 viewerTitle.textContent = updated.title || "";
