@@ -167,7 +167,7 @@ window.addEventListener("load", () => {
 
   setTimeout(() => {
     overlay.classList.add("hidden");
-  }, 1000);
+  }, 500);
 
   const view = location.hash.replace("#", "") || "gallery";
   showView(view);
