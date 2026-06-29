@@ -277,7 +277,21 @@ document.addEventListener("keydown", (e) => {
     openViewer(currentIndex);
   }
 });
+viewerEditWork.addEventListener("click", (e) => {
+  e.stopPropagation();
 
+  if (!adminMode || !works[currentIndex]) return;
+  editWork(works[currentIndex]);
+});
+
+viewerDeleteWork.addEventListener("click", (e) => {
+  e.stopPropagation();
+
+  if (!adminMode || !works[currentIndex]) return;
+
+  deleteWork(works[currentIndex].id);
+  viewer.classList.remove("open");
+});
 // ===============================
 // スマホ viewer 操作
 // ===============================
@@ -460,6 +474,12 @@ modalSave.addEventListener("click", async () => {
 // ===============================
 // アップロード
 // ===============================
+function saveCurrentUploadStepValue() {
+  if (uploadStep === 0) uploadData.title = uploadStepInput.value.trim();
+  if (uploadStep === 1) uploadData.tags = uploadStepInput.value.trim();
+  if (uploadStep === 2) uploadData.date = uploadStepMonth.value;
+  if (uploadStep === 3) uploadData.description = uploadStepTextarea.value.trim();
+}
 function openUploadStepModal() {
   if (!requireAdminToken()) return;
 
@@ -469,6 +489,8 @@ function openUploadStepModal() {
   uploadStepMonth.style.display = "none";
   uploadStepTextarea.style.display = "none";
   uploadStepOk.style.display = "block";
+  uploadStepBack.style.display = "none";
+  uploadStepBack.style.display = uploadStep === 0 || uploadStep === 4 ? "none" : "block";
 
   if (uploadStep === 0) {
     uploadStepTitle.textContent = "タイトルを入力してください";
@@ -500,7 +522,13 @@ function openUploadStepModal() {
     uploadAllFiles();
   }
 }
+uploadStepBack.addEventListener("click", () => {
+  if (uploadStep <= 0) return;
 
+  saveCurrentUploadStepValue();
+  uploadStep--;
+  openUploadStepModal();
+});
 uploadStepOk.addEventListener("click", () => {
   if (uploadStep === 0) {
     uploadData.title = uploadStepInput.value.trim();
