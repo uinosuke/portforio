@@ -641,6 +641,10 @@ uploadDropzone.addEventListener("drop", (e) => {
   const files = Array.from(e.dataTransfer.files);
   if (files.length === 0) return;
 
+  files.forEach(file => {
+    console.log(file.name, file.size, file.type);
+  });
+  
   uploadData.files = files;
   uploadStep = 0;
   openUploadStepModal();
