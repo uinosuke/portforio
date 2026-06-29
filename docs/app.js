@@ -52,6 +52,7 @@ const uploadStepTextarea = document.getElementById("upload-step-textarea");
 const uploadStepOk = document.getElementById("upload-step-ok");
 const uploadStepBack = document.getElementById("upload-step-back");
 
+let adminMode = false;
 
 // ===============================
 // 管理者モード（4回クリック）
