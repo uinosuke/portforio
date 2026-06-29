@@ -649,10 +649,9 @@ uploadDropzone.addEventListener("drop", (e) => {
 async function uploadAllFiles() {
   if (!requireAdminToken()) return;
 
-  for (const file of uploadData.files) {
+await Promise.all(uploadData.files.map(async (file) => {
     if (file.size > 10 * 1024 * 1024) {
       alert("10MBを超える画像はアップロードできません: " + file.name);
-      break;
     }
 
     const formData = new FormData();
@@ -673,14 +672,13 @@ async function uploadAllFiles() {
 
       if (!res.ok) {
         alert("アップロードに失敗しました: " + res.status);
-        break;
       }
     } catch (err) {
       console.error("通信エラー:", err);
       alert("通信エラーが発生しました");
       break;
     }
-  }
+ }));
 
   uploadStepModal.classList.remove("open");
   uploadStepOk.style.display = "block";
