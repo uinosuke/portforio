@@ -33,9 +33,8 @@ const modalTitle = document.getElementById("modal-title");
 const modalTextarea = document.getElementById("modal-textarea");
 const modalSave = document.getElementById("modal-save");
 const modalCancel = document.getElementById("modal-cancel");
-const modalBack = document.getElementById("modal-back");
 
-// スマホ viewer
+// スマホ viewer（ボトムシート）
 const mobileMenuBtn = document.querySelector(".mobile-menu-btn");
 const mobileMenuPanel = document.querySelector(".mobile-menu-panel");
 const viewerRight = document.querySelector(".viewer-right");
@@ -43,19 +42,26 @@ const viewerLeft = document.querySelector(".viewer-left");
 const dragHandle = document.querySelector(".viewer-drag-handle");
 
 // ★ アップロード関連（新ステップ式）
-const uploadDropzone = document.getElementById("upload-dropzone"); // ← これが無いと死ぬ
+const uploadDropzone = document.getElementById("upload-dropzone");
 const uploadStepModal = document.getElementById("upload-step-modal");
 const uploadStepTitle = document.getElementById("upload-step-title");
 const uploadStepInput = document.getElementById("upload-step-input");
 const uploadStepMonth = document.getElementById("upload-step-month");
 const uploadStepTextarea = document.getElementById("upload-step-textarea");
 const uploadStepOk = document.getElementById("upload-step-ok");
-const uploadStepBack = document.getElementById("upload-step-back");
 
 let adminMode = false;
+let works = [];
+let currentIndex = 0;
 
-let uploadData = { files: [], title: "", tags: "", date: "", description: "" };
 let uploadStep = 0;
+let uploadData = {
+  files: [],
+  title: "",
+  tags: "",
+  date: "",
+  description: ""
+};
 
 // ===============================
 // 管理者モード（4回クリック）
@@ -127,7 +133,8 @@ async function loadWorks() {
   const res = await fetch(`${API_BASE}/works`);
   works = await res.json();
 
-  works.reverse(); // ★最新順
+  // ★ 最新順（左上が最新）
+  works.reverse();
 
   worksList.innerHTML = "";
 
@@ -487,19 +494,6 @@ uploadStepOk.addEventListener("click", () => {
 });
 
 // ===============================
-// ★ ステップ式アップロード：戻るボタン（追加）
-// ===============================
-uploadStepBack.addEventListener("click", () => {
-  if (uploadStep === 0) {
-    uploadStepModal.classList.remove("open");
-    return;
-  }
-
-  uploadStep--;
-  openUploadStepModal();
-});
-
-// ===============================
 // ★ ドロップゾーン：複数ファイル取得
 // ===============================
 uploadDropzone.addEventListener("dragover", (e) => {
@@ -530,6 +524,7 @@ async function uploadAllFiles() {
 
   for (const file of uploadData.files) {
 
+    // ★ 10MB超えたら即停止（Worker保護）
     if (file.size > 10 * 1024 * 1024) {
       alert("10MBを超える画像はアップロードできません: " + file.name);
       break;
@@ -553,14 +548,16 @@ async function uploadAllFiles() {
 
       if (!res.ok) {
         console.error("アップロード失敗:", res.status);
+        break; // ★ Worker が落ちたら次の画像は送らない
         alert("アップロードに失敗しました（" + res.status + "）");
-        break;
+        break; // ★ Workerが落ちたら次の画像は送らない
       }
 
     } catch (err) {
       console.error("通信エラー:", err);
+      break; // ★ Worker が落ちたら次の画像は送らない
       alert("通信エラーが発生しました");
-      break;
+      break; // ★ Workerが落ちたら次の画像は送らない
     }
   }
 
@@ -573,6 +570,36 @@ async function uploadAllFiles() {
   loadWorks();
 }
 
+
+
+// ===============================
+// 編集処理
+// ===============================
+function editWork(item) {
+  const newTitle = prompt("タイトルを編集", item.title);
+  if (newTitle === null) return;
+
+  const newTags = prompt("タグ（スペース区切り）", Array.isArray(item.tags) ? item.tags.join(" ") : item.tags);
+  if (newTags === null) return;
+
+  const newDate = prompt("年月 (YYYY-MM)", item.date || "");
+  if (newDate === null) return;
+
+  const newDesc = prompt("説明文", item.description);
+  if (newDesc === null) return;
+
+  fetch(`${API_BASE}/works/${item.id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      title: newTitle,
+      tags: newTags.split(" "),
+      date: newDate,
+      description: newDesc
+    })
+  }).then(() => loadWorks());
+}
+
 // ===============================
 // 削除処理
 // ===============================
@@ -581,53 +608,8 @@ function deleteWork(id) {
 
   fetch(`${API_BASE}/works/${id}`, {
     method: "DELETE"
-  })
-    .then(() => {
-      loadWorks();
-    })
-    .catch(err => {
-      console.error("削除エラー:", err);
-      alert("削除に失敗しました");
-    });
+  }).then(() => loadWorks());
 }
-
-
-// ===============================
-// 編集処理
-// ===============================
-function editWork(item) {
-  modal.classList.add("open");
-  modalTitle.textContent = "説明文を編集";
-  modalTextarea.value = item.description;
-
-  modalSave.onclick = () => {
-    const newDesc = modalTextarea.value.trim();
-
-    fetch(`${API_BASE}/works/${item.id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        title: item.title,
-        tags: Array.isArray(item.tags) ? item.tags : item.tags.split(" "),
-        date: item.date,
-        description: newDesc
-      })
-    }).then(() => {
-      modal.classList.remove("open");
-      loadWorks();
-    });
-  };
-}
-
-// 編集モーダル：戻る（追加）
-modalBack.addEventListener("click", () => {
-  modal.classList.remove("open");
-});
-
-// 編集モーダル：キャンセル（既存）
-modalCancel.addEventListener("click", () => {
-  modal.classList.remove("open");
-});
 
 // ===============================
 // 初期ロード
