@@ -724,7 +724,41 @@ body.admin-mode .viewer-admin-actions {
   background: #d93025;
   color: #fff;
 }
+/* ===============================
+ アバウト/制作について
+=============================== */
 #about-content,
 #info-content {
   animation: fadeIn 0.8s ease;
+}
+/* ===============================
+ ローディングアニメーション
+=============================== */
+#loading-overlay {
+  position: fixed;
+  inset: 0;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999;
+  transition: opacity 0.4s ease;
+}
+
+#loading-overlay.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid #ddd;
+  border-top-color: #111;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
