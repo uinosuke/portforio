@@ -61,19 +61,28 @@ const siteTitle = document.getElementById("site-title");
 const editAboutBtn = document.getElementById("edit-about");
 const editInfoBtn = document.getElementById("edit-info");
 
+// ===============================
+// 状態
+// ===============================
 let adminMode = false;
 let adminToken = localStorage.getItem("adminToken") || "";
 
 let works = [];
+let displayedWorks = [];
 let currentIndex = 0;
+
+let currentPage = 0;
+const PAGE_SIZE = 30;
+let isLoading = false;
+let allLoaded = false;
 
 let uploadStep = 0;
 let uploadData = {
-files: [],
-title: "",
-tags: "",
-date: "",
-description: ""
+  files: [],
+  title: "",
+  tags: "",
+  date: "",
+  description: ""
 };
 
 let editingPage = null;
@@ -82,151 +91,147 @@ let editingPage = null;
 // 管理者ログイン
 // ===============================
 async function adminLogin() {
-const password = prompt("管理者パスワードを入力してください");
-if (!password) return;
+  const password = prompt("管理者パスワードを入力してください");
+  if (!password) return;
 
-try {
-const res = await fetch(`${API_BASE}/login`, {
-method: "POST",
-headers: { "Content-Type": "application/json" },
-body: JSON.stringify({ password })
-});
+  try {
+    const res = await fetch(`${API_BASE}/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ password })
+    });
 
-if (!res.ok) {
-alert("パスワードが違います");
-return;
-}
+    if (!res.ok) {
+      alert("パスワードが違います");
+      return;
+    }
 
-const data = await res.json();
+    const data = await res.json();
 
-adminToken = data.token;
-localStorage.setItem("adminToken", adminToken);
+    adminToken = data.token;
+    localStorage.setItem("adminToken", adminToken);
 
-adminMode = true;
-document.body.classList.add("admin-mode");
-alert("管理者モードに入りました");
-} catch (err) {
-console.error(err);
-alert("ログインに失敗しました");
-}
+    adminMode = true;
+    document.body.classList.add("admin-mode");
+    alert("管理者モードに入りました");
+  } catch (err) {
+    console.error(err);
+    alert("ログインに失敗しました");
+  }
 }
 
 function adminLogout() {
-adminToken = "";
-localStorage.removeItem("adminToken");
+  adminToken = "";
+  localStorage.removeItem("adminToken");
 
-adminMode = false;
-document.body.classList.remove("admin-mode");
-alert("管理者モードを終了しました");
+  adminMode = false;
+  document.body.classList.remove("admin-mode");
+  alert("管理者モードを終了しました");
 }
 
 function authHeaders(extraHeaders = {}) {
-return {
-...extraHeaders,
-Authorization: `Bearer ${adminToken}`
-};
+  return {
+    ...extraHeaders,
+    Authorization: `Bearer ${adminToken}`
+  };
 }
 
 function requireAdminToken() {
-if (!adminToken) {
-alert("管理者ログインが必要です");
-return false;
-}
-return true;
+  if (!adminToken) {
+    alert("管理者ログインが必要です");
+    return false;
+  }
+  return true;
 }
 
 siteTitle.addEventListener("dblclick", () => {
-if (adminMode) {
-adminLogout();
-} else {
-adminLogin();
-}
+  if (adminMode) {
+    adminLogout();
+  } else {
+    adminLogin();
+  }
 });
 
 // ===============================
 // スマホメニュー
 // ===============================
 mobileMenuBtn.addEventListener("click", () => {
-mobileMenuPanel.classList.toggle("open");
+  mobileMenuPanel.classList.toggle("open");
 });
 
 // ===============================
 // ページ切り替え
 // ===============================
 function showView(view) {
-document.querySelectorAll(".view").forEach(v => v.classList.add("hidden"));
+  document.querySelectorAll(".view").forEach((v) => {
+    v.classList.add("hidden");
+  });
 
-const target = document.getElementById(`view-${view}`);
-if (target) target.classList.remove("hidden");
+  const target = document.getElementById(`view-${view}`);
+  if (target) target.classList.remove("hidden");
 
-mobileMenuPanel.classList.remove("open");
+  mobileMenuPanel.classList.remove("open");
 }
 
-window.addEventListener("load", () => {
-  const overlay = document.getElementById("loading-overlay");
-
-  setTimeout(() => {
-    overlay.classList.add("hidden");
-  }, 500);
-
-  const view = location.hash.replace("#", "") || "gallery";
-  showView(view);
-
-  if (adminToken) {
-    adminMode = true;
-    document.body.classList.add("admin-mode");
-  }
-
-  if (window.innerWidth <= 768) {
-    enableDragSheet();
-    enableSwipeNavigation();
-  }
-
-  loadWorks();
-  loadAbout();
-  loadInfo();
-});
 window.addEventListener("hashchange", () => {
   const view = location.hash.replace("#", "") || "gallery";
   showView(view);
 });
+
 // ===============================
 // 画像一覧へ戻ったら検索解除
 // ===============================
-document.querySelectorAll(".nav-item[data-view='gallery']").forEach(btn => {
-btn.addEventListener("click", () => {
-searchInput.value = "";
-mobileSearchInput.value = "";
-searchClear.style.display = "none";
-filterWorks("");
-});
+document.querySelectorAll(".nav-item[data-view='gallery']").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    searchInput.value = "";
+    mobileSearchInput.value = "";
+    searchClear.style.display = "none";
+    filterWorks("");
+  });
 });
 
-let currentPage = 0;
-const PAGE_SIZE = 30;
-let isLoading = false;
-let allLoaded = false;
-
+// ===============================
+// 作品一覧
+// ===============================
 async function loadWorks() {
-  const res = await fetch(`${API_BASE}/works`);
-  works = await res.json();
-  works.reverse();
+  try {
+    const res = await fetch(`${API_BASE}/works`);
 
+    if (!res.ok) {
+      throw new Error(`作品一覧の取得に失敗しました: ${res.status}`);
+    }
+
+    works = await res.json();
+    works.reverse();
+
+    const keyword =
+      searchInput.value.trim() || mobileSearchInput.value.trim();
+
+    filterWorks(keyword);
+  } catch (err) {
+    console.error(err);
+    works = [];
+    displayedWorks = [];
+    resetGallery();
+  }
+}
+
+function resetGallery() {
   worksList.innerHTML = "";
   currentPage = 0;
+  isLoading = false;
   allLoaded = false;
-
   renderPage();
 }
 
 function renderPage() {
   if (isLoading || allLoaded) return;
+
   isLoading = true;
 
   const columnCount = window.innerWidth <= 768 ? 2 : 6;
-
-  // 列がなければ作る
   let columns = Array.from(worksList.children);
+
   if (columns.length === 0) {
     columns = Array.from({ length: columnCount }, () => {
       const col = document.createElement("div");
@@ -240,464 +245,575 @@ function renderPage() {
   }
 
   const start = currentPage * PAGE_SIZE;
-  const end = Math.min(start + PAGE_SIZE, works.length);
+  const end = Math.min(start + PAGE_SIZE, displayedWorks.length);
 
   for (let i = start; i < end; i++) {
-    const item = works[i];
+    const item = displayedWorks[i];
+
     const card = document.createElement("div");
     card.className = "work-card";
-    card.innerHTML = `
-      <img class="work-image" src="${item.image}" alt="">
-      <div class="work-body">
-        <p class="work-title">${item.title}</p>
-      </div>
-    `;
+
+    const image = document.createElement("img");
+    image.className = "work-image";
+    image.src = item.image;
+    image.alt = item.title || "";
+
+    const body = document.createElement("div");
+    body.className = "work-body";
+
+    const title = document.createElement("p");
+    title.className = "work-title";
+    title.textContent = item.title || "";
+
+    body.appendChild(title);
+    card.appendChild(image);
+    card.appendChild(body);
+
     card.addEventListener("click", () => openViewer(i));
     columns[i % columnCount].appendChild(card);
   }
 
-  if (end >= works.length) allLoaded = true;
+  if (end >= displayedWorks.length) {
+    allLoaded = true;
+  }
+
   currentPage++;
   isLoading = false;
 }
 
 // 無限スクロール監視
 window.addEventListener("scroll", () => {
-  if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 300) {
+  if (
+    window.innerHeight + window.scrollY >=
+    document.body.offsetHeight - 300
+  ) {
     renderPage();
   }
 });
+
+// ===============================
+// 検索
+// タグと概要の両方を検索対象にする
+// ===============================
+function normalizeText(value) {
+  return String(value || "")
+    .normalize("NFKC")
+    .toLowerCase();
+}
+
+function filterWorks(keyword) {
+  const normalizedKeyword = normalizeText(keyword).trim();
+
+  if (!normalizedKeyword) {
+    displayedWorks = [...works];
+  } else {
+    displayedWorks = works.filter((item) => {
+      const tagsText = Array.isArray(item.tags)
+        ? item.tags.join(" ")
+        : String(item.tags || "");
+
+      const descriptionText = String(item.description || "");
+
+      const searchText = normalizeText(
+        `${tagsText} ${descriptionText}`
+      );
+
+      return searchText.includes(normalizedKeyword);
+    });
+  }
+
+  viewer.classList.remove("open");
+  resetGallery();
+}
+
+mobileSearchBtn.addEventListener("click", () => {
+  const keyword = mobileSearchInput.value.trim();
+
+  searchInput.value = keyword;
+  searchClear.style.display = keyword ? "block" : "none";
+
+  filterWorks(keyword);
+
+  mobileMenuPanel.classList.remove("open");
+  showView("gallery");
+});
+
+searchInput.addEventListener("input", () => {
+  const keyword = searchInput.value.trim();
+
+  mobileSearchInput.value = keyword;
+  searchClear.style.display = keyword ? "block" : "none";
+
+  filterWorks(keyword);
+});
+
+searchClear.addEventListener("click", () => {
+  searchInput.value = "";
+  mobileSearchInput.value = "";
+  searchClear.style.display = "none";
+  filterWorks("");
+});
+
 // ===============================
 // viewer
 // ===============================
 function openViewerEditForm() {
-if (!adminMode || !works[currentIndex]) return;
+  if (!adminMode || !displayedWorks[currentIndex]) return;
 
-const item = works[currentIndex];
+  const item = displayedWorks[currentIndex];
 
-viewerEditTitle.value = item.title || "";
-viewerEditTags.value = Array.isArray(item.tags) ? item.tags.join(" ") : item.tags || "";
-viewerEditDate.value = item.date || "";
-viewerEditDescription.value = item.description || "";
+  viewerEditTitle.value = item.title || "";
+  viewerEditTags.value = Array.isArray(item.tags)
+    ? item.tags.join(" ")
+    : item.tags || "";
+  viewerEditDate.value = item.date || "";
+  viewerEditDescription.value = item.description || "";
 
-viewerEditForm.classList.remove("hidden");
+  viewerEditForm.classList.remove("hidden");
 }
 
 function closeViewerEditForm() {
-viewerEditForm.classList.add("hidden");
+  viewerEditForm.classList.add("hidden");
 }
-
 
 function openViewer(index) {
-currentIndex = index;
-const item = works[index];
+  if (!displayedWorks[index]) return;
 
-viewerImage.src = item.image;
-viewerTitle.textContent = item.title;
+  currentIndex = index;
+  const item = displayedWorks[index];
 
-const tagsArray = Array.isArray(item.tags)
-? item.tags
-: String(item.tags || "").split(" ").filter(t => t.trim() !== "");
+  viewerImage.src = item.image;
+  viewerTitle.textContent = item.title || "";
 
-viewerTags.innerHTML = tagsArray.map(tag => `<span class="tag">${tag}</span>`).join("");
+  const tagsArray = Array.isArray(item.tags)
+    ? item.tags
+    : String(item.tags || "")
+        .split(" ")
+        .filter((tag) => tag.trim() !== "");
 
-viewerDate.textContent = item.date || "";
-viewerDescription.textContent = item.description || "";
+  viewerTags.innerHTML = "";
 
-viewer.classList.add("open");
-closeViewerEditForm();
+  tagsArray.forEach((tag) => {
+    const span = document.createElement("span");
+    span.className = "tag";
+    span.textContent = tag;
+    viewerTags.appendChild(span);
+  });
 
-if (window.innerWidth <= 768) {
-viewerLeft.style.display = "flex";
-viewerRight.classList.remove("active");
-}
+  viewerDate.textContent = item.date || "";
+  viewerDescription.textContent = item.description || "";
+
+  viewer.classList.add("open");
+  closeViewerEditForm();
+
+  if (window.innerWidth <= 768) {
+    viewerLeft.style.display = "flex";
+    viewerRight.classList.remove("active");
+  }
 }
 
 viewerCloseBtn.addEventListener("click", () => {
-viewer.classList.remove("open");
+  viewer.classList.remove("open");
 });
 
 viewer.addEventListener("click", (e) => {
-const clickedInside =
-e.target === viewerImage ||
-e.target.closest(".viewer-right") ||
-e.target.closest(".viewer-arrow") ||
-e.target === viewerCloseBtn;
+  const clickedInside =
+    e.target === viewerImage ||
+    e.target.closest(".viewer-right") ||
+    e.target.closest(".viewer-arrow") ||
+    e.target === viewerCloseBtn;
 
-if (!clickedInside) viewer.classList.remove("open");
+  if (!clickedInside) {
+    viewer.classList.remove("open");
+  }
 });
 
 document.addEventListener("keydown", (e) => {
-if (e.key === "Escape") viewer.classList.remove("open");
+  if (e.key === "Escape") {
+    viewer.classList.remove("open");
+  }
+
+  if (!viewer.classList.contains("open")) return;
+  if (displayedWorks.length === 0) return;
+
+  if (e.key === "ArrowLeft") {
+    currentIndex =
+      (currentIndex - 1 + displayedWorks.length) %
+      displayedWorks.length;
+    openViewer(currentIndex);
+  }
+
+  if (e.key === "ArrowRight") {
+    currentIndex =
+      (currentIndex + 1) %
+      displayedWorks.length;
+    openViewer(currentIndex);
+  }
 });
 
 btnPrev.addEventListener("click", (e) => {
-e.stopPropagation();
-currentIndex = (currentIndex - 1 + works.length) % works.length;
-openViewer(currentIndex);
+  e.stopPropagation();
+
+  if (displayedWorks.length === 0) return;
+
+  currentIndex =
+    (currentIndex - 1 + displayedWorks.length) %
+    displayedWorks.length;
+
+  openViewer(currentIndex);
 });
 
 btnNext.addEventListener("click", (e) => {
-e.stopPropagation();
-currentIndex = (currentIndex + 1) % works.length;
-openViewer(currentIndex);
+  e.stopPropagation();
+
+  if (displayedWorks.length === 0) return;
+
+  currentIndex =
+    (currentIndex + 1) %
+    displayedWorks.length;
+
+  openViewer(currentIndex);
 });
 
-document.addEventListener("keydown", (e) => {
-if (!viewer.classList.contains("open")) return;
-
-if (e.key === "ArrowLeft") {
-currentIndex = (currentIndex - 1 + works.length) % works.length;
-openViewer(currentIndex);
-}
-
-if (e.key === "ArrowRight") {
-currentIndex = (currentIndex + 1) % works.length;
-openViewer(currentIndex);
-}
-});
 viewerEditWork.addEventListener("click", (e) => {
-e.stopPropagation();
-openViewerEditForm();
+  e.stopPropagation();
+  openViewerEditForm();
 });
 
 viewerDeleteWork.addEventListener("click", (e) => {
-e.stopPropagation();
+  e.stopPropagation();
 
-if (!adminMode || !works[currentIndex]) return;
+  if (!adminMode || !displayedWorks[currentIndex]) return;
 
-deleteWork(works[currentIndex].id);
-viewer.classList.remove("open");
+  deleteWork(displayedWorks[currentIndex].id);
+  viewer.classList.remove("open");
 });
 
 viewerCancelEdit.addEventListener("click", (e) => {
-e.stopPropagation();
-closeViewerEditForm();
+  e.stopPropagation();
+  closeViewerEditForm();
 });
 
 viewerSaveWork.addEventListener("click", async (e) => {
   e.stopPropagation();
 
+  if (!requireAdminToken() || !displayedWorks[currentIndex]) {
+    return;
+  }
 
-  if (!requireAdminToken() || !works[currentIndex]) return;
+  const item = displayedWorks[currentIndex];
 
-const item = works[currentIndex];
+  try {
+    const res = await fetch(`${API_BASE}/works/${item.id}`, {
+      method: "PUT",
+      headers: authHeaders({
+        "Content-Type": "application/json"
+      }),
+      body: JSON.stringify({
+        title: viewerEditTitle.value.trim(),
+        tags: viewerEditTags.value
+          .split(/\s+/)
+          .filter((tag) => tag.trim() !== ""),
+        date: viewerEditDate.value,
+        description: viewerEditDescription.value.trim()
+      })
+    });
 
-const res = await fetch(`${API_BASE}/works/${item.id}`, {
-method: "PUT",
-headers: authHeaders({ "Content-Type": "application/json" }),
-body: JSON.stringify({
-title: viewerEditTitle.value.trim(),
-tags: viewerEditTags.value.split(" ").filter(tag => tag.trim() !== ""),
-date: viewerEditDate.value,
-description: viewerEditDescription.value.trim()
-})
-});
+    if (!res.ok) {
+      alert("保存に失敗しました");
+      return;
+    }
 
-if (!res.ok) {
-  alert("保存に失敗しました");
-  return;
-}
-const result = await res.json();
-const updated = result.item;
-works[currentIndex] = updated;
-
-viewerTitle.textContent = updated.title || "";
-const updatedTags = Array.isArray(updated.tags) ? updated.tags : [];
-viewerTags.innerHTML = updatedTags.map(tag => `<span class="tag">${tag}</span>`).join("");
-viewerDate.textContent = updated.date || "";
-viewerDescription.textContent = updated.description || "";
-
-closeViewerEditForm();
-loadWorks();
+    closeViewerEditForm();
+    viewer.classList.remove("open");
+    await loadWorks();
+  } catch (err) {
+    console.error(err);
+    alert("保存に失敗しました");
+  }
 });
 
 // ===============================
 // スマホ viewer 操作
 // ===============================
 function enableDragSheet() {
-if (!viewerRight) return;
+  if (!viewerRight) return;
 
-let startY = 0;
-let isDragging = false;
+  let startY = 0;
+  let isDragging = false;
 
-viewerRight.addEventListener("touchstart", (e) => {
-const touchY = e.touches[0].clientY;
-const rect = viewerRight.getBoundingClientRect();
-const offsetY = touchY - rect.top;
+  viewerRight.addEventListener("touchstart", (e) => {
+    const touchY = e.touches[0].clientY;
+    const rect = viewerRight.getBoundingClientRect();
+    const offsetY = touchY - rect.top;
 
-if (offsetY <= 60) {
-startY = touchY;
-isDragging = true;
-}
-});
+    if (offsetY <= 60) {
+      startY = touchY;
+      isDragging = true;
+    }
+  });
 
-viewerRight.addEventListener("touchmove", (e) => {
-if (!isDragging) return;
+  viewerRight.addEventListener("touchmove", (e) => {
+    if (!isDragging) return;
 
-const diff = startY - e.touches[0].clientY;
+    const diff = startY - e.touches[0].clientY;
 
-if (diff > 20) viewerRight.classList.add("active");
-if (diff < -20) viewerRight.classList.remove("active");
-});
+    if (diff > 20) viewerRight.classList.add("active");
+    if (diff < -20) viewerRight.classList.remove("active");
+  });
 
-viewerRight.addEventListener("touchend", () => {
-isDragging = false;
-});
+  viewerRight.addEventListener("touchend", () => {
+    isDragging = false;
+  });
 
-if (dragHandle) {
-dragHandle.addEventListener("click", () => {
-viewerRight.classList.toggle("active");
-});
-}
+  if (dragHandle) {
+    dragHandle.addEventListener("click", () => {
+      viewerRight.classList.toggle("active");
+    });
+  }
 }
 
 function enableSwipeNavigation() {
-if (!viewerLeft) return;
+  if (!viewerLeft) return;
 
-let startX = 0;
-let endX = 0;
+  let startX = 0;
+  let endX = 0;
 
-viewerLeft.addEventListener("touchstart", (e) => {
-startX = e.touches[0].clientX;
-});
+  viewerLeft.addEventListener("touchstart", (e) => {
+    startX = e.touches[0].clientX;
+  });
 
-viewerLeft.addEventListener("touchend", (e) => {
-endX = e.changedTouches[0].clientX;
-const diff = endX - startX;
+  viewerLeft.addEventListener("touchend", (e) => {
+    if (displayedWorks.length === 0) return;
 
-if (diff < -50) {
-currentIndex = (currentIndex + 1) % works.length;
-openViewer(currentIndex);
-}
+    endX = e.changedTouches[0].clientX;
+    const diff = endX - startX;
 
-if (diff > 50) {
-currentIndex = (currentIndex - 1 + works.length) % works.length;
-openViewer(currentIndex);
-}
-});
-}
+    if (diff < -50) {
+      currentIndex =
+        (currentIndex + 1) %
+        displayedWorks.length;
+      openViewer(currentIndex);
+    }
 
-// ===============================
-// 検索
-// ===============================
-mobileSearchBtn.addEventListener("click", () => {
-const keyword = mobileSearchInput.value.trim();
-searchInput.value = keyword;
-filterWorks(keyword);
-
-mobileMenuPanel.classList.remove("open");
-showView("gallery");
-});
-
-searchInput.addEventListener("input", () => {
-const keyword = searchInput.value.trim();
-searchClear.style.display = keyword ? "block" : "none";
-filterWorks(keyword);
-});
-
-searchClear.addEventListener("click", () => {
-searchInput.value = "";
-searchClear.style.display = "none";
-filterWorks("");
-});
-
-function filterWorks(keyword) {
-const cards = document.querySelectorAll(".work-card");
-const k = keyword.toLowerCase();
-
-cards.forEach((card, index) => {
-const item = works[index];
-
-const title = String(item.title || "").toLowerCase();
-const tags = Array.isArray(item.tags)
-? item.tags.join(" ").toLowerCase()
-: String(item.tags || "").toLowerCase();
-const desc = String(item.description || "").toLowerCase();
-const date = String(item.date || "").toLowerCase();
-
-const match =
-title.includes(k) ||
-tags.includes(k) ||
-desc.includes(k) ||
-date.includes(k);
-
-card.style.display = match ? "block" : "none";
-});
+    if (diff > 50) {
+      currentIndex =
+        (currentIndex - 1 + displayedWorks.length) %
+        displayedWorks.length;
+      openViewer(currentIndex);
+    }
+  });
 }
 
 // ===============================
 // ABOUT / 制作について
 // ===============================
 async function loadAbout() {
-const res = await fetch(`${API_BASE}/about`);
-const html = await res.text();
-const el = document.getElementById("about-content");
-if (el) el.innerHTML = html;
+  try {
+    const res = await fetch(`${API_BASE}/about`);
+    const html = await res.text();
+    const el = document.getElementById("about-content");
+
+    if (el) el.innerHTML = html;
+  } catch (err) {
+    console.error(err);
+  }
 }
 
 async function loadInfo() {
-const res = await fetch(`${API_BASE}/works-info`);
-const html = await res.text();
-const el = document.getElementById("info-content");
-if (el) el.innerHTML = html;
+  try {
+    const res = await fetch(`${API_BASE}/works-info`);
+    const html = await res.text();
+    const el = document.getElementById("info-content");
+
+    if (el) el.innerHTML = html;
+  } catch (err) {
+    console.error(err);
+  }
 }
 
 function openTextEditor(type) {
-if (!requireAdminToken()) return;
+  if (!requireAdminToken()) return;
 
-editingPage = type;
+  editingPage = type;
 
-const contentEl = type === "about"
-? document.getElementById("about-content")
-: document.getElementById("info-content");
+  const contentEl =
+    type === "about"
+      ? document.getElementById("about-content")
+      : document.getElementById("info-content");
 
-modalTitle.textContent = type === "about" ? "ABOUTを編集" : "制作についてを編集";
-modalTextarea.value = contentEl.innerHTML.trim();
+  modalTitle.textContent =
+    type === "about"
+      ? "ABOUTを編集"
+      : "制作についてを編集";
 
-modal.classList.add("open");
+  modalTextarea.value = contentEl.innerHTML.trim();
+  modal.classList.add("open");
 }
 
-editAboutBtn.addEventListener("click", () => openTextEditor("about"));
-editInfoBtn.addEventListener("click", () => openTextEditor("info"));
+editAboutBtn.addEventListener("click", () => {
+  openTextEditor("about");
+});
+
+editInfoBtn.addEventListener("click", () => {
+  openTextEditor("info");
+});
 
 modalCancel.addEventListener("click", () => {
-modal.classList.remove("open");
-editingPage = null;
+  modal.classList.remove("open");
+  editingPage = null;
 });
 
 modalSave.addEventListener("click", async () => {
-if (!editingPage || !requireAdminToken()) return;
+  if (!editingPage || !requireAdminToken()) return;
 
-const endpoint = editingPage === "about" ? "/about" : "/works-info";
+  const endpoint =
+    editingPage === "about"
+      ? "/about"
+      : "/works-info";
 
-const res = await fetch(`${API_BASE}${endpoint}`, {
-method: "PUT",
-headers: authHeaders({ "Content-Type": "text/html" }),
-body: modalTextarea.value
-});
+  try {
+    const res = await fetch(`${API_BASE}${endpoint}`, {
+      method: "PUT",
+      headers: authHeaders({
+        "Content-Type": "text/html"
+      }),
+      body: modalTextarea.value
+    });
 
-if (!res.ok) {
-alert("保存に失敗しました");
-return;
-}
+    if (!res.ok) {
+      alert("保存に失敗しました");
+      return;
+    }
 
-modal.classList.remove("open");
-editingPage = null;
+    modal.classList.remove("open");
+    editingPage = null;
 
-await loadAbout();
-await loadInfo();
+    await loadAbout();
+    await loadInfo();
 
-alert("保存しました");
+    alert("保存しました");
+  } catch (err) {
+    console.error(err);
+    alert("保存に失敗しました");
+  }
 });
 
 // ===============================
 // アップロード
 // ===============================
 function saveCurrentUploadStepValue() {
-if (uploadStep === 0) uploadData.title = uploadStepInput.value.trim();
-if (uploadStep === 1) uploadData.tags = uploadStepInput.value.trim();
-if (uploadStep === 2) uploadData.date = uploadStepMonth.value;
-if (uploadStep === 3) uploadData.description = uploadStepTextarea.value.trim();
+  if (uploadStep === 0) {
+    uploadData.title = uploadStepInput.value.trim();
+  }
+
+  if (uploadStep === 1) {
+    uploadData.tags = uploadStepInput.value.trim();
+  }
+
+  if (uploadStep === 2) {
+    uploadData.date = uploadStepMonth.value;
+  }
+
+  if (uploadStep === 3) {
+    uploadData.description =
+      uploadStepTextarea.value.trim();
+  }
 }
+
 function openUploadStepModal() {
-if (!requireAdminToken()) return;
+  if (!requireAdminToken()) return;
 
-uploadStepModal.classList.add("open");
+  uploadStepModal.classList.add("open");
 
-uploadStepInput.style.display = "none";
-uploadStepMonth.style.display = "none";
-uploadStepTextarea.style.display = "none";
-uploadStepOk.style.display = "block";
-uploadStepBack.style.display = uploadStep === 0 || uploadStep === 4 ? "none" : "block";
+  uploadStepInput.style.display = "none";
+  uploadStepMonth.style.display = "none";
+  uploadStepTextarea.style.display = "none";
+  uploadStepOk.style.display = "block";
+  uploadStepBack.style.display =
+    uploadStep === 0 || uploadStep === 4
+      ? "none"
+      : "block";
 
-if (uploadStep === 0) {
-uploadStepTitle.textContent = "タイトルを入力してください";
-uploadStepInput.style.display = "block";
-uploadStepInput.value = uploadData.title;
+  if (uploadStep === 0) {
+    uploadStepTitle.textContent =
+      "タイトルを入力してください";
+    uploadStepInput.style.display = "block";
+    uploadStepInput.value = uploadData.title;
+  }
+
+  if (uploadStep === 1) {
+    uploadStepTitle.textContent =
+      "タグを入力してください（スペース区切り）";
+    uploadStepInput.style.display = "block";
+    uploadStepInput.value = uploadData.tags;
+  }
+
+  if (uploadStep === 2) {
+    uploadStepTitle.textContent =
+      "年月を選択してください";
+    uploadStepMonth.style.display = "block";
+    uploadStepMonth.value = uploadData.date;
+  }
+
+  if (uploadStep === 3) {
+    uploadStepTitle.textContent =
+      "概要を入力してください";
+    uploadStepTextarea.style.display = "block";
+    uploadStepTextarea.value = uploadData.description;
+  }
+
+  if (uploadStep === 4) {
+    uploadStepTitle.textContent = "アップロード中...";
+    uploadStepOk.style.display = "none";
+    uploadAllFiles();
+  }
 }
 
-if (uploadStep === 1) {
-uploadStepTitle.textContent = "タグを入力してください（スペース区切り）";
-uploadStepInput.style.display = "block";
-uploadStepInput.value = uploadData.tags;
-}
-
-if (uploadStep === 2) {
-uploadStepTitle.textContent = "年月を選択してください";
-uploadStepMonth.style.display = "block";
-uploadStepMonth.value = uploadData.date;
-}
-
-if (uploadStep === 3) {
-uploadStepTitle.textContent = "概要を入力してください";
-uploadStepTextarea.style.display = "block";
-uploadStepTextarea.value = uploadData.description;
-}
-
-if (uploadStep === 4) {
-uploadStepTitle.textContent = "アップロード中...";
-uploadStepOk.style.display = "none";
-uploadAllFiles();
-}
-}
 uploadStepBack.addEventListener("click", () => {
-if (uploadStep <= 0) return;
+  if (uploadStep <= 0) return;
 
-saveCurrentUploadStepValue();
-uploadStep--;
-openUploadStepModal();
+  saveCurrentUploadStepValue();
+  uploadStep--;
+  openUploadStepModal();
 });
+
 uploadStepOk.addEventListener("click", () => {
-if (uploadStep === 0) {
-uploadData.title = uploadStepInput.value.trim();
-uploadStep++;
-openUploadStepModal();
-return;
-}
+  saveCurrentUploadStepValue();
 
-if (uploadStep === 1) {
-uploadData.tags = uploadStepInput.value.trim();
-uploadStep++;
-openUploadStepModal();
-return;
-}
+  if (uploadStep < 3) {
+    uploadStep++;
+    openUploadStepModal();
+    return;
+  }
 
-if (uploadStep === 2) {
-uploadData.date = uploadStepMonth.value;
-uploadStep++;
-openUploadStepModal();
-return;
-}
-
-if (uploadStep === 3) {
-uploadData.description = uploadStepTextarea.value.trim();
-uploadStep++;
-openUploadStepModal();
-}
+  if (uploadStep === 3) {
+    uploadStep++;
+    openUploadStepModal();
+  }
 });
 
 uploadDropzone.addEventListener("dragover", (e) => {
-e.preventDefault();
-uploadDropzone.classList.add("dragover");
+  e.preventDefault();
+  uploadDropzone.classList.add("dragover");
 });
 
 uploadDropzone.addEventListener("dragleave", () => {
-uploadDropzone.classList.remove("dragover");
+  uploadDropzone.classList.remove("dragover");
 });
 
 uploadDropzone.addEventListener("drop", (e) => {
-e.preventDefault();
-uploadDropzone.classList.remove("dragover");
+  e.preventDefault();
+  uploadDropzone.classList.remove("dragover");
 
-if (!requireAdminToken()) return;
+  if (!requireAdminToken()) return;
 
-const files = Array.from(e.dataTransfer.files);
-if (files.length === 0) return;
+  const files = Array.from(e.dataTransfer.files);
+  if (files.length === 0) return;
 
-uploadData.files = files;
-uploadStep = 0;
-openUploadStepModal();
+  uploadData.files = files;
+  uploadStep = 0;
+  openUploadStepModal();
 });
 
 async function uploadAllFiles() {
@@ -705,18 +821,25 @@ async function uploadAllFiles() {
 
   for (const file of uploadData.files) {
     if (file.size > 10 * 1024 * 1024) {
-      alert("10MBを超える画像はアップロードできません: " + file.name);
+      alert(
+        "10MBを超える画像はアップロードできません: " +
+        file.name
+      );
       return;
     }
 
     const formData = new FormData();
+
     formData.append("file", file);
-    formData.append("meta", JSON.stringify({
-      title: uploadData.title,
-      tags: uploadData.tags,
-      date: uploadData.date,
-      description: uploadData.description
-    }));
+    formData.append(
+      "meta",
+      JSON.stringify({
+        title: uploadData.title,
+        tags: uploadData.tags,
+        date: uploadData.date,
+        description: uploadData.description
+      })
+    );
 
     try {
       const res = await fetch(`${API_BASE}/upload`, {
@@ -737,82 +860,132 @@ async function uploadAllFiles() {
   }
 
   uploadStepModal.classList.remove("open");
-  uploadData = { files: [], title: "", tags: "", date: "", description: "" };
-  uploadStep = 0;
 
-  loadWorks();
+  uploadData = {
+    files: [],
+    title: "",
+    tags: "",
+    date: "",
+    description: ""
+  };
+
+  uploadStep = 0;
+  await loadWorks();
 }
 
 // ===============================
 // 作品編集 / 削除
 // ===============================
 function editWork(item) {
-if (!requireAdminToken()) return;
+  if (!requireAdminToken()) return;
 
-const newTitle = prompt("タイトルを編集", item.title);
-if (newTitle === null) return;
+  const newTitle = prompt(
+    "タイトルを編集",
+    item.title
+  );
 
-const newTags = prompt("タグ（スペース区切り）", Array.isArray(item.tags) ? item.tags.join(" ") : item.tags);
-if (newTags === null) return;
+  if (newTitle === null) return;
 
-const newDate = prompt("年月 (YYYY-MM)", item.date || "");
-if (newDate === null) return;
+  const currentTags = Array.isArray(item.tags)
+    ? item.tags.join(" ")
+    : item.tags || "";
 
-const newDesc = prompt("説明文", item.description);
-if (newDesc === null) return;
+  const newTags = prompt(
+    "タグ（スペース区切り）",
+    currentTags
+  );
 
-fetch(`${API_BASE}/works/${item.id}`, {
-method: "PUT",
-headers: authHeaders({ "Content-Type": "application/json" }),
-body: JSON.stringify({
-title: newTitle,
-tags: newTags.split(" ").filter(tag => tag.trim() !== ""),
-date: newDate,
-description: newDesc
-})
-}).then((res) => {
-if (!res.ok) {
-alert("編集に失敗しました");
-return;
-}
+  if (newTags === null) return;
 
-loadWorks();
-});
+  const newDate = prompt(
+    "年月 (YYYY-MM)",
+    item.date || ""
+  );
+
+  if (newDate === null) return;
+
+  const newDesc = prompt(
+    "説明文",
+    item.description || ""
+  );
+
+  if (newDesc === null) return;
+
+  fetch(`${API_BASE}/works/${item.id}`, {
+    method: "PUT",
+    headers: authHeaders({
+      "Content-Type": "application/json"
+    }),
+    body: JSON.stringify({
+      title: newTitle,
+      tags: newTags
+        .split(/\s+/)
+        .filter((tag) => tag.trim() !== ""),
+      date: newDate,
+      description: newDesc
+    })
+  })
+    .then((res) => {
+      if (!res.ok) {
+        throw new Error("編集に失敗しました");
+      }
+
+      return loadWorks();
+    })
+    .catch((err) => {
+      console.error(err);
+      alert("編集に失敗しました");
+    });
 }
 
 function deleteWork(id) {
-if (!requireAdminToken()) return;
+  if (!requireAdminToken()) return;
+  if (!confirm("本当に削除しますか？")) return;
 
-if (!confirm("本当に削除しますか？")) return;
+  fetch(`${API_BASE}/works/${id}`, {
+    method: "DELETE",
+    headers: authHeaders()
+  })
+    .then((res) => {
+      if (!res.ok) {
+        throw new Error("削除に失敗しました");
+      }
 
-fetch(`${API_BASE}/works/${id}`, {
-method: "DELETE",
-headers: authHeaders()
-}).then((res) => {
-if (!res.ok) {
-alert("削除に失敗しました");
-return;
-}
-
-loadWorks();
-});
+      return loadWorks();
+    })
+    .catch((err) => {
+      console.error(err);
+      alert("削除に失敗しました");
+    });
 }
 
 // ===============================
 // 初期ロード
 // ===============================
 window.addEventListener("load", () => {
-if (adminToken) {
-adminMode = true;
-document.body.classList.add("admin-mode");
-}
+  const overlay =
+    document.getElementById("loading-overlay");
 
-if (window.innerWidth <= 768) {
-enableDragSheet();
-enableSwipeNavigation();
-}
+  setTimeout(() => {
+    overlay.classList.add("hidden");
+  }, 500);
 
-loadWorks();
-loadAbout();
-loadInfo();
+  const view =
+    location.hash.replace("#", "") || "gallery";
+
+  showView(view);
+
+  if (adminToken) {
+    adminMode = true;
+    document.body.classList.add("admin-mode");
+  }
+
+  if (window.innerWidth <= 768) {
+    enableDragSheet();
+    enableSwipeNavigation();
+  }
+
+  loadWorks();
+  loadAbout();
+  loadInfo();
 });
