@@ -4,9 +4,12 @@
 const API_BASE =
   "https://delicate-sunset-ea8a.d08084222816.workers.dev";
 
-const APP_VERSION = "2026-07-13-search-v5";
+const APP_VERSION =
+  "2026-07-13-search-ime-v6";
 
-console.info(`[portfolio] app.js ${APP_VERSION}`);
+console.info(
+  `[portfolio] ${APP_VERSION}`
+);
 
 // ===============================
 // DOM取得
@@ -30,7 +33,9 @@ const viewerDate =
   document.getElementById("viewer-date");
 
 const viewerDescription =
-  document.getElementById("viewer-description");
+  document.getElementById(
+    "viewer-description"
+  );
 
 const btnPrev =
   document.getElementById("viewer-prev");
@@ -39,7 +44,9 @@ const btnNext =
   document.getElementById("viewer-next");
 
 const viewerCloseBtn =
-  document.getElementById("viewer-close-btn");
+  document.getElementById(
+    "viewer-close-btn"
+  );
 
 const searchInput =
   document.getElementById("search-input");
@@ -48,10 +55,14 @@ const searchClear =
   document.getElementById("search-clear");
 
 const mobileSearchInput =
-  document.getElementById("mobile-search-input");
+  document.getElementById(
+    "mobile-search-input"
+  );
 
 const mobileSearchBtn =
-  document.getElementById("mobile-search-btn");
+  document.getElementById(
+    "mobile-search-btn"
+  );
 
 const modal =
   document.getElementById("edit-modal");
@@ -60,49 +71,77 @@ const modalTitle =
   document.getElementById("modal-title");
 
 const modalTextarea =
-  document.getElementById("modal-textarea");
+  document.getElementById(
+    "modal-textarea"
+  );
 
 const modalSave =
   document.getElementById("modal-save");
 
 const modalCancel =
-  document.getElementById("modal-cancel");
+  document.getElementById(
+    "modal-cancel"
+  );
 
 const mobileMenuBtn =
-  document.querySelector(".mobile-menu-btn");
+  document.querySelector(
+    ".mobile-menu-btn"
+  );
 
 const mobileMenuPanel =
-  document.querySelector(".mobile-menu-panel");
+  document.querySelector(
+    ".mobile-menu-panel"
+  );
 
 const viewerRight =
-  document.querySelector(".viewer-right");
+  document.querySelector(
+    ".viewer-right"
+  );
 
 const viewerLeft =
-  document.querySelector(".viewer-left");
+  document.querySelector(
+    ".viewer-left"
+  );
 
 const dragHandle =
-  document.querySelector(".viewer-drag-handle");
+  document.querySelector(
+    ".viewer-drag-handle"
+  );
 
 const uploadStepBack =
-  document.getElementById("upload-step-back");
+  document.getElementById(
+    "upload-step-back"
+  );
 
 const viewerEditWork =
-  document.getElementById("viewer-edit-work");
+  document.getElementById(
+    "viewer-edit-work"
+  );
 
 const viewerDeleteWork =
-  document.getElementById("viewer-delete-work");
+  document.getElementById(
+    "viewer-delete-work"
+  );
 
 const viewerEditForm =
-  document.getElementById("viewer-edit-form");
+  document.getElementById(
+    "viewer-edit-form"
+  );
 
 const viewerEditTitle =
-  document.getElementById("viewer-edit-title");
+  document.getElementById(
+    "viewer-edit-title"
+  );
 
 const viewerEditTags =
-  document.getElementById("viewer-edit-tags");
+  document.getElementById(
+    "viewer-edit-tags"
+  );
 
 const viewerEditDate =
-  document.getElementById("viewer-edit-date");
+  document.getElementById(
+    "viewer-edit-date"
+  );
 
 const viewerEditDescription =
   document.getElementById(
@@ -110,7 +149,9 @@ const viewerEditDescription =
   );
 
 const viewerSaveWork =
-  document.getElementById("viewer-save-work");
+  document.getElementById(
+    "viewer-save-work"
+  );
 
 const viewerCancelEdit =
   document.getElementById(
@@ -118,7 +159,9 @@ const viewerCancelEdit =
   );
 
 const uploadDropzone =
-  document.getElementById("upload-dropzone");
+  document.getElementById(
+    "upload-dropzone"
+  );
 
 const uploadStepModal =
   document.getElementById(
@@ -146,7 +189,9 @@ const uploadStepTextarea =
   );
 
 const uploadStepOk =
-  document.getElementById("upload-step-ok");
+  document.getElementById(
+    "upload-step-ok"
+  );
 
 const siteTitle =
   document.getElementById("site-title");
@@ -163,7 +208,8 @@ const editInfoBtn =
 let adminMode = false;
 
 let adminToken =
-  localStorage.getItem("adminToken") || "";
+  localStorage.getItem("adminToken") ||
+  "";
 
 let works = [];
 let displayedWorks = [];
@@ -188,35 +234,37 @@ let uploadData = {
 
 let editingPage = null;
 
+let isPcComposing = false;
+let isMobileComposing = false;
+
 // ===============================
 // 共通処理
 // ===============================
-function authHeaders(extraHeaders = {}) {
+function authHeaders(
+  extraHeaders = {}
+) {
   return {
     ...extraHeaders,
-    Authorization: `Bearer ${adminToken}`
+    Authorization:
+      `Bearer ${adminToken}`
   };
 }
 
 function requireAdminToken() {
   if (!adminToken) {
-    alert("管理者ログインが必要です");
+    alert(
+      "管理者ログインが必要です"
+    );
+
     return false;
   }
 
   return true;
 }
 
-/**
- * 検索用に文字列を統一する
- *
- * ・全角英数字と半角英数字を統一
- * ・大文字と小文字を統一
- * ・配列やオブジェクトにも対応
- * ・記号区切りを空白へ変換
- */
 function normalizeSearchText(value) {
-  if (value == null) {
+  if (value === null ||
+      value === undefined) {
     return "";
   }
 
@@ -236,69 +284,116 @@ function normalizeSearchText(value) {
     .normalize("NFKC")
     .toLowerCase()
     .replace(/[＃#]/g, "")
-    .replace(/[、,，／/|｜]+/g, " ")
+    .replace(
+      /[、,，。．・／/|｜]+/g,
+      " "
+    )
     .replace(/\s+/g, " ")
     .trim();
 }
 
-/**
- * タグを表示用の配列に変換する
- */
 function getTagsArray(tags) {
-  if (Array.isArray(tags)) {
-    return tags
-      .map((tag) => String(tag))
-      .filter(Boolean);
+  if (tags === null ||
+      tags === undefined) {
+    return [];
   }
 
-  if (tags == null) {
-    return [];
+  if (Array.isArray(tags)) {
+    return tags
+      .flatMap(getTagsArray)
+      .filter(Boolean);
   }
 
   if (typeof tags === "object") {
     return Object.values(tags)
-      .flatMap((value) =>
-        getTagsArray(value)
-      )
+      .flatMap(getTagsArray)
       .filter(Boolean);
   }
 
-  const text = String(tags).trim();
+  const text =
+    String(tags).trim();
 
   if (!text) {
     return [];
   }
 
-  /*
-   * ["ポスター","保育園"]のような
-   * JSON文字列にも対応
-   */
   if (
     text.startsWith("[") &&
     text.endsWith("]")
   ) {
     try {
-      const parsed = JSON.parse(text);
+      const parsed =
+        JSON.parse(text);
 
       if (Array.isArray(parsed)) {
         return parsed
-          .map((tag) => String(tag))
+          .flatMap(getTagsArray)
           .filter(Boolean);
       }
     } catch (error) {
-      // JSONでなければ普通の文字列として扱う
+      console.warn(
+        "タグのJSON変換を省略",
+        error
+      );
     }
   }
 
   return text
     .split(/[\s、,，]+/)
+    .map((tag) => tag.trim())
     .filter(Boolean);
+}
+
+function getDescriptionText(item) {
+  return [
+    item?.description,
+    item?.desc,
+    item?.summary,
+    item?.overview,
+    item?.caption,
+    item?.meta?.description,
+    item?.metadata?.description
+  ]
+    .filter(
+      (value) =>
+        value !== null &&
+        value !== undefined
+    )
+    .map((value) =>
+      String(value)
+    )
+    .join(" ");
+}
+
+function getSearchTarget(item) {
+  const tags = [
+    item?.tags,
+    item?.tag,
+    item?.meta?.tags,
+    item?.metadata?.tags
+  ];
+
+  const descriptions = [
+    item?.description,
+    item?.desc,
+    item?.summary,
+    item?.overview,
+    item?.caption,
+    item?.meta?.description,
+    item?.metadata?.description
+  ];
+
+  return normalizeSearchText([
+    tags,
+    descriptions
+  ]);
 }
 
 function getCurrentKeyword() {
   return (
-    searchInput.value.trim() ||
-    mobileSearchInput.value.trim()
+    searchInput.value ||
+    mobileSearchInput.value ||
+    ""
   );
 }
 
@@ -320,10 +415,12 @@ async function adminLogin() {
       `${API_BASE}/login`,
       {
         method: "POST",
+
         headers: {
           "Content-Type":
             "application/json"
         },
+
         body: JSON.stringify({
           password
         })
@@ -331,13 +428,18 @@ async function adminLogin() {
     );
 
     if (!res.ok) {
-      alert("パスワードが違います");
+      alert(
+        "パスワードが違います"
+      );
+
       return;
     }
 
-    const data = await res.json();
+    const data =
+      await res.json();
 
-    adminToken = data.token;
+    adminToken =
+      data.token || "";
 
     localStorage.setItem(
       "adminToken",
@@ -350,7 +452,9 @@ async function adminLogin() {
       "admin-mode"
     );
 
-    alert("管理者モードに入りました");
+    alert(
+      "管理者モードに入りました"
+    );
   } catch (error) {
     console.error(error);
 
@@ -408,7 +512,9 @@ function showView(view) {
   document
     .querySelectorAll(".view")
     .forEach((element) => {
-      element.classList.add("hidden");
+      element.classList.add(
+        "hidden"
+      );
     });
 
   const target =
@@ -417,7 +523,9 @@ function showView(view) {
     );
 
   if (target) {
-    target.classList.remove("hidden");
+    target.classList.remove(
+      "hidden"
+    );
   }
 
   mobileMenuPanel.classList.remove(
@@ -429,8 +537,10 @@ window.addEventListener(
   "hashchange",
   () => {
     const view =
-      location.hash.replace("#", "") ||
-      "gallery";
+      location.hash.replace(
+        "#",
+        ""
+      ) || "gallery";
 
     showView(view);
   }
@@ -444,47 +554,39 @@ async function loadWorks() {
     const res = await fetch(
       `${API_BASE}/works`,
       {
-        /*
-         * APIの古い作品一覧を
-         * ブラウザが保持しないようにする
-         */
         cache: "no-store"
       }
     );
 
     if (!res.ok) {
       throw new Error(
-        `作品一覧の取得に失敗しました: ${res.status}`
+        `作品一覧の取得失敗: ${res.status}`
       );
     }
 
-    const data = await res.json();
+    const data =
+      await res.json();
 
     if (!Array.isArray(data)) {
       throw new Error(
-        "作品一覧の形式が配列ではありません"
+        "作品一覧が配列ではありません"
       );
     }
 
-    /*
-     * 最新の作品を先頭にする
-     */
     works = [...data].reverse();
 
     console.info(
-      "[portfolio] works loaded",
+      "[portfolio] 作品数",
       works.length
     );
 
-    console.info(
-      "[portfolio] first work",
-      works[0]
-    );
+    if (works.length > 0) {
+      console.info(
+        "[portfolio] 作品データ例",
+        works[0]
+      );
+    }
 
-    /*
-     * 検索中に再取得された場合も
-     * 検索文字を維持する
-     */
     filterWorks(
       getCurrentKeyword()
     );
@@ -499,7 +601,7 @@ async function loadWorks() {
 }
 
 // ===============================
-// ギャラリー再描画
+// ギャラリー
 // ===============================
 function resetGallery() {
   worksList.innerHTML = "";
@@ -511,35 +613,43 @@ function resetGallery() {
   renderPage();
 }
 
-function createColumns(columnCount) {
+function createColumns(
+  columnCount
+) {
   return Array.from(
     {
       length: columnCount
     },
     () => {
       const column =
-        document.createElement("div");
+        document.createElement(
+          "div"
+        );
 
-      column.style.display = "flex";
+      column.style.display =
+        "flex";
 
       column.style.flexDirection =
         "column";
 
-      column.style.gap = "16px";
-      column.style.flex = "1";
+      column.style.gap =
+        "16px";
 
-      worksList.appendChild(column);
+      column.style.flex =
+        "1";
+
+      worksList.appendChild(
+        column
+      );
 
       return column;
     }
   );
 }
 
-// ===============================
-// 作品カード描画
-// ===============================
 function renderPage() {
-  if (isLoading || allLoaded) {
+  if (isLoading ||
+      allLoaded) {
     return;
   }
 
@@ -557,7 +667,9 @@ function renderPage() {
 
   if (columns.length === 0) {
     columns =
-      createColumns(columnCount);
+      createColumns(
+        columnCount
+      );
   }
 
   const start =
@@ -578,14 +690,20 @@ function renderPage() {
       displayedWorks[index];
 
     const card =
-      document.createElement("div");
+      document.createElement(
+        "div"
+      );
 
-    card.className = "work-card";
+    card.className =
+      "work-card";
 
     const image =
-      document.createElement("img");
+      document.createElement(
+        "img"
+      );
 
-    image.className = "work-image";
+    image.className =
+      "work-image";
 
     image.src =
       item.image || "";
@@ -593,17 +711,24 @@ function renderPage() {
     image.alt =
       item.title || "";
 
-    image.loading = "lazy";
+    image.loading =
+      "lazy";
 
     const body =
-      document.createElement("div");
+      document.createElement(
+        "div"
+      );
 
-    body.className = "work-body";
+    body.className =
+      "work-body";
 
     const title =
-      document.createElement("p");
+      document.createElement(
+        "p"
+      );
 
-    title.className = "work-title";
+    title.className =
+      "work-title";
 
     title.textContent =
       item.title || "";
@@ -613,10 +738,6 @@ function renderPage() {
     card.appendChild(image);
     card.appendChild(body);
 
-    /*
-     * DOM上のカード順ではなく、
-     * 検索結果配列の位置を直接使う
-     */
     card.addEventListener(
       "click",
       () => {
@@ -630,7 +751,8 @@ function renderPage() {
   }
 
   if (
-    end >= displayedWorks.length
+    end >=
+    displayedWorks.length
   ) {
     allLoaded = true;
   }
@@ -639,9 +761,6 @@ function renderPage() {
   isLoading = false;
 }
 
-// ===============================
-// 無限スクロール
-// ===============================
 window.addEventListener(
   "scroll",
   () => {
@@ -660,104 +779,103 @@ window.addEventListener(
 // ===============================
 // 検索
 //
-// ・全作品を検索
-// ・タグを検索
-// ・概要を検索
-// ・完全一致ではなく部分一致
-// ・複数語はOR検索
+// タグ＋概要
+// 部分一致
+// 全作品対象
+// 複数語はOR検索
+// 漢字変換中は検索しない
 // ===============================
 function filterWorks(keyword) {
+  const normalizedKeyword =
+    normalizeSearchText(keyword);
+
   const words =
-    normalizeSearchText(keyword)
+    normalizedKeyword
       .split(" ")
+      .map((word) =>
+        word.trim()
+      )
       .filter(Boolean);
 
-  /*
-   * 空欄なら全作品を表示
-   */
   if (words.length === 0) {
-    displayedWorks = [...works];
+    displayedWorks =
+      [...works];
   } else {
     displayedWorks =
       works.filter((item) => {
-        /*
-         * タグの保存形式が多少違っても
-         * 探せるように候補をまとめる
-         */
-        const tags = [
-          item.tags,
-          item.tag,
-          item.meta?.tags,
-          item.metadata?.tags
-        ];
-
-        /*
-         * 概要の項目名が多少違っても
-         * 探せるように候補をまとめる
-         */
-        const descriptions = [
-          item.description,
-          item.desc,
-          item.summary,
-          item.overview,
-          item.caption,
-          item.meta?.description,
-          item.metadata?.description
-        ];
-
         const searchTarget =
-          normalizeSearchText([
-            tags,
-            descriptions
-          ]);
+          getSearchTarget(item);
 
-        /*
-         * どれか1語でも含まれれば表示
-         *
-         * 例：
-         * 「保育園 ポスター」
-         * ↓
-         * 保育園またはポスターを含む作品
-         */
-        return words.some((word) =>
-          searchTarget.includes(word)
+        return words.some(
+          (word) =>
+            searchTarget.includes(
+              word
+            )
         );
       });
   }
 
   console.info(
-    "[portfolio] search",
+    "[portfolio] 検索",
     {
       keyword,
-      total: works.length,
+      normalizedKeyword,
+      total:
+        works.length,
       matched:
         displayedWorks.length
     }
   );
 
-  viewer.classList.remove("open");
+  viewer.classList.remove(
+    "open"
+  );
 
   resetGallery();
 }
 
-// ===============================
-// PC検索
-// ===============================
+function runPcSearch() {
+  const keyword =
+    searchInput.value;
+
+  mobileSearchInput.value =
+    keyword;
+
+  searchClear.style.display =
+    keyword.trim()
+      ? "block"
+      : "none";
+
+  filterWorks(keyword);
+}
+
+searchInput.addEventListener(
+  "compositionstart",
+  () => {
+    isPcComposing = true;
+  }
+);
+
+searchInput.addEventListener(
+  "compositionend",
+  () => {
+    isPcComposing = false;
+
+    runPcSearch();
+  }
+);
+
 searchInput.addEventListener(
   "input",
-  () => {
-    const keyword =
-      searchInput.value;
+  (event) => {
+    if (
+      isPcComposing ||
+      event.isComposing
+    ) {
+      return;
+    }
 
-    mobileSearchInput.value =
-      keyword;
-
-    searchClear.style.display =
-      keyword.trim()
-        ? "block"
-        : "none";
-
-    filterWorks(keyword);
+    runPcSearch();
   }
 );
 
@@ -771,12 +889,25 @@ searchClear.addEventListener(
       "none";
 
     filterWorks("");
+
+    searchInput.focus();
   }
 );
 
-// ===============================
-// スマホ検索
-// ===============================
+mobileSearchInput.addEventListener(
+  "compositionstart",
+  () => {
+    isMobileComposing = true;
+  }
+);
+
+mobileSearchInput.addEventListener(
+  "compositionend",
+  () => {
+    isMobileComposing = false;
+  }
+);
+
 mobileSearchBtn.addEventListener(
   "click",
   () => {
@@ -804,7 +935,17 @@ mobileSearchBtn.addEventListener(
 mobileSearchInput.addEventListener(
   "keydown",
   (event) => {
-    if (event.key !== "Enter") {
+    if (
+      event.key !== "Enter"
+    ) {
+      return;
+    }
+
+    if (
+      event.isComposing ||
+      isMobileComposing ||
+      event.keyCode === 229
+    ) {
       return;
     }
 
@@ -864,7 +1005,7 @@ function openViewer(index) {
     item.date || "";
 
   viewerDescription.textContent =
-    item.description || "";
+    getDescriptionText(item);
 
   viewerTags.innerHTML = "";
 
@@ -872,11 +1013,15 @@ function openViewer(index) {
     item.tags
   ).forEach((tag) => {
     const tagElement =
-      document.createElement("span");
+      document.createElement(
+        "span"
+      );
 
-    tagElement.className = "tag";
+    tagElement.className =
+      "tag";
 
-    tagElement.textContent = tag;
+    tagElement.textContent =
+      tag;
 
     viewerTags.appendChild(
       tagElement
@@ -885,9 +1030,13 @@ function openViewer(index) {
 
   closeViewerEditForm();
 
-  viewer.classList.add("open");
+  viewer.classList.add(
+    "open"
+  );
 
-  if (window.innerWidth <= 768) {
+  if (
+    window.innerWidth <= 768
+  ) {
     viewerLeft.style.display =
       "flex";
 
@@ -898,7 +1047,9 @@ function openViewer(index) {
 }
 
 function closeViewer() {
-  viewer.classList.remove("open");
+  viewer.classList.remove(
+    "open"
+  );
 
   closeViewerEditForm();
 }
@@ -912,7 +1063,8 @@ viewer.addEventListener(
   "click",
   (event) => {
     const clickedInside =
-      event.target === viewerImage ||
+      event.target ===
+        viewerImage ||
       event.target.closest(
         ".viewer-right"
       ) ||
@@ -975,6 +1127,7 @@ document.addEventListener(
   (event) => {
     if (event.key === "Escape") {
       closeViewer();
+
       return;
     }
 
@@ -1025,7 +1178,8 @@ function openViewerEditForm() {
   const item =
     displayedWorks[currentIndex];
 
-  if (!adminMode || !item) {
+  if (!adminMode ||
+      !item) {
     return;
   }
 
@@ -1041,7 +1195,7 @@ function openViewerEditForm() {
     item.date || "";
 
   viewerEditDescription.value =
-    item.description || "";
+    getDescriptionText(item);
 
   viewerEditForm.classList.remove(
     "hidden"
@@ -1078,7 +1232,9 @@ viewerSaveWork.addEventListener(
     event.stopPropagation();
 
     const item =
-      displayedWorks[currentIndex];
+      displayedWorks[
+        currentIndex
+      ];
 
     if (
       !requireAdminToken() ||
@@ -1086,6 +1242,14 @@ viewerSaveWork.addEventListener(
     ) {
       return;
     }
+
+    const tags =
+      viewerEditTags.value
+        .split(/[\s、,，]+/)
+        .map((tag) =>
+          tag.trim()
+        )
+        .filter(Boolean);
 
     try {
       const res = await fetch(
@@ -1104,14 +1268,7 @@ viewerSaveWork.addEventListener(
                 .value
                 .trim(),
 
-            tags:
-              viewerEditTags
-                .value
-                .split(/\s+/)
-                .filter(
-                  (tag) =>
-                    tag.trim() !== ""
-                ),
+            tags,
 
             date:
               viewerEditDate.value,
@@ -1146,7 +1303,7 @@ viewerSaveWork.addEventListener(
 );
 
 // ===============================
-// 作品削除
+// 削除
 // ===============================
 viewerDeleteWork.addEventListener(
   "click",
@@ -1154,13 +1311,18 @@ viewerDeleteWork.addEventListener(
     event.stopPropagation();
 
     const item =
-      displayedWorks[currentIndex];
+      displayedWorks[
+        currentIndex
+      ];
 
-    if (!adminMode || !item) {
+    if (!adminMode ||
+        !item) {
       return;
     }
 
-    await deleteWork(item.id);
+    await deleteWork(
+      item.id
+    );
   }
 );
 
@@ -1169,11 +1331,12 @@ async function deleteWork(id) {
     return;
   }
 
-  if (
-    !confirm(
+  const confirmed =
+    confirm(
       "本当に削除しますか？"
-    )
-  ) {
+    );
+
+  if (!confirmed) {
     return;
   }
 
@@ -1207,7 +1370,7 @@ async function deleteWork(id) {
 }
 
 // ===============================
-// スマホ Viewer 操作
+// スマホViewer操作
 // ===============================
 function enableDragSheet() {
   if (!viewerRight) {
@@ -1221,7 +1384,8 @@ function enableDragSheet() {
     "touchstart",
     (event) => {
       const touchY =
-        event.touches[0].clientY;
+        event.touches[0]
+          .clientY;
 
       const rect =
         viewerRight
@@ -1244,9 +1408,12 @@ function enableDragSheet() {
         return;
       }
 
+      const currentY =
+        event.touches[0]
+          .clientY;
+
       const diff =
-        startY -
-        event.touches[0].clientY;
+        startY - currentY;
 
       if (diff > 20) {
         viewerRight.classList.add(
@@ -1292,7 +1459,8 @@ function enableSwipeNavigation() {
     "touchstart",
     (event) => {
       startX =
-        event.touches[0].clientX;
+        event.touches[0]
+          .clientX;
     }
   );
 
@@ -1317,7 +1485,9 @@ function enableSwipeNavigation() {
           (currentIndex + 1) %
           displayedWorks.length;
 
-        openViewer(currentIndex);
+        openViewer(
+          currentIndex
+        );
       }
 
       if (diff > 50) {
@@ -1329,7 +1499,9 @@ function enableSwipeNavigation() {
           ) %
           displayedWorks.length;
 
-        openViewer(currentIndex);
+        openViewer(
+          currentIndex
+        );
       }
     }
   );
@@ -1347,6 +1519,12 @@ async function loadAbout() {
       }
     );
 
+    if (!res.ok) {
+      throw new Error(
+        `ABOUT取得失敗: ${res.status}`
+      );
+    }
+
     const html =
       await res.text();
 
@@ -1356,7 +1534,8 @@ async function loadAbout() {
       );
 
     if (element) {
-      element.innerHTML = html;
+      element.innerHTML =
+        html;
     }
   } catch (error) {
     console.error(error);
@@ -1375,6 +1554,12 @@ async function loadInfo() {
       }
     );
 
+    if (!res.ok) {
+      throw new Error(
+        `制作情報取得失敗: ${res.status}`
+      );
+    }
+
     const html =
       await res.text();
 
@@ -1384,7 +1569,8 @@ async function loadInfo() {
       );
 
     if (element) {
-      element.innerHTML = html;
+      element.innerHTML =
+        html;
     }
   } catch (error) {
     console.error(error);
@@ -1392,7 +1578,7 @@ async function loadInfo() {
 }
 
 // ===============================
-// ABOUT / 制作について編集
+// ABOUT・制作について編集
 // ===============================
 function openTextEditor(type) {
   if (!requireAdminToken()) {
@@ -1416,29 +1602,39 @@ function openTextEditor(type) {
       : "制作についてを編集";
 
   modalTextarea.value =
-    contentElement.innerHTML.trim();
+    contentElement
+      ? contentElement.innerHTML.trim()
+      : "";
 
-  modal.classList.add("open");
+  modal.classList.add(
+    "open"
+  );
 }
 
 editAboutBtn.addEventListener(
   "click",
   () => {
-    openTextEditor("about");
+    openTextEditor(
+      "about"
+    );
   }
 );
 
 editInfoBtn.addEventListener(
   "click",
   () => {
-    openTextEditor("info");
+    openTextEditor(
+      "info"
+    );
   }
 );
 
 modalCancel.addEventListener(
   "click",
   () => {
-    modal.classList.remove("open");
+    modal.classList.remove(
+      "open"
+    );
 
     editingPage = null;
   }
@@ -1483,14 +1679,18 @@ modalSave.addEventListener(
         return;
       }
 
-      modal.classList.remove("open");
+      modal.classList.remove(
+        "open"
+      );
 
       editingPage = null;
 
       await loadAbout();
       await loadInfo();
 
-      alert("保存しました");
+      alert(
+        "保存しました"
+      );
     } catch (error) {
       console.error(error);
 
@@ -1502,17 +1702,21 @@ modalSave.addEventListener(
 );
 
 // ===============================
-// アップロード入力値保存
+// アップロード
 // ===============================
 function saveCurrentUploadStepValue() {
   if (uploadStep === 0) {
     uploadData.title =
-      uploadStepInput.value.trim();
+      uploadStepInput
+        .value
+        .trim();
   }
 
   if (uploadStep === 1) {
     uploadData.tags =
-      uploadStepInput.value.trim();
+      uploadStepInput
+        .value
+        .trim();
   }
 
   if (uploadStep === 2) {
@@ -1528,9 +1732,6 @@ function saveCurrentUploadStepValue() {
   }
 }
 
-// ===============================
-// アップロードモーダル
-// ===============================
 function openUploadStepModal() {
   if (!requireAdminToken()) {
     return;
@@ -1649,9 +1850,6 @@ uploadStepOk.addEventListener(
   }
 );
 
-// ===============================
-// ドラッグ＆ドロップ
-// ===============================
 uploadDropzone.addEventListener(
   "dragover",
   (event) => {
@@ -1701,9 +1899,6 @@ uploadDropzone.addEventListener(
   }
 );
 
-// ===============================
-// アップロード実行
-// ===============================
 async function uploadAllFiles() {
   if (!requireAdminToken()) {
     return;
@@ -1733,7 +1928,6 @@ async function uploadAllFiles() {
 
     formData.append(
       "meta",
-
       JSON.stringify({
         title:
           uploadData.title,
@@ -1758,7 +1952,8 @@ async function uploadAllFiles() {
           headers:
             authHeaders(),
 
-          body: formData
+          body:
+            formData
         }
       );
 
@@ -1772,7 +1967,9 @@ async function uploadAllFiles() {
     } catch (error) {
       console.error(error);
 
-      alert("通信エラー");
+      alert(
+        "通信エラー"
+      );
 
       return;
     }
@@ -1807,14 +2004,18 @@ window.addEventListener(
       );
 
     setTimeout(() => {
-      overlay.classList.add(
-        "hidden"
-      );
+      if (overlay) {
+        overlay.classList.add(
+          "hidden"
+        );
+      }
     }, 500);
 
     const view =
-      location.hash.replace("#", "") ||
-      "gallery";
+      location.hash.replace(
+        "#",
+        ""
+      ) || "gallery";
 
     showView(view);
 
@@ -1830,7 +2031,6 @@ window.addEventListener(
       window.innerWidth <= 768
     ) {
       enableDragSheet();
-
       enableSwipeNavigation();
     }
 
