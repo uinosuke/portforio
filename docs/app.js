@@ -2,7 +2,7 @@
 // 設定
 // ===============================
 const API_BASE = "https://delicate-sunset-ea8a.d08084222816.workers.dev";
-const APP_VERSION = "2026-07-17-mobile-sheet-drag-v2";
+const APP_VERSION = "2026-07-17-mobile-sheet-drag-v3";
 console.info(`[portfolio] ${APP_VERSION}`);
 
 // ===============================
@@ -1166,7 +1166,10 @@ function getViewerSheetLimits() {
 
   const maxHeight = Math.max(
     minHeight,
-    viewportHeight - 82,
+    Math.min(
+      viewportHeight * 0.46,
+      minHeight + 120,
+    ),
   );
 
   return {
