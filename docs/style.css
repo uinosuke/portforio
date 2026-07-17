@@ -2593,3 +2593,291 @@ body.admin-mode .work-title {
     width: 100%;
   }
 }
+
+/* =========================================================
+ 2026-07-17 ワインレッド配色・ホバー調整
+========================================================= */
+
+:root {
+  --portfolio-bg: #f7f6f4;
+  --portfolio-panel: #ffffff;
+  --portfolio-text: #222222;
+  --portfolio-muted: #6f6968;
+  --portfolio-line: #e6e2dd;
+  --portfolio-accent: #7a1f2c;
+  --portfolio-accent-hover: #941f32;
+  --portfolio-accent-light: #a44a58;
+  --portfolio-accent-soft: #f2e5e8;
+  --portfolio-dark: #222222;
+  --portfolio-shadow: 0 12px 32px rgba(70, 28, 36, 0.11);
+}
+
+html,
+body {
+  background: var(--portfolio-bg);
+  color: var(--portfolio-text);
+}
+
+body {
+  background:
+    radial-gradient(circle at 90% 0%, rgba(122, 31, 44, 0.07), transparent 29rem),
+    var(--portfolio-bg);
+}
+
+.header,
+.sidebar,
+.mobile-menu-panel,
+.viewer-right {
+  background: rgba(255, 255, 255, 0.96);
+  border-color: var(--portfolio-line);
+}
+
+.pc-search,
+.mobile-search-box {
+  background: #f3f0ed;
+  border-color: #e4ded9;
+}
+
+.search-icon,
+#search-clear {
+  color: #807775;
+}
+
+#search-clear:hover {
+  color: var(--portfolio-accent);
+}
+
+.mobile-menu-btn span {
+  background: var(--portfolio-text);
+}
+
+/* 左メニュー */
+.nav-item {
+  color: #625c5a;
+  border-left-color: transparent;
+}
+
+.nav-item::before {
+  background: var(--portfolio-accent);
+}
+
+.nav-item:hover,
+.nav-item.active {
+  color: #ffffff;
+  border-left-color: var(--portfolio-accent-hover);
+}
+
+.nav-item:hover .nav-label i,
+.nav-item.active .nav-label i {
+  opacity: 1;
+}
+
+.nav-item:hover .nav-count {
+  background: rgba(255, 255, 255, 0.17);
+  color: #ffffff;
+}
+
+.nav-new {
+  background: var(--portfolio-accent-soft);
+  color: var(--portfolio-accent);
+}
+
+.consult-btn,
+#mobile-search-btn,
+.modal-btn.save,
+.text-edit-btn,
+#viewer-save-work {
+  background: var(--portfolio-accent);
+  color: #ffffff;
+  transition:
+    background 0.18s ease,
+    transform 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.consult-btn:hover,
+#mobile-search-btn:hover,
+.modal-btn.save:hover,
+.text-edit-btn:hover,
+#viewer-save-work:hover {
+  background: var(--portfolio-accent-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(122, 31, 44, 0.22);
+}
+
+/* 見出し・ラベル */
+.view-eyebrow,
+.home-link-card > span,
+.service-card > span {
+  color: var(--portfolio-accent);
+}
+
+/* フィルタ */
+.filter-chip {
+  background: rgba(255, 255, 255, 0.82);
+  border-color: var(--portfolio-line);
+  color: #685f5d;
+}
+
+.filter-chip:hover {
+  border-color: var(--portfolio-accent-light);
+  background: var(--portfolio-accent-soft);
+  color: var(--portfolio-accent);
+}
+
+.filter-chip.active {
+  border-color: var(--portfolio-accent);
+  background: var(--portfolio-accent);
+  color: #ffffff;
+}
+
+/* HOME */
+.home-hero {
+  border-color: var(--portfolio-line);
+  background:
+    radial-gradient(circle at 88% 18%, rgba(122, 31, 44, 0.13), transparent 25rem),
+    #ffffff;
+}
+
+.home-primary-btn {
+  border-color: var(--portfolio-accent);
+  background: var(--portfolio-accent);
+  color: #ffffff;
+}
+
+.home-primary-btn:hover {
+  border-color: var(--portfolio-accent-hover);
+  background: var(--portfolio-accent-hover);
+  color: #ffffff;
+  box-shadow: 0 10px 24px rgba(122, 31, 44, 0.24);
+}
+
+.home-secondary-btn {
+  border-color: var(--portfolio-line);
+  background: #ffffff;
+  color: var(--portfolio-text);
+}
+
+.home-secondary-btn:hover {
+  border-color: var(--portfolio-accent-light);
+  background: var(--portfolio-accent-soft);
+  color: var(--portfolio-accent);
+  box-shadow: 0 9px 22px rgba(122, 31, 44, 0.12);
+}
+
+.home-section-header > a {
+  color: #625b59;
+  text-decoration: none;
+  transition: color 0.18s ease;
+}
+
+.home-section-header > a:hover {
+  color: var(--portfolio-accent);
+}
+
+.home-collage::before {
+  background: radial-gradient(
+    circle at center,
+    rgba(122, 31, 44, 0.14),
+    rgba(164, 74, 88, 0.04) 62%,
+    transparent 74%
+  );
+}
+
+/* カード */
+.work-card,
+.service-card,
+.home-link-card,
+.text-panel {
+  border-color: var(--portfolio-line);
+}
+
+.work-card:hover {
+  border-color: rgba(164, 74, 88, 0.42);
+  box-shadow:
+    0 12px 28px rgba(70, 28, 36, 0.12),
+    0 2px 6px rgba(70, 28, 36, 0.05);
+}
+
+.service-card:hover,
+.home-link-card:hover {
+  border-color: rgba(164, 74, 88, 0.46);
+  box-shadow: var(--portfolio-shadow);
+}
+
+.service-card:hover > i,
+.home-link-card:hover > i {
+  color: var(--portfolio-accent-light);
+}
+
+.work-tag {
+  background: #f1edeb;
+  color: #756b68;
+}
+
+#viewer-tags .tag {
+  background: var(--portfolio-accent-soft);
+  color: var(--portfolio-accent);
+}
+
+/* 最近の制作タブ上部 */
+.recent-summary {
+  background:
+    radial-gradient(circle at 88% 20%, rgba(164, 74, 88, 0.52), transparent 24rem),
+    linear-gradient(135deg, #43151d 0%, #711e2c 100%);
+}
+
+.recent-summary-label,
+.recent-summary-count span {
+  color: #e0c9cf;
+}
+
+.recent-summary p {
+  color: #eadde0;
+}
+
+/* ビューア */
+.viewer-arrow:hover {
+  background: rgba(122, 31, 44, 0.84);
+}
+
+.viewer-close-btn:hover {
+  background: rgba(122, 31, 44, 0.88);
+}
+
+/* 入力欄 */
+.pc-search:focus-within,
+.mobile-search-box:focus-within,
+#modal-textarea:focus,
+.viewer-edit-form input:focus,
+.viewer-edit-form textarea:focus {
+  border-color: var(--portfolio-accent-light);
+  box-shadow: 0 0 0 3px rgba(164, 74, 88, 0.12);
+  outline: none;
+}
+
+/* 管理画面の補助ボタン */
+.modal-btn.cancel:hover,
+#viewer-cancel-edit:hover,
+.edit-button:hover {
+  background: #e9e2df;
+  color: var(--portfolio-accent);
+}
+
+.delete-button:hover {
+  background: #f5e2e4;
+  color: #a52a3b;
+}
+
+/* ドロップゾーン */
+.upload-dropzone.dragover {
+  border-color: var(--portfolio-accent);
+  background: var(--portfolio-accent-soft);
+  color: var(--portfolio-accent);
+}
+
+/* 読み込み表示 */
+.spinner {
+  border-color: #e3dcd8;
+  border-top-color: var(--portfolio-accent);
+}
