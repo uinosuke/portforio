@@ -2,7 +2,7 @@
 // 設定
 // ===============================
 const API_BASE = "https://delicate-sunset-ea8a.d08084222816.workers.dev";
-const APP_VERSION = "2026-07-17-fixed-collage-v2";
+const APP_VERSION = "2026-07-17-viewer-fix-v1";
 console.info(`[portfolio] ${APP_VERSION}`);
 
 // ===============================
@@ -49,6 +49,7 @@ const dragHandle = document.querySelector(".viewer-drag-handle");
 const uploadStepBack = document.getElementById("upload-step-back");
 const viewerEditWork = document.getElementById("viewer-edit-work");
 const viewerDeleteWork = document.getElementById("viewer-delete-work");
+const viewerDisplayFields = document.getElementById("viewer-display-fields");
 const viewerEditForm = document.getElementById("viewer-edit-form");
 const viewerEditTitle = document.getElementById("viewer-edit-title");
 const viewerEditTags = document.getElementById("viewer-edit-tags");
@@ -1277,11 +1278,21 @@ function openViewerEditForm() {
   viewerEditDescription.value =
     getDescriptionText(item);
 
+  viewerDisplayFields?.classList.add("hidden");
   viewerEditForm.classList.remove("hidden");
+
+  if (window.innerWidth <= 768) {
+    viewerRight.classList.add("active");
+  }
+
+  requestAnimationFrame(() => {
+    viewerEditTitle.focus();
+  });
 }
 
 function closeViewerEditForm() {
   viewerEditForm.classList.add("hidden");
+  viewerDisplayFields?.classList.remove("hidden");
 }
 
 viewerEditWork.addEventListener(
