@@ -1994,3 +1994,70 @@ body.admin-mode .work-title {
     margin-left: 0 !important;
   }
 }
+
+
+/* =========================================================
+ 2026-07-17 HOME微調整 v3
+========================================================= */
+
+/* HOMEのコラージュ画像は切り抜かず、画像全体を表示 */
+.home-visual-card img {
+  object-fit: contain;
+  object-position: center;
+  background: #fff;
+}
+
+/* 回転したカードがHOME枠の端で欠けないよう、少し内側へ配置 */
+.home-visual-card-a {
+  width: 54%;
+  height: 68%;
+  top: 5%;
+  right: 4%;
+}
+
+.home-visual-card-b {
+  width: 48%;
+  height: 60%;
+  left: 3%;
+  bottom: 4%;
+}
+
+.home-visual-card-c {
+  width: 39%;
+  height: 46%;
+  right: 10%;
+  bottom: 4%;
+}
+
+@media (max-width: 768px) {
+  .home-visual {
+    height: 245px;
+  }
+
+  .home-visual-card-a {
+    width: 55%;
+    height: 66%;
+    top: 5%;
+    right: 4%;
+  }
+
+  .home-visual-card-b {
+    width: 47%;
+    height: 58%;
+    left: 3%;
+    bottom: 5%;
+  }
+
+  .home-visual-card-c {
+    width: 38%;
+    height: 44%;
+    right: 10%;
+    bottom: 5%;
+  }
+}
+
+@media (max-width: 430px) {
+  .home-visual {
+    height: 225px;
+  }
+}
