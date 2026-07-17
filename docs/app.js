@@ -789,12 +789,21 @@ function filterWorks(keyword) {
     .map((word) => word.trim())
     .filter(Boolean);
 
-  const category =
+  // カテゴリごとに検索対象となる文字列を設定
+  const categoryKeywords = {
+    高齢者: ["高齢者", "GH", "YH"],
+  };
+
+  const categories =
     activeCategory === "all"
-      ? ""
-      : normalizeSearchText(
-          activeCategory,
-        );
+      ? []
+      : categoryKeywords[activeCategory] ||
+        [activeCategory];
+
+  const normalizedCategories =
+    categories.map((category) =>
+      normalizeSearchText(category),
+    );
 
   const sourceWorks = getSourceWorks();
 
@@ -810,8 +819,11 @@ function filterWorks(keyword) {
         );
 
       const matchesCategory =
-        !category ||
-        searchTarget.includes(category);
+        normalizedCategories.length === 0 ||
+        normalizedCategories.some(
+          (category) =>
+            searchTarget.includes(category),
+        );
 
       return (
         matchesKeyword &&
