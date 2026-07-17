@@ -2964,27 +2964,27 @@ textarea {
 }
 
 /* =========================================================
- 2026-07-17 ABOUTプロフィールレイアウト
+ 2026-07-17 ABOUTプロフィールレイアウト v2
 ========================================================= */
 
 #view-about {
-  max-width: 1180px;
+  max-width: 1080px;
   margin: 0 auto;
 }
 
 .about-profile-card {
   position: relative;
   display: grid;
-  grid-template-columns: 240px minmax(0, 1fr);
-  gap: clamp(30px, 5vw, 64px);
+  grid-template-columns: 168px minmax(0, 1fr);
+  gap: clamp(28px, 4vw, 46px);
   align-items: center;
-  padding: clamp(28px, 4vw, 50px);
+  padding: clamp(28px, 3.4vw, 38px);
   border: 1px solid var(--portfolio-line);
-  border-radius: 24px;
+  border-radius: 22px;
   background:
-    radial-gradient(circle at 90% 10%, rgba(122, 31, 44, 0.09), transparent 25rem),
+    radial-gradient(circle at 92% 8%, rgba(122, 31, 44, 0.085), transparent 23rem),
     var(--portfolio-panel);
-  box-shadow: var(--portfolio-shadow);
+  box-shadow: 0 14px 32px rgba(70, 28, 36, 0.09);
   overflow: hidden;
 }
 
@@ -2993,8 +2993,8 @@ textarea {
   position: absolute;
   top: 0;
   right: 0;
-  width: 180px;
-  height: 4px;
+  width: 150px;
+  height: 3px;
   background: linear-gradient(
     90deg,
     transparent,
@@ -3004,101 +3004,97 @@ textarea {
 }
 
 .about-profile-photo {
-  position: relative;
-  width: 240px;
+  width: 168px;
   aspect-ratio: 1;
   border-radius: 50%;
-  display: grid;
-  place-items: center;
-  isolation: isolate;
   overflow: hidden;
-  border: 8px solid #ffffff;
+  border: 6px solid #ffffff;
   background: var(--portfolio-accent-soft);
   box-shadow:
-    0 18px 34px rgba(69, 25, 34, 0.16),
-    0 0 0 1px rgba(122, 31, 44, 0.08);
+    0 14px 28px rgba(69, 25, 34, 0.14),
+    0 0 0 1px rgba(122, 31, 44, 0.09);
 }
 
-.about-profile-photo svg {
+.about-profile-photo img {
   display: block;
   width: 100%;
   height: 100%;
-}
-
-.about-profile-photo > span {
-  position: absolute;
-  left: 50%;
-  bottom: 18px;
-  transform: translateX(-50%);
-  z-index: 2;
-  padding: 6px 11px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.9);
-  color: var(--portfolio-accent);
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  white-space: nowrap;
-  backdrop-filter: blur(8px);
+  object-fit: cover;
+  object-position: center;
 }
 
 .about-profile-copy {
   min-width: 0;
+  max-width: 690px;
 }
 
 .about-profile-copy h1 {
-  margin: 8px 0 10px;
-  font-size: clamp(38px, 4.5vw, 64px);
+  margin: 6px 0 13px;
+  font-size: clamp(34px, 3.6vw, 46px);
   line-height: 1;
-  letter-spacing: -0.035em;
+  letter-spacing: -0.025em;
 }
 
 .about-profile-copy > p {
+  max-width: 650px;
   margin: 0;
-  color: var(--portfolio-muted);
+  color: #57504e;
   font-size: 14px;
-  line-height: 1.8;
+  line-height: 1.95;
 }
 
-.about-profile-keywords {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 9px;
-  margin-top: 25px;
-}
-
-.about-profile-keywords span {
+.about-consult-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 34px;
-  padding: 7px 16px;
-  border: 1px solid rgba(122, 31, 44, 0.38);
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.76);
-  color: var(--portfolio-accent);
-  font-size: 11px;
+  gap: 9px;
+  min-height: 42px;
+  margin-top: 21px;
+  padding: 10px 20px;
+  border: 1px solid var(--portfolio-accent);
+  border-radius: 8px;
+  background: var(--portfolio-accent);
+  color: #ffffff;
+  font-size: 13px;
   font-weight: 600;
-  letter-spacing: 0.04em;
+  line-height: 1;
+  text-decoration: none;
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease,
+    transform 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.about-consult-btn:hover {
+  border-color: var(--portfolio-accent-hover);
+  background: var(--portfolio-accent-hover);
+  color: #ffffff;
+  transform: translateY(-1px);
+  box-shadow: 0 9px 20px rgba(122, 31, 44, 0.22);
+}
+
+.about-consult-btn i {
+  font-size: 11px;
 }
 
 .about-content-panel {
   position: relative;
-  margin-top: 22px;
-  padding: clamp(30px, 4.5vw, 58px);
-  border-radius: 24px;
-  box-shadow: var(--portfolio-shadow);
+  margin-top: 20px;
+  padding: clamp(30px, 4.2vw, 50px);
+  border-radius: 22px;
+  box-shadow: 0 14px 32px rgba(70, 28, 36, 0.08);
 }
 
 #about-content {
-  max-width: 880px;
+  max-width: 850px;
 }
 
 #about-content h1,
 #about-content h2,
 #about-content h3 {
   position: relative;
-  margin-top: 2.1em;
+  margin-top: 2.05em;
   margin-bottom: 0.8em;
   color: var(--portfolio-text);
   line-height: 1.45;
@@ -3114,9 +3110,9 @@ textarea {
 #about-content h3::after {
   content: "";
   display: block;
-  width: 34px;
+  width: 32px;
   height: 2px;
-  margin-top: 10px;
+  margin-top: 9px;
   background: var(--portfolio-accent);
 }
 
@@ -3142,58 +3138,59 @@ textarea {
   box-shadow: 0 8px 20px rgba(122, 31, 44, 0.2);
 }
 
-@media (max-width: 900px) {
+@media (max-width: 760px) {
+  #view-about {
+    max-width: none;
+  }
+
   .about-profile-card {
-    grid-template-columns: 190px minmax(0, 1fr);
-    gap: 28px;
+    grid-template-columns: 132px minmax(0, 1fr);
+    gap: 24px;
+    padding: 26px 24px;
   }
 
   .about-profile-photo {
-    width: 190px;
+    width: 132px;
+  }
+
+  .about-profile-copy h1 {
+    font-size: 36px;
   }
 }
 
-@media (max-width: 680px) {
+@media (max-width: 560px) {
   .about-profile-card {
     grid-template-columns: 1fr;
     justify-items: center;
     text-align: center;
-    padding: 28px 22px;
+    padding: 27px 21px;
   }
 
   .about-profile-photo {
-    width: min(210px, 68vw);
+    width: min(150px, 48vw);
   }
 
-  .about-profile-keywords {
-    justify-content: center;
+  .about-profile-copy > p {
+    text-align: left;
+  }
+
+  .about-consult-btn {
+    width: 100%;
+    max-width: 270px;
   }
 
   .about-content-panel {
     padding: 28px 22px;
-  }
-
-  #about-content {
-    max-width: none;
   }
 }
 
 @media (max-width: 430px) {
   .about-profile-card,
   .about-content-panel {
-    border-radius: 18px;
+    border-radius: 17px;
   }
 
   .about-profile-copy h1 {
-    font-size: 42px;
-  }
-
-  .about-profile-keywords {
-    gap: 7px;
-  }
-
-  .about-profile-keywords span {
-    padding: 6px 12px;
-    font-size: 10px;
+    font-size: 34px;
   }
 }
