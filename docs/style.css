@@ -3450,3 +3450,32 @@ html.viewer-sheet-dragging body {
     max-width: none;
   }
 }
+
+/* =========================================================
+ 2026-07-17 スマホViewerは少しだけ伸ばして以降スクロール v3
+========================================================= */
+
+@media (max-width: 768px) {
+  .viewer-right,
+  .viewer-right.active {
+    max-height: 46dvh !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+  }
+
+  .viewer-right.is-dragging {
+    overflow-y: hidden !important;
+  }
+}
+
+/* =========================================================
+ 2026-07-17 スマホViewerハンドル背景
+========================================================= */
+
+@media (max-width: 768px) {
+  .viewer-drag-handle {
+    background: var(--portfolio-panel, #ffffff) !important;
+    border-radius: 18px 18px 0 0;
+    box-shadow: 0 8px 12px rgba(255, 255, 255, 0.94);
+  }
+}
