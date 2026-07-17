@@ -3320,3 +3320,74 @@ body.admin-mode .viewer-edit-form:not(.hidden) {
     box-sizing: border-box;
   }
 }
+
+/* =========================================================
+ 2026-07-17 スマホViewer連続ドラッグ・ロゴ4クリック対応
+========================================================= */
+
+#site-title,
+#site-title:hover,
+#site-title:focus,
+#site-title:active {
+  cursor: default !important;
+  opacity: 1 !important;
+  filter: none !important;
+  transform: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+  transition: none !important;
+  text-decoration: none !important;
+  user-select: none;
+  -webkit-user-drag: none;
+  touch-action: manipulation;
+}
+
+@media (max-width: 768px) {
+  .viewer-right,
+  .viewer-right.active {
+    height: var(
+      --viewer-sheet-height,
+      max(185px, 30dvh)
+    ) !important;
+    max-height: calc(100dvh - 82px);
+    transition:
+      height 0.24s cubic-bezier(.22, .8, .28, 1);
+    overscroll-behavior: contain;
+  }
+
+  .viewer-right.is-dragging {
+    transition: none !important;
+    user-select: none;
+  }
+
+  .viewer-drag-handle {
+    position: sticky;
+    top: -10px;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 92px;
+    height: 34px;
+    margin: -10px auto 4px;
+    background: transparent;
+    border-radius: 999px;
+    cursor: ns-resize;
+    touch-action: none;
+  }
+
+  .viewer-drag-handle::before {
+    content: "";
+    display: block;
+    width: 48px;
+    height: 5px;
+    border-radius: 999px;
+    background: #c8c6c4;
+    box-shadow: 0 1px 0 rgba(255,255,255,.85);
+  }
+
+  .viewer-right.is-dragging
+  .viewer-drag-handle::before {
+    background: var(--portfolio-accent-light);
+  }
+}
