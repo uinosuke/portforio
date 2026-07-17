@@ -2,7 +2,7 @@
 // 設定
 // ===============================
 const API_BASE = "https://delicate-sunset-ea8a.d08084222816.workers.dev";
-const APP_VERSION = "2026-07-17-mobile-sheet-logo-v2";
+const APP_VERSION = "2026-07-17-mobile-sheet-drag-v2";
 console.info(`[portfolio] ${APP_VERSION}`);
 
 // ===============================
@@ -1527,16 +1527,23 @@ function enableDragSheet() {
   viewerRight.dataset.dragReady = "true";
 
   let dragging = false;
+  let activePointerId = null;
   let startY = 0;
-  let startHeight = 0;
   let lastY = 0;
+  let startHeight = 0;
 
   const beginDrag = (event) => {
     if (window.innerWidth > 768) {
       return;
     }
 
+    if (event.pointerType === "mouse" &&
+        event.button !== 0) {
+      return;
+    }
+
     dragging = true;
+    activePointerId = event.pointerId;
     startY = event.clientY;
     lastY = event.clientY;
     startHeight =
@@ -1546,15 +1553,16 @@ function enableDragSheet() {
       "is-dragging",
     );
 
-    dragHandle.setPointerCapture?.(
-      event.pointerId,
+    document.documentElement.classList.add(
+      "viewer-sheet-dragging",
     );
 
     event.preventDefault();
   };
 
   const moveDrag = (event) => {
-    if (!dragging) {
+    if (!dragging ||
+        event.pointerId !== activePointerId) {
       return;
     }
 
@@ -1572,24 +1580,26 @@ function enableDragSheet() {
   };
 
   const endDrag = (event) => {
-    if (!dragging) {
+    if (!dragging ||
+        event.pointerId !== activePointerId) {
       return;
     }
 
     dragging = false;
+    activePointerId = null;
 
     viewerRight.classList.remove(
       "is-dragging",
     );
 
-    dragHandle.releasePointerCapture?.(
-      event.pointerId,
+    document.documentElement.classList.remove(
+      "viewer-sheet-dragging",
     );
 
     const movedDistance =
       Math.abs(lastY - startY);
 
-    // 軽くタップした場合だけ、最小・最大を切り替える
+    // ハンドルを軽く押しただけなら最小・最大を切り替える
     if (movedDistance < 8) {
       const currentHeight =
         viewerRight.getBoundingClientRect().height;
@@ -1608,25 +1618,35 @@ function enableDragSheet() {
           ? maxHeight
           : minHeight,
       );
+
+      return;
     }
+
+    // 指を離した位置をそのまま維持する
+    setViewerSheetHeight(
+      viewerRight.getBoundingClientRect().height,
+    );
   };
 
   dragHandle.addEventListener(
     "pointerdown",
     beginDrag,
+    { passive: false },
   );
 
-  dragHandle.addEventListener(
+  // 指が細いハンドルの外へ出ても追跡を続ける
+  window.addEventListener(
     "pointermove",
     moveDrag,
+    { passive: false },
   );
 
-  dragHandle.addEventListener(
+  window.addEventListener(
     "pointerup",
     endDrag,
   );
 
-  dragHandle.addEventListener(
+  window.addEventListener(
     "pointercancel",
     endDrag,
   );
@@ -1641,6 +1661,11 @@ function enableDragSheet() {
         "active",
         "is-dragging",
       );
+
+      document.documentElement.classList.remove(
+        "viewer-sheet-dragging",
+      );
+
       return;
     }
 
