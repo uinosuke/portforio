@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>MyPortfolio</title>
-<link rel="stylesheet" href="style.css?v=20260717-fixed-collage-v1" />
+<link rel="stylesheet" href="style.css?v=20260717-about-profile-v1" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 
@@ -55,12 +55,7 @@
     <span class="nav-label"><i class="fa-regular fa-clock"></i>最近の制作</span>
     <span class="nav-meta"><span class="nav-new">NEW</span><span id="mobile-recent-count" class="nav-count">—</span></span>
   </a>
-
-  <a class="nav-item" href="#services" data-view="services">
-    <span class="nav-label"><i class="fa-solid fa-plus"></i>依頼できること</span>
-  </a>
-
-  <a class="nav-item" href="#about" data-view="about">
+<a class="nav-item" href="#about" data-view="about">
     <span class="nav-label"><i class="fa-regular fa-circle-user"></i>ABOUT</span>
   </a>
 
@@ -105,12 +100,7 @@
         <span class="nav-label"><i class="fa-regular fa-clock"></i>最近の制作</span>
         <span class="nav-meta"><span class="nav-new">NEW</span><span id="recent-count" class="nav-count">—</span></span>
       </a>
-
-      <a class="nav-item" href="#services" data-view="services">
-        <span class="nav-label"><i class="fa-solid fa-plus"></i>依頼できること</span>
-      </a>
-
-      <a class="nav-item" href="#about" data-view="about">
+<a class="nav-item" href="#about" data-view="about">
         <span class="nav-label"><i class="fa-regular fa-circle-user"></i>ABOUT</span>
       </a>
 
@@ -141,11 +131,7 @@
       <div class="home-hero">
         <div class="home-hero-copy">
           <span class="view-eyebrow">DESIGN &amp; WORK SUPPORT</span>
-          <h1>
-            「つくりたい」を、<br>
-            見えるかたちに。
-          </h1>
-          
+          <h1>「つくりたい」を、<br>見えるかたちに。</h1>
           <p>
             ポスター、サムネイル、掲示物、資料、図解、地図、表など、
             保育・学育・高齢者・本部の各現場で作ってきたものをまとめています。
@@ -153,7 +139,7 @@
 
           <div class="home-actions">
             <a class="home-primary-btn" href="#gallery">デザイン一覧を見る</a>
-            <a class="home-secondary-btn" href="#services">依頼できること</a>
+            <a class="home-secondary-btn" href="#about">ABOUTを見る</a>
           </div>
 
           <div class="home-stats">
@@ -201,11 +187,11 @@
           <p>登録しているすべての制作物を、検索やカテゴリから探せます。</p>
         </a>
 
-        <a class="home-link-card" href="#services">
-          <span>02 / SERVICES</span>
-          <i class="fa-solid fa-plus"></i>
-          <h2>依頼できること</h2>
-          <p>ポスター、現場向け制作、資料整理、業務ツールなどを紹介します。</p>
+        <a class="home-link-card" href="#about">
+          <span>02 / ABOUT</span>
+          <i class="fa-regular fa-circle-user"></i>
+          <h2>このサイトについて</h2>
+          <p>制作を担当している人や、このサイトを立ち上げた背景を紹介します。</p>
         </a>
 
         <a class="home-link-card" href="https://works.do/R/ti/p/300885@himawari-fukushikai" target="_blank">
@@ -281,72 +267,48 @@
       <div id="recent-works-list" class="works-grid"></div>
     </section>
 
-    <!-- 依頼できること -->
-    <section id="view-services" class="view hidden">
-      <div class="view-header">
-        <div>
-          <span class="view-eyebrow">SERVICES</span>
-          <h1>依頼できること</h1>
-          <p>どんな制作や相談ができるのかを、作品とは別にまとめています。</p>
-        </div>
-      </div>
-
-      <div class="service-grid">
-        <article class="service-card">
-          <span>01 / POSTER</span>
-          <i class="fa-regular fa-images"></i>
-          <h2>ポスター・チラシ</h2>
-          <p>園行事、地域イベント、施設案内、お知らせなど。情報を整理して、伝わる順番に組み立てます。</p>
-        </article>
-
-        <article class="service-card">
-          <span>02 / SNS</span>
-          <i class="fa-regular fa-window-maximize"></i>
-          <h2>SNS・サムネイル</h2>
-          <p>LINE WORKS、SNS投稿、動画サムネイルなど、掲載先に合わせて見せ方を調整します。</p>
-        </article>
-
-        <article class="service-card">
-          <span>03 / FIELD SUPPORT</span>
-          <i class="fa-solid fa-shapes"></i>
-          <h2>保育・学育の現場制作</h2>
-          <p>園だより、行事案内、掲示物、カード、教材、工作の見本や型紙など、現場で時間のかかる制作物を相談しながら整えます。</p>
-        </article>
-
-        <article class="service-card">
-          <span>04 / DOCUMENT</span>
-          <i class="fa-regular fa-file-lines"></i>
-          <h2>資料・シート整理</h2>
-          <p>ヒアリングシート、管理表、説明資料など、現場で迷わず使える形へ整理します。</p>
-        </article>
-
-        <article class="service-card">
-          <span>05 / TOOL</span>
-          <i class="fa-solid fa-code"></i>
-          <h2>小さな業務ツール</h2>
-          <p>検索ページ、入力支援、管理画面など、日々の小さな面倒を減らす仕組みを作ります。</p>
-        </article>
-
-        <article class="service-card">
-          <span>06 / CONSULT</span>
-          <i class="fa-regular fa-comments"></i>
-          <h2>相談から一緒に整理</h2>
-          <p>何を作ればいいか決まっていない段階でも、目的や対象を聞きながら必要な形を考えます。</p>
-        </article>
-      </div>
-    </section>
-
     <!-- ABOUT -->
     <section id="view-about" class="view hidden">
-      <div class="view-header">
-        <div>
+      <div class="about-profile-card">
+        <div
+          class="about-profile-photo"
+          role="img"
+          aria-label="プロフィール画像の仮置き"
+        >
+          <svg viewBox="0 0 240 240" aria-hidden="true">
+            <circle cx="120" cy="120" r="118" fill="#f1e7e9"></circle>
+            <circle cx="120" cy="93" r="42" fill="#c9aeb4"></circle>
+            <path
+              d="M48 211c8-46 35-72 72-72s64 26 72 72"
+              fill="#a44a58"
+            ></path>
+            <circle
+              cx="120"
+              cy="120"
+              r="115"
+              fill="none"
+              stroke="#ffffff"
+              stroke-width="6"
+            ></circle>
+          </svg>
+          <span>PROFILE PHOTO</span>
+        </div>
+
+        <div class="about-profile-copy">
           <span class="view-eyebrow">PROFILE</span>
           <h1>ABOUT</h1>
           <p>このサイトと制作活動について。</p>
+
+          <div class="about-profile-keywords" aria-label="制作分野">
+            <span>ポスター</span>
+            <span>資料</span>
+            <span>図解</span>
+            <span>業務支援</span>
+          </div>
         </div>
       </div>
 
-      <div class="text-panel">
+      <div class="text-panel about-content-panel">
         <div id="about-content"></div>
         <button id="edit-about" class="admin-only text-edit-btn">編集</button>
       </div>
@@ -464,6 +426,6 @@
   </div>
 </div>
 
-<script src="app.js?v=20260717-home-design-v6"></script>
+<script src="app.js?v=20260717-fixed-collage-v2"></script>
 </body>
 </html>
