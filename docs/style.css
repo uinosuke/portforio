@@ -3391,3 +3391,62 @@ body.admin-mode .viewer-edit-form:not(.hidden) {
     background: var(--portfolio-accent-light);
   }
 }
+
+/* =========================================================
+ 2026-07-17 制作について中央揃え・スマホViewerドラッグ v2
+========================================================= */
+
+/* ABOUTと同じ基準幅・中央配置にそろえる */
+#view-info {
+  width: min(100%, 1080px);
+  max-width: 1080px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+#view-info .view-header,
+#view-info .text-panel {
+  width: 100%;
+  max-width: none;
+  box-sizing: border-box;
+}
+
+/* ドラッグ中はページ本体をスクロールさせない */
+html.viewer-sheet-dragging,
+html.viewer-sheet-dragging body {
+  overflow: hidden !important;
+  overscroll-behavior: none;
+}
+
+@media (max-width: 768px) {
+  /* 見える線は細いまま、操作範囲はパネル上端いっぱいに広げる */
+  .viewer-drag-handle {
+    position: sticky;
+    top: -16px;
+    z-index: 30;
+    width: calc(100% + 36px);
+    height: 48px;
+    margin: -16px -18px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    cursor: ns-resize;
+    touch-action: none !important;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  .viewer-drag-handle::before {
+    width: 50px;
+    height: 5px;
+  }
+
+  .viewer-right.is-dragging {
+    overflow-y: hidden !important;
+  }
+
+  #view-info {
+    max-width: none;
+  }
+}
