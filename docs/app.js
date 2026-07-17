@@ -2,7 +2,7 @@
 // 設定
 // ===============================
 const API_BASE = "https://delicate-sunset-ea8a.d08084222816.workers.dev";
-const APP_VERSION = "2026-07-17-home-design-v6";
+const APP_VERSION = "2026-07-17-fixed-collage-v2";
 console.info(`[portfolio] ${APP_VERSION}`);
 
 // ===============================
@@ -14,11 +14,6 @@ const homeRecentList = document.getElementById("home-recent-list");
 const homeDesignCount = document.getElementById("home-design-count");
 const homeRecentCount = document.getElementById("home-recent-count");
 const homeRecentRange = document.getElementById("home-recent-range");
-const homeFeatureImages = [
-  document.getElementById("home-feature-image-1"),
-  document.getElementById("home-feature-image-2"),
-  document.getElementById("home-feature-image-3"),
-];
 const galleryCount = document.getElementById("gallery-count");
 const recentCount = document.getElementById("recent-count");
 const mobileGalleryCount = document.getElementById("mobile-gallery-count");
@@ -626,48 +621,6 @@ function renderHome() {
     });
   }
 
-  const visualWorks = [
-    ...recentWorks,
-    ...works.filter(
-      (item) =>
-        !recentWorks.some(
-          (recentItem) =>
-            recentItem.id === item.id,
-        ),
-    ),
-  ].slice(0, 3);
-
-  homeFeatureImages.forEach(
-    (image, index) => {
-      if (!image) {
-        return;
-      }
-
-      const item = visualWorks[index];
-      const card = image.closest(
-        ".home-visual-card",
-      );
-
-      if (!item?.image) {
-        image.removeAttribute("src");
-        image.alt = "";
-
-        if (card) {
-          card.classList.add("is-empty");
-        }
-
-        return;
-      }
-
-      image.src = item.image;
-      image.alt = item.title ||
-        "最近の制作物";
-
-      if (card) {
-        card.classList.remove("is-empty");
-      }
-    },
-  );
 }
 
 function getSourceWorks() {
