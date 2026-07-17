@@ -2,7 +2,7 @@
 // 設定
 // ===============================
 const API_BASE = "https://delicate-sunset-ea8a.d08084222816.workers.dev";
-const APP_VERSION = "2026-07-17-recent-tabs-v1";
+const APP_VERSION = "2026-07-17-home-design-v2";
 console.info(`[portfolio] ${APP_VERSION}`);
 
 // ===============================
@@ -10,6 +10,15 @@ console.info(`[portfolio] ${APP_VERSION}`);
 // ===============================
 const worksList = document.getElementById("works-list");
 const recentWorksList = document.getElementById("recent-works-list");
+const homeRecentList = document.getElementById("home-recent-list");
+const homeDesignCount = document.getElementById("home-design-count");
+const homeRecentCount = document.getElementById("home-recent-count");
+const homeRecentRange = document.getElementById("home-recent-range");
+const homeFeatureImages = [
+  document.getElementById("home-feature-image-1"),
+  document.getElementById("home-feature-image-2"),
+  document.getElementById("home-feature-image-3"),
+];
 const galleryCount = document.getElementById("gallery-count");
 const recentCount = document.getElementById("recent-count");
 const mobileGalleryCount = document.getElementById("mobile-gallery-count");
@@ -72,7 +81,7 @@ let works = [];
 let displayedWorks = [];
 let currentIndex = 0;
 let currentPage = 0;
-let currentView = "gallery";
+let currentView = "home";
 let activeCategory = "all";
 let resizeTimer = null;
 
@@ -286,6 +295,12 @@ siteTitle.addEventListener("dblclick", () => {
   }
 });
 
+siteTitle.addEventListener("click", () => {
+  if (location.hash !== "#home") {
+    location.hash = "#home";
+  }
+});
+
 // ===============================
 // スマホメニュー
 // ===============================
@@ -331,6 +346,10 @@ function showView(view) {
     filterWorks(getCurrentKeyword());
   } else {
     closeViewer();
+
+    if (safeView === "home") {
+      renderHome();
+    }
   }
 }
 
@@ -349,7 +368,7 @@ document
 window.addEventListener("hashchange", () => {
   const view =
     location.hash.replace("#", "") ||
-    "gallery";
+    "home";
 
   showView(view);
 });
@@ -466,6 +485,175 @@ function updatePortfolioStats() {
     recentSummaryRange.textContent =
       rangeLabel;
   }
+
+  if (homeDesignCount) {
+    homeDesignCount.textContent = works.length;
+  }
+
+  if (homeRecentCount) {
+    homeRecentCount.textContent =
+      recentWorks.length;
+  }
+
+  if (homeRecentRange) {
+    homeRecentRange.textContent =
+      rangeLabel.replace("年", ".").replace("月〜", "–").replace("月", "");
+  }
+}
+
+
+function createHomeWorkCard(
+  item,
+  index,
+  homeWorks,
+) {
+  const card =
+    document.createElement("article");
+
+  card.className =
+    "work-card home-work-card";
+
+  const image =
+    document.createElement("img");
+
+  image.className = "work-image";
+  image.src = item.image || "";
+  image.alt = item.title || "";
+  image.loading = "lazy";
+
+  const body =
+    document.createElement("div");
+
+  body.className = "work-body";
+
+  const tags =
+    document.createElement("div");
+
+  tags.className = "work-tag-list";
+
+  getTagsArray(item.tags)
+    .slice(0, 2)
+    .forEach((tag) => {
+      const tagElement =
+        document.createElement("span");
+
+      tagElement.className = "work-tag";
+      tagElement.textContent = tag;
+      tags.appendChild(tagElement);
+    });
+
+  const title =
+    document.createElement("p");
+
+  title.className = "work-title";
+  title.textContent =
+    item.title || "無題";
+
+  const meta =
+    document.createElement("div");
+
+  meta.className = "work-meta";
+
+  const date =
+    document.createElement("span");
+
+  date.className = "work-date";
+  date.textContent = item.date || "";
+
+  meta.appendChild(date);
+
+  if (tags.children.length > 0) {
+    body.appendChild(tags);
+  }
+
+  body.appendChild(title);
+  body.appendChild(meta);
+  card.appendChild(image);
+  card.appendChild(body);
+
+  card.addEventListener("click", () => {
+    displayedWorks = [...homeWorks];
+    openViewer(index);
+  });
+
+  return card;
+}
+
+function renderHome() {
+  if (!homeRecentList) {
+    return;
+  }
+
+  const recentWorks =
+    getRecentWorks().slice(0, 6);
+
+  homeRecentList.innerHTML = "";
+
+  if (recentWorks.length === 0) {
+    const empty =
+      document.createElement("div");
+
+    empty.className =
+      "empty-state home-empty-state";
+
+    empty.innerHTML =
+      "<strong>最近2か月の制作物はまだありません</strong><span>作品に今月または先月のDATEを設定すると、ここに自動表示されます。</span>";
+
+    homeRecentList.appendChild(empty);
+  } else {
+    recentWorks.forEach((item, index) => {
+      homeRecentList.appendChild(
+        createHomeWorkCard(
+          item,
+          index,
+          recentWorks,
+        ),
+      );
+    });
+  }
+
+  const visualWorks = [
+    ...recentWorks,
+    ...works.filter(
+      (item) =>
+        !recentWorks.some(
+          (recentItem) =>
+            recentItem.id === item.id,
+        ),
+    ),
+  ].slice(0, 3);
+
+  homeFeatureImages.forEach(
+    (image, index) => {
+      if (!image) {
+        return;
+      }
+
+      const item = visualWorks[index];
+      const card = image.closest(
+        ".home-visual-card",
+      );
+
+      if (!item?.image) {
+        image.removeAttribute("src");
+        image.alt = "";
+
+        if (card) {
+          card.classList.add("is-empty");
+        }
+
+        return;
+      }
+
+      image.src = item.image;
+      image.alt = item.title ||
+        "最近の制作物";
+
+      if (card) {
+        card.classList.remove("is-empty");
+      }
+    },
+  );
 }
 
 function getSourceWorks() {
@@ -523,7 +711,11 @@ async function loadWorks() {
       console.info("[portfolio] 作品データ例", works[0]);
     }
 
-    filterWorks(getCurrentKeyword());
+    renderHome();
+
+    if (isWorksView(currentView)) {
+      filterWorks(getCurrentKeyword());
+    }
   } catch (error) {
     console.error(error);
 
