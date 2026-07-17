@@ -2,13 +2,23 @@
 // 設定
 // ===============================
 const API_BASE = "https://delicate-sunset-ea8a.d08084222816.workers.dev";
-const APP_VERSION = "2026-07-13-title-tags-description-v7";
+const APP_VERSION = "2026-07-17-recent-tabs-v1";
 console.info(`[portfolio] ${APP_VERSION}`);
 
 // ===============================
 // DOM取得
 // ===============================
 const worksList = document.getElementById("works-list");
+const recentWorksList = document.getElementById("recent-works-list");
+const galleryCount = document.getElementById("gallery-count");
+const recentCount = document.getElementById("recent-count");
+const mobileGalleryCount = document.getElementById("mobile-gallery-count");
+const mobileRecentCount = document.getElementById("mobile-recent-count");
+const galleryTotalLabel = document.getElementById("gallery-total-label");
+const recentTotalLabel = document.getElementById("recent-total-label");
+const recentRange = document.getElementById("recent-range");
+const recentSummaryRange = document.getElementById("recent-summary-range");
+const filterChips = document.querySelectorAll(".filter-chip");
 const viewer = document.getElementById("image-viewer");
 const viewerImage = document.getElementById("viewer-image");
 const viewerTitle = document.getElementById("viewer-title");
@@ -62,6 +72,9 @@ let works = [];
 let displayedWorks = [];
 let currentIndex = 0;
 let currentPage = 0;
+let currentView = "gallery";
+let activeCategory = "all";
+let resizeTimer = null;
 
 const PAGE_SIZE = 30;
 
@@ -283,24 +296,203 @@ mobileMenuBtn.addEventListener("click", () => {
 // ===============================
 // ページ切り替え
 // ===============================
+function isWorksView(view) {
+  return view === "gallery" || view === "recent";
+}
+
 function showView(view) {
+  const requestedTarget = document.getElementById(`view-${view}`);
+  const safeView = requestedTarget ? view : "gallery";
+
+  currentView = safeView;
+
   document.querySelectorAll(".view").forEach((element) => {
     element.classList.add("hidden");
   });
 
-  const target = document.getElementById(`view-${view}`);
+  const target = document.getElementById(`view-${safeView}`);
 
   if (target) {
     target.classList.remove("hidden");
   }
 
+  document
+    .querySelectorAll(".nav-item[data-view]")
+    .forEach((item) => {
+      item.classList.toggle(
+        "active",
+        item.dataset.view === safeView,
+      );
+    });
+
   mobileMenuPanel.classList.remove("open");
+
+  if (isWorksView(safeView)) {
+    filterWorks(getCurrentKeyword());
+  } else {
+    closeViewer();
+  }
 }
 
+document
+  .querySelectorAll(".nav-item[data-view]")
+  .forEach((item) => {
+    item.addEventListener("click", () => {
+      if (
+        location.hash === `#${item.dataset.view}`
+      ) {
+        showView(item.dataset.view);
+      }
+    });
+  });
+
 window.addEventListener("hashchange", () => {
-  const view = location.hash.replace("#", "") || "gallery";
+  const view =
+    location.hash.replace("#", "") ||
+    "gallery";
+
   showView(view);
 });
+
+// ===============================
+// 最近の制作
+// 今月＋先月の2か月分
+// ===============================
+function getMonthKey(value) {
+  const text = String(value || "").trim();
+
+  const match = text.match(
+    /^(\d{4})[-\/.年](\d{1,2})/,
+  );
+
+  if (!match) {
+    return "";
+  }
+
+  return `${match[1]}-${String(
+    Number(match[2]),
+  ).padStart(2, "0")}`;
+}
+
+function getRecentMonthKeys() {
+  const now = new Date();
+
+  const currentMonth = new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    1,
+  );
+
+  const previousMonth = new Date(
+    now.getFullYear(),
+    now.getMonth() - 1,
+    1,
+  );
+
+  return [currentMonth, previousMonth].map(
+    (date) =>
+      `${date.getFullYear()}-${String(
+        date.getMonth() + 1,
+      ).padStart(2, "0")}`,
+  );
+}
+
+function getRecentWorks() {
+  const monthKeys = new Set(
+    getRecentMonthKeys(),
+  );
+
+  return works.filter((item) =>
+    monthKeys.has(getMonthKey(item.date)),
+  );
+}
+
+function getRecentRangeLabel() {
+  const keys = getRecentMonthKeys();
+  const older = keys[1].split("-");
+  const newer = keys[0].split("-");
+
+  if (older[0] === newer[0]) {
+    return `${newer[0]}年${Number(
+      older[1],
+    )}月〜${Number(newer[1])}月`;
+  }
+
+  return `${older[0]}年${Number(
+    older[1],
+  )}月〜${newer[0]}年${Number(
+    newer[1],
+  )}月`;
+}
+
+function updatePortfolioStats() {
+  const recentWorks = getRecentWorks();
+  const rangeLabel = getRecentRangeLabel();
+
+  [
+    galleryCount,
+    mobileGalleryCount,
+  ].forEach((element) => {
+    if (element) {
+      element.textContent = works.length;
+    }
+  });
+
+  [
+    recentCount,
+    mobileRecentCount,
+  ].forEach((element) => {
+    if (element) {
+      element.textContent =
+        recentWorks.length;
+    }
+  });
+
+  if (galleryTotalLabel) {
+    galleryTotalLabel.textContent =
+      `${works.length} works`;
+  }
+
+  if (recentTotalLabel) {
+    recentTotalLabel.textContent =
+      recentWorks.length;
+  }
+
+  if (recentRange) {
+    recentRange.textContent = rangeLabel;
+  }
+
+  if (recentSummaryRange) {
+    recentSummaryRange.textContent =
+      rangeLabel;
+  }
+}
+
+function getSourceWorks() {
+  if (currentView === "recent") {
+    return getRecentWorks();
+  }
+
+  return works;
+}
+
+function getActiveWorksList() {
+  if (currentView === "recent") {
+    return recentWorksList;
+  }
+
+  return worksList;
+}
+
+function ensureWorksViewForSearch() {
+  if (isWorksView(currentView)) {
+    return;
+  }
+
+  currentView = "gallery";
+  location.hash = "#gallery";
+  showView("gallery");
+}
 
 // ===============================
 // 作品一覧取得
@@ -323,6 +515,8 @@ async function loadWorks() {
 
     works = [...data].reverse();
 
+    updatePortfolioStats();
+
     console.info("[portfolio] 作品数", works.length);
 
     if (works.length > 0) {
@@ -343,8 +537,32 @@ async function loadWorks() {
 // ===============================
 // ギャラリー
 // ===============================
+function getColumnCount() {
+  const width = window.innerWidth;
+
+  if (width <= 768) {
+    return 2;
+  }
+
+  if (width <= 1100) {
+    return 3;
+  }
+
+  if (width <= 1500) {
+    return 4;
+  }
+
+  return 5;
+}
+
 function resetGallery() {
-  worksList.innerHTML = "";
+  if (worksList) {
+    worksList.innerHTML = "";
+  }
+
+  if (recentWorksList) {
+    recentWorksList.innerHTML = "";
+  }
 
   currentPage = 0;
   isLoading = false;
@@ -353,39 +571,86 @@ function resetGallery() {
   renderPage();
 }
 
-function createColumns(columnCount) {
+function createColumns(
+  columnCount,
+  targetList,
+) {
   return Array.from(
     {
       length: columnCount,
     },
     () => {
-      const column = document.createElement("div");
+      const column =
+        document.createElement("div");
 
-      column.style.display = "flex";
-      column.style.flexDirection = "column";
-      column.style.gap = "16px";
-      column.style.flex = "1";
+      column.className = "works-column";
 
-      worksList.appendChild(column);
+      targetList.appendChild(column);
 
       return column;
     },
   );
 }
 
+function createEmptyState(targetList) {
+  const empty =
+    document.createElement("div");
+
+  empty.className = "empty-state";
+
+  empty.innerHTML =
+    currentView === "recent"
+      ? "<strong>最近2か月の制作物はまだありません</strong><span>作品のDATEが今月または先月になると、自動でここにも表示されます。</span>"
+      : "<strong>該当する制作物がありません</strong><span>検索語やカテゴリを変えてみてください。</span>";
+
+  targetList.appendChild(empty);
+}
+
 function renderPage() {
-  if (isLoading || allLoaded) {
+  if (
+    isLoading ||
+    allLoaded ||
+    !isWorksView(currentView)
+  ) {
+    return;
+  }
+
+  const targetList =
+    getActiveWorksList();
+
+  if (!targetList) {
     return;
   }
 
   isLoading = true;
 
-  const columnCount = window.innerWidth <= 768 ? 2 : 6;
+  if (
+    displayedWorks.length === 0 &&
+    currentPage === 0
+  ) {
+    createEmptyState(targetList);
 
-  let columns = Array.from(worksList.children);
+    allLoaded = true;
+    isLoading = false;
+
+    return;
+  }
+
+  const columnCount = getColumnCount();
+
+  let columns =
+    Array.from(targetList.children).filter(
+      (element) =>
+        element.classList.contains(
+          "works-column",
+        ),
+    );
 
   if (columns.length === 0) {
-    columns = createColumns(columnCount);
+    columns = createColumns(
+      columnCount,
+      targetList,
+    );
   }
 
   const start = currentPage * PAGE_SIZE;
@@ -395,30 +660,76 @@ function renderPage() {
     displayedWorks.length,
   );
 
-  for (let index = start; index < end; index++) {
+  for (
+    let index = start;
+    index < end;
+    index++
+  ) {
     const item = displayedWorks[index];
 
-    const card = document.createElement("div");
+    const card =
+      document.createElement("article");
 
     card.className = "work-card";
 
-    const image = document.createElement("img");
+    const image =
+      document.createElement("img");
 
     image.className = "work-image";
     image.src = item.image || "";
     image.alt = item.title || "";
     image.loading = "lazy";
 
-    const body = document.createElement("div");
+    const body =
+      document.createElement("div");
 
     body.className = "work-body";
 
-    const title = document.createElement("p");
+    const tags =
+      document.createElement("div");
+
+    tags.className = "work-tag-list";
+
+    getTagsArray(item.tags)
+      .slice(0, 2)
+      .forEach((tag) => {
+        const tagElement =
+          document.createElement("span");
+
+        tagElement.className =
+          "work-tag";
+
+        tagElement.textContent = tag;
+
+        tags.appendChild(tagElement);
+      });
+
+    const title =
+      document.createElement("p");
 
     title.className = "work-title";
-    title.textContent = item.title || "";
+    title.textContent =
+      item.title || "無題";
+
+    const meta =
+      document.createElement("div");
+
+    meta.className = "work-meta";
+
+    const date =
+      document.createElement("span");
+
+    date.className = "work-date";
+    date.textContent = item.date || "";
+
+    meta.appendChild(date);
+
+    if (tags.children.length > 0) {
+      body.appendChild(tags);
+    }
 
     body.appendChild(title);
+    body.appendChild(meta);
 
     card.appendChild(image);
     card.appendChild(body);
@@ -427,7 +738,9 @@ function renderPage() {
       openViewer(index);
     });
 
-    columns[index % columnCount].appendChild(card);
+    columns[
+      index % columnCount
+    ].appendChild(card);
   }
 
   if (end >= displayedWorks.length) {
@@ -448,6 +761,16 @@ window.addEventListener("scroll", () => {
   }
 });
 
+window.addEventListener("resize", () => {
+  clearTimeout(resizeTimer);
+
+  resizeTimer = setTimeout(() => {
+    if (isWorksView(currentView)) {
+      filterWorks(getCurrentKeyword());
+    }
+  }, 180);
+});
+
 // ===============================
 // 検索
 //
@@ -458,29 +781,51 @@ window.addEventListener("scroll", () => {
 // 漢字変換中は検索しない
 // ===============================
 function filterWorks(keyword) {
-  const normalizedKeyword = normalizeSearchText(keyword);
+  const normalizedKeyword =
+    normalizeSearchText(keyword);
 
   const words = normalizedKeyword
     .split(" ")
     .map((word) => word.trim())
     .filter(Boolean);
 
-  if (words.length === 0) {
-    displayedWorks = [...works];
-  } else {
-    displayedWorks = works.filter((item) => {
-      const searchTarget = getSearchTarget(item);
+  const category =
+    activeCategory === "all"
+      ? ""
+      : normalizeSearchText(
+          activeCategory,
+        );
 
-      return words.some((word) =>
-        searchTarget.includes(word),
+  const sourceWorks = getSourceWorks();
+
+  displayedWorks = sourceWorks.filter(
+    (item) => {
+      const searchTarget =
+        getSearchTarget(item);
+
+      const matchesKeyword =
+        words.length === 0 ||
+        words.some((word) =>
+          searchTarget.includes(word),
+        );
+
+      const matchesCategory =
+        !category ||
+        searchTarget.includes(category);
+
+      return (
+        matchesKeyword &&
+        matchesCategory
       );
-    });
-  }
+    },
+  );
 
   console.info("[portfolio] 検索", {
+    view: currentView,
     keyword,
     normalizedKeyword,
-    total: works.length,
+    category: activeCategory,
+    total: sourceWorks.length,
     matched: displayedWorks.length,
   });
 
@@ -489,7 +834,26 @@ function filterWorks(keyword) {
   resetGallery();
 }
 
+filterChips.forEach((chip) => {
+  chip.addEventListener("click", () => {
+    activeCategory =
+      chip.dataset.filter || "all";
+
+    filterChips.forEach((item) => {
+      item.classList.toggle(
+        "active",
+        item.dataset.filter ===
+          activeCategory,
+      );
+    });
+
+    filterWorks(getCurrentKeyword());
+  });
+});
+
 function runPcSearch() {
+  ensureWorksViewForSearch();
+
   const keyword = searchInput.value;
 
   mobileSearchInput.value = keyword;
@@ -538,6 +902,8 @@ mobileSearchInput.addEventListener("compositionend", () => {
 });
 
 mobileSearchBtn.addEventListener("click", () => {
+  ensureWorksViewForSearch();
+
   const keyword = mobileSearchInput.value;
 
   searchInput.value = keyword;
@@ -571,11 +937,12 @@ mobileSearchInput.addEventListener("keydown", (event) => {
 });
 
 // ===============================
-// 画像一覧へ戻ったら検索解除
+// 画像一覧・最近の制作へ移動したら
+// 検索とカテゴリを初期化
 // ===============================
 document
   .querySelectorAll(
-    ".nav-item[data-view='gallery']",
+    ".nav-item[data-view='gallery'], .nav-item[data-view='recent']",
   )
   .forEach((button) => {
     button.addEventListener("click", () => {
@@ -583,8 +950,14 @@ document
       mobileSearchInput.value = "";
 
       searchClear.style.display = "none";
+      activeCategory = "all";
 
-      filterWorks("");
+      filterChips.forEach((chip) => {
+        chip.classList.toggle(
+          "active",
+          chip.dataset.filter === "all",
+        );
+      });
     });
   });
 
