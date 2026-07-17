@@ -200,6 +200,19 @@ overflow: hidden;
 transition: color 0.2s ease;
 }
 
+.nav-item::after {
+content: "";
+position: absolute;
+top: 50%;
+right: 28px;
+width: 0%;
+height: 1px;
+background: #ffffff;
+transition: width 0.2s ease 0.15s;
+z-index: 3;
+transform: translateY(-50%);
+}
+
 .nav-item:hover::after {
 width: calc(100% - 170px);
 }
@@ -1527,5 +1540,457 @@ body.admin-mode .work-title {
 
   .viewer-left {
     width: 100%;
+  }
+}
+
+/* =========================================================
+ 2026-07-17 HOME追加・スマホ最終調整
+========================================================= */
+
+/* ホバー時に右から伸びていた白線を撤廃 */
+.nav-item::after {
+  display: none !important;
+}
+
+.home-hero {
+  min-height: 430px;
+  padding: clamp(30px, 4vw, 52px);
+  border: 1px solid var(--portfolio-line);
+  border-radius: 22px;
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(340px, .92fr);
+  gap: clamp(28px, 5vw, 70px);
+  align-items: center;
+  background:
+    radial-gradient(circle at 88% 18%, rgba(139,30,63,.12), transparent 24rem),
+    #fff;
+  overflow: hidden;
+}
+
+.home-hero-copy {
+  min-width: 0;
+}
+
+.home-hero h1 {
+  margin: 14px 0 18px;
+  max-width: 720px;
+  font-size: clamp(38px, 5.1vw, 72px);
+  line-height: 1.04;
+  letter-spacing: -.048em;
+}
+
+.home-hero-copy > p {
+  max-width: 720px;
+  margin: 0;
+  color: var(--portfolio-muted);
+  font-size: 15px;
+  line-height: 1.95;
+}
+
+.home-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 26px;
+}
+
+.home-primary-btn,
+.home-secondary-btn {
+  min-height: 46px;
+  padding: 12px 19px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 800;
+  text-decoration: none;
+  transition: .2s ease;
+}
+
+.home-primary-btn {
+  border: 1px solid var(--portfolio-dark);
+  background: var(--portfolio-dark);
+  color: #fff;
+}
+
+.home-secondary-btn {
+  border: 1px solid var(--portfolio-line);
+  background: #fff;
+  color: var(--portfolio-text);
+}
+
+.home-primary-btn:hover,
+.home-secondary-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(0,0,0,.09);
+}
+
+.home-stats {
+  display: flex;
+  gap: clamp(20px, 4vw, 42px);
+  flex-wrap: wrap;
+  margin-top: 34px;
+}
+
+.home-stats strong {
+  display: block;
+  font-size: 25px;
+  letter-spacing: -.035em;
+}
+
+.home-stats span {
+  display: block;
+  margin-top: 3px;
+  color: #94948e;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: .11em;
+}
+
+.home-visual {
+  position: relative;
+  width: 100%;
+  height: 330px;
+  min-width: 0;
+}
+
+.home-visual-card {
+  position: absolute;
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,.9);
+  border-radius: 17px;
+  background: linear-gradient(135deg, #eee, #d9d9d5);
+  box-shadow: 0 18px 45px rgba(25,20,18,.16);
+}
+
+.home-visual-card img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.home-visual-card.is-empty::before {
+  content: "DESIGN";
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: rgba(0,0,0,.22);
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: .16em;
+}
+
+.home-visual-card-a {
+  width: 58%;
+  height: 72%;
+  top: 0;
+  right: 1%;
+  transform: rotate(3.5deg);
+}
+
+.home-visual-card-b {
+  width: 50%;
+  height: 64%;
+  left: 0;
+  bottom: 0;
+  transform: rotate(-4.5deg);
+}
+
+.home-visual-card-c {
+  width: 41%;
+  height: 49%;
+  right: 7%;
+  bottom: 0;
+  transform: rotate(6deg);
+}
+
+.home-section {
+  margin-top: 30px;
+}
+
+.home-section-header {
+  margin-bottom: 17px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 22px;
+}
+
+.home-section-header h2 {
+  margin: 5px 0 6px;
+  font-size: clamp(24px, 2.5vw, 34px);
+  letter-spacing: -.025em;
+}
+
+.home-section-header p {
+  margin: 0;
+  color: var(--portfolio-muted);
+  font-size: 12px;
+}
+
+.home-section-header > a {
+  padding: 9px 0;
+  color: #555550;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.home-section-header > a i {
+  margin-left: 6px;
+  transition: transform .18s ease;
+}
+
+.home-section-header > a:hover i {
+  transform: translateX(4px);
+}
+
+.home-recent-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.home-recent-grid .work-card {
+  min-width: 0;
+}
+
+.home-recent-grid .work-image {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+.home-recent-grid .home-empty-state {
+  grid-column: 1 / -1;
+}
+
+.home-link-grid {
+  margin-top: 30px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.home-link-card {
+  min-height: 190px;
+  padding: 23px;
+  border: 1px solid var(--portfolio-line);
+  border-radius: 14px;
+  position: relative;
+  overflow: hidden;
+  background: #fff;
+  color: var(--portfolio-text);
+  text-decoration: none;
+  transition: .22s ease;
+}
+
+.home-link-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--portfolio-shadow);
+}
+
+.home-link-card > span {
+  color: var(--portfolio-accent);
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: .12em;
+}
+
+.home-link-card > i {
+  position: absolute;
+  top: 23px;
+  right: 23px;
+  color: #d7d7d2;
+  font-size: 23px;
+}
+
+.home-link-card h2 {
+  margin: 45px 0 9px;
+  font-size: 19px;
+}
+
+.home-link-card p {
+  margin: 0;
+  color: var(--portfolio-muted);
+  font-size: 12px;
+  line-height: 1.8;
+}
+
+@media (max-width: 1120px) {
+  .home-hero {
+    grid-template-columns: 1fr;
+  }
+
+  .home-visual {
+    width: min(560px, 100%);
+    height: 310px;
+    margin: 0 auto;
+  }
+
+  .home-link-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  html,
+  body {
+    overflow-x: hidden;
+  }
+
+  .mobile-menu-btn {
+    top: 23px;
+    right: 16px;
+  }
+
+  .mobile-menu-panel {
+    top: 68px;
+    transform: translateY(-120%);
+    transition: transform .28s ease;
+  }
+
+  .mobile-menu-panel.open {
+    top: 68px;
+    transform: translateY(0);
+  }
+
+  .home-hero {
+    min-height: 0;
+    padding: 25px 20px 22px;
+    border-radius: 17px;
+    gap: 26px;
+  }
+
+  .home-hero h1 {
+    margin: 12px 0 15px;
+    font-size: clamp(34px, 10.5vw, 46px);
+    line-height: 1.08;
+  }
+
+  .home-hero-copy > p {
+    font-size: 13px;
+    line-height: 1.85;
+  }
+
+  .home-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+    margin-top: 21px;
+  }
+
+  .home-primary-btn,
+  .home-secondary-btn {
+    width: 100%;
+  }
+
+  .home-stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 26px;
+  }
+
+  .home-stats > div {
+    min-width: 0;
+  }
+
+  .home-stats strong {
+    overflow-wrap: anywhere;
+    font-size: 17px;
+  }
+
+  .home-stats span {
+    font-size: 7px;
+    letter-spacing: .07em;
+  }
+
+  .home-visual {
+    width: min(430px, 100%);
+    height: 230px;
+  }
+
+  .home-visual-card {
+    border-radius: 13px;
+  }
+
+  .home-section {
+    margin-top: 25px;
+  }
+
+  .home-section-header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .home-section-header > a {
+    align-self: flex-end;
+  }
+
+  .home-recent-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 9px;
+  }
+
+  .home-recent-grid .work-body {
+    padding: 10px;
+  }
+
+  .home-link-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin-top: 25px;
+  }
+
+  .home-link-card {
+    min-height: 155px;
+    padding: 20px;
+  }
+
+  .home-link-card h2 {
+    margin-top: 35px;
+  }
+}
+
+@media (max-width: 430px) {
+  .home-recent-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .home-recent-grid .work-image {
+    aspect-ratio: 16 / 10;
+  }
+
+  .home-stats {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .home-stats > div:last-child {
+    grid-column: 1 / -1;
+  }
+}
+
+/* スマホでPC用サイドバー余白が残らないよう最終固定 */
+@media (max-width: 768px) {
+  .layout {
+    display: block;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .sidebar {
+    display: none !important;
+  }
+
+  .main {
+    width: 100% !important;
+    max-width: 100%;
+    min-width: 0;
+    margin-left: 0 !important;
   }
 }
