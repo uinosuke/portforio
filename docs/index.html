@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>MyPortfolio</title>
-<link rel="stylesheet" href="style.css?v=20260717-about-profile-v2" />
+<link rel="stylesheet" href="style.css?v=20260717-viewer-fix-v1" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 
@@ -24,7 +24,6 @@
     id="site-title"
     src="https://raw.githubusercontent.com/uinosuke/portforio/main/docs/images/logo.png"
     alt="MyPortfolio"
-    title="ダブルクリックで管理者モード"
   />
 
   <div class="search-box pc-search">
@@ -337,21 +336,23 @@
   <div class="viewer-right">
     <div class="viewer-drag-handle"></div>
 
-    <h3 class="viewer-section-title">TITLE</h3>
-    <p id="viewer-title"></p>
+    <div id="viewer-display-fields" class="viewer-display-fields">
+      <h3 class="viewer-section-title">TITLE</h3>
+      <p id="viewer-title"></p>
 
-    <h3 class="viewer-section-title">TAGS</h3>
-    <div id="viewer-tags"></div>
+      <h3 class="viewer-section-title">TAGS</h3>
+      <div id="viewer-tags"></div>
 
-    <h3 class="viewer-section-title">DATE</h3>
-    <p id="viewer-date"></p>
+      <h3 class="viewer-section-title">DATE</h3>
+      <p id="viewer-date"></p>
 
-    <h3 class="viewer-section-title">DESCRIPTION</h3>
-    <p id="viewer-description"></p>
+      <h3 class="viewer-section-title">DESCRIPTION</h3>
+      <p id="viewer-description"></p>
 
-    <div class="viewer-admin-actions admin-only">
-      <button id="viewer-edit-work">編集</button>
-      <button id="viewer-delete-work">削除</button>
+      <div class="viewer-admin-actions admin-only">
+        <button id="viewer-edit-work">編集</button>
+        <button id="viewer-delete-work">削除</button>
+      </div>
     </div>
 
     <div id="viewer-edit-form" class="viewer-edit-form admin-only hidden">
@@ -415,6 +416,6 @@
   </div>
 </div>
 
-<script src="app.js?v=20260717-fixed-collage-v2"></script>
+<script src="app.js?v=20260717-viewer-fix-v1"></script>
 </body>
 </html>
