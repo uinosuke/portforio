@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>MyPortfolio</title>
-<link rel="stylesheet" href="style.css" />
+<link rel="stylesheet" href="style.css?v=20260717-recent-tabs-v1" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 
@@ -15,43 +15,70 @@
 <div id="loading-overlay">
   <div class="spinner"></div>
 </div>
+
 <!-- =============================== -->
 <!-- ヘッダー -->
 <!-- =============================== -->
 <header class="header">
-<img id="site-title" src="https://raw.githubusercontent.com/uinosuke/portforio/main/docs/images/logo.png" alt="MyPortfolio" style="height: 50px; object-fit: contain;" />
+  <img
+    id="site-title"
+    src="https://raw.githubusercontent.com/uinosuke/portforio/main/docs/images/logo.png"
+    alt="MyPortfolio"
+    title="ダブルクリックで管理者モード"
+  />
 
-<div class="search-box pc-search">
-<i class="fa-solid fa-magnifying-glass search-icon"></i>
-<input id="search-input" type="text" placeholder="検索..." />
-<span id="search-clear">×</span>
-</div>
+  <div class="search-box pc-search">
+    <i class="fa-solid fa-magnifying-glass search-icon"></i>
+    <input id="search-input" type="text" placeholder="タイトル・タグ・概要を検索..." />
+    <span id="search-clear">×</span>
+  </div>
 
-<div class="mobile-menu-btn">
-<span></span><span></span><span></span>
-</div>
+  <div class="mobile-menu-btn" aria-label="メニューを開く">
+    <span></span><span></span><span></span>
+  </div>
 </header>
 
 <!-- =============================== -->
 <!-- スマホメニュー -->
 <!-- =============================== -->
 <div class="mobile-menu-panel">
-<a class="nav-item" href="#gallery" data-view="gallery">画像一覧</a>
-<a class="nav-item" href="#about" data-view="about">ABOUT</a>
-<a class="nav-item" href="#info" data-view="info">制作について</a>
-<a class="nav-item" href="https://himawari-fukushikai.org/" target="_blank">法人HP</a>
+  <a class="nav-item" href="#gallery" data-view="gallery">
+    <span class="nav-label"><i class="fa-regular fa-images"></i>画像一覧</span>
+    <span id="mobile-gallery-count" class="nav-count">—</span>
+  </a>
 
-<div class="mobile-search-area">
-<div class="mobile-search-box">
-<i class="fa-solid fa-magnifying-glass search-icon"></i>
-<input id="mobile-search-input" type="text" placeholder="検索..." />
-<button id="mobile-search-btn">検索</button>
-</div>
-</div>
+  <a class="nav-item" href="#recent" data-view="recent">
+    <span class="nav-label"><i class="fa-regular fa-clock"></i>最近の制作</span>
+    <span class="nav-meta"><span class="nav-new">NEW</span><span id="mobile-recent-count" class="nav-count">—</span></span>
+  </a>
 
-<a class="consult-btn" href="https://works.do/R/ti/p/300885@himawari-fukushikai" target="_blank">
-ご相談はこちら
-</a>
+  <a class="nav-item" href="#services" data-view="services">
+    <span class="nav-label"><i class="fa-solid fa-plus"></i>依頼できること</span>
+  </a>
+
+  <a class="nav-item" href="#about" data-view="about">
+    <span class="nav-label"><i class="fa-regular fa-circle-user"></i>ABOUT</span>
+  </a>
+
+  <a class="nav-item" href="#info" data-view="info">
+    <span class="nav-label"><i class="fa-regular fa-file-lines"></i>制作について</span>
+  </a>
+
+  <a class="nav-item" href="https://himawari-fukushikai.org/" target="_blank">
+    <span class="nav-label"><i class="fa-solid fa-arrow-up-right-from-square"></i>法人HP</span>
+  </a>
+
+  <div class="mobile-search-area">
+    <div class="mobile-search-box">
+      <i class="fa-solid fa-magnifying-glass search-icon"></i>
+      <input id="mobile-search-input" type="text" placeholder="検索..." />
+      <button id="mobile-search-btn">検索</button>
+    </div>
+  </div>
+
+  <a class="consult-btn" href="https://works.do/R/ti/p/300885@himawari-fukushikai" target="_blank">
+    ご相談はこちら
+  </a>
 </div>
 
 <!-- =============================== -->
@@ -59,150 +86,297 @@
 <!-- =============================== -->
 <div class="layout">
 
-<aside class="sidebar">
-<a class="nav-item" href="#gallery" data-view="gallery"><span>画像一覧</span></a>
-<a class="nav-item" href="#about" data-view="about"><span>ABOUT</span></a>
-<a class="nav-item" href="#info" data-view="info"><span>制作について</span></a>
-<a class="nav-item" href="https://himawari-fukushikai.org/" target="_blank"><span>法人HP</span></a>
+  <aside class="sidebar">
+    <nav class="sidebar-nav">
+      <a class="nav-item" href="#gallery" data-view="gallery">
+        <span class="nav-label"><i class="fa-regular fa-images"></i>画像一覧</span>
+        <span id="gallery-count" class="nav-count">—</span>
+      </a>
 
-<div class="sidebar-bottom">
-<a class="consult-btn" href="https://works.do/R/ti/p/300885@himawari-fukushikai" target="_blank">
-ご相談はこちら
-</a>
-<div id="admin-panel" class="admin-only">管理者モード</div>
+      <a class="nav-item" href="#recent" data-view="recent">
+        <span class="nav-label"><i class="fa-regular fa-clock"></i>最近の制作</span>
+        <span class="nav-meta"><span class="nav-new">NEW</span><span id="recent-count" class="nav-count">—</span></span>
+      </a>
+
+      <a class="nav-item" href="#services" data-view="services">
+        <span class="nav-label"><i class="fa-solid fa-plus"></i>依頼できること</span>
+      </a>
+
+      <a class="nav-item" href="#about" data-view="about">
+        <span class="nav-label"><i class="fa-regular fa-circle-user"></i>ABOUT</span>
+      </a>
+
+      <a class="nav-item" href="#info" data-view="info">
+        <span class="nav-label"><i class="fa-regular fa-file-lines"></i>制作について</span>
+      </a>
+
+      <a class="nav-item" href="https://himawari-fukushikai.org/" target="_blank">
+        <span class="nav-label"><i class="fa-solid fa-arrow-up-right-from-square"></i>法人HP</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-bottom">
+      <a class="consult-btn" href="https://works.do/R/ti/p/300885@himawari-fukushikai" target="_blank">
+        ご相談はこちら
+      </a>
+      <div id="admin-panel" class="admin-only">管理者モード</div>
+    </div>
+  </aside>
+
+  <!-- =============================== -->
+  <!-- メイン -->
+  <!-- =============================== -->
+  <main class="main">
+
+    <!-- 画像一覧 -->
+    <section id="view-gallery" class="view">
+      <div class="view-header">
+        <div>
+          <span class="view-eyebrow">WORKS ARCHIVE</span>
+          <h1>画像一覧</h1>
+          <p>これまで制作したデザイン・広報物をまとめています。</p>
+        </div>
+        <span id="gallery-total-label" class="view-total">— works</span>
+      </div>
+
+      <div id="upload-dropzone" class="upload-dropzone admin-only">
+        ここに画像をドラッグ＆ドロップしてください
+      </div>
+
+      <div class="filter-row" aria-label="カテゴリで絞り込み">
+        <button class="filter-chip active" data-filter="all">すべて</button>
+        <button class="filter-chip" data-filter="ポスター">ポスター</button>
+        <button class="filter-chip" data-filter="サムネイル">サムネイル</button>
+        <button class="filter-chip" data-filter="採用">採用</button>
+        <button class="filter-chip" data-filter="保育">保育</button>
+        <button class="filter-chip" data-filter="学育">学育</button>
+        <button class="filter-chip" data-filter="高齢者">高齢者</button>
+        <button class="filter-chip" data-filter="本部">本部</button>
+      </div>
+
+      <div id="works-list" class="works-grid"></div>
+    </section>
+
+    <!-- 最近の制作 -->
+    <section id="view-recent" class="view hidden">
+      <div class="view-header">
+        <div>
+          <span class="view-eyebrow">RECENT WORKS</span>
+          <h1>最近の制作</h1>
+          <p>今月と先月に制作したものを、画像一覧から自動でまとめます。</p>
+        </div>
+        <span id="recent-range" class="view-total">—</span>
+      </div>
+
+      <div class="recent-summary">
+        <div>
+          <span class="recent-summary-label">LATEST TWO MONTHS</span>
+          <strong id="recent-summary-range">—</strong>
+          <p>新しく追加した制作物を、古い作品に埋もれさせず見せるためのタブ。</p>
+        </div>
+        <div class="recent-summary-count">
+          <strong id="recent-total-label">0</strong>
+          <span>WORKS</span>
+        </div>
+      </div>
+
+      <div class="filter-row" aria-label="最近の制作をカテゴリで絞り込み">
+        <button class="filter-chip active" data-filter="all">すべて</button>
+        <button class="filter-chip" data-filter="ポスター">ポスター</button>
+        <button class="filter-chip" data-filter="サムネイル">サムネイル</button>
+        <button class="filter-chip" data-filter="採用">採用</button>
+        <button class="filter-chip" data-filter="保育">保育</button>
+        <button class="filter-chip" data-filter="学育">学育</button>
+        <button class="filter-chip" data-filter="高齢者">高齢者</button>
+        <button class="filter-chip" data-filter="本部">本部</button>
+      </div>
+
+      <div id="recent-works-list" class="works-grid"></div>
+    </section>
+
+    <!-- 依頼できること -->
+    <section id="view-services" class="view hidden">
+      <div class="view-header">
+        <div>
+          <span class="view-eyebrow">SERVICES</span>
+          <h1>依頼できること</h1>
+          <p>どんな制作や相談ができるのかを、作品とは別にまとめています。</p>
+        </div>
+      </div>
+
+      <div class="service-grid">
+        <article class="service-card">
+          <span>01 / POSTER</span>
+          <i class="fa-regular fa-images"></i>
+          <h2>ポスター・チラシ</h2>
+          <p>園行事、地域イベント、採用、施設案内など。情報を整理して、伝わる順番に組み立てます。</p>
+        </article>
+
+        <article class="service-card">
+          <span>02 / SNS</span>
+          <i class="fa-regular fa-window-maximize"></i>
+          <h2>SNS・サムネイル</h2>
+          <p>LINE WORKS、SNS投稿、動画サムネイルなど、掲載先に合わせて見せ方を調整します。</p>
+        </article>
+
+        <article class="service-card">
+          <span>03 / RECRUIT</span>
+          <i class="fa-solid fa-user-plus"></i>
+          <h2>採用広報</h2>
+          <p>求人画像、募集案内、採用ページ用素材など、応募者に届く採用コミュニケーションを整えます。</p>
+        </article>
+
+        <article class="service-card">
+          <span>04 / DOCUMENT</span>
+          <i class="fa-regular fa-file-lines"></i>
+          <h2>資料・シート整理</h2>
+          <p>ヒアリングシート、管理表、説明資料など、現場で迷わず使える形へ整理します。</p>
+        </article>
+
+        <article class="service-card">
+          <span>05 / TOOL</span>
+          <i class="fa-solid fa-code"></i>
+          <h2>小さな業務ツール</h2>
+          <p>検索ページ、入力支援、管理画面など、日々の小さな面倒を減らす仕組みを作ります。</p>
+        </article>
+
+        <article class="service-card">
+          <span>06 / CONSULT</span>
+          <i class="fa-regular fa-comments"></i>
+          <h2>相談から一緒に整理</h2>
+          <p>何を作ればいいか決まっていない段階でも、目的や対象を聞きながら必要な形を考えます。</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="view-about" class="view hidden">
+      <div class="view-header">
+        <div>
+          <span class="view-eyebrow">PROFILE</span>
+          <h1>ABOUT</h1>
+          <p>このサイトと制作活動について。</p>
+        </div>
+      </div>
+
+      <div class="text-panel">
+        <div id="about-content"></div>
+        <button id="edit-about" class="admin-only text-edit-btn">編集</button>
+      </div>
+    </section>
+
+    <!-- 制作について -->
+    <section id="view-info" class="view hidden">
+      <div class="view-header">
+        <div>
+          <span class="view-eyebrow">PROCESS</span>
+          <h1>制作について</h1>
+          <p>依頼から完成までの考え方や流れ。</p>
+        </div>
+      </div>
+
+      <div class="text-panel">
+        <div id="info-content"></div>
+        <button id="edit-info" class="admin-only text-edit-btn">編集</button>
+      </div>
+    </section>
+
+  </main>
 </div>
-</aside>
 
 <!-- =============================== -->
-<!-- メイン -->
-<!-- =============================== -->
-<main class="main">
-
-<!-- ★★★ ドロップゾーン（管理者モード） -->
-<div id="upload-dropzone" class="upload-dropzone admin-only">
-ここに画像をドラッグ＆ドロップしてください
-</div>
-
-<!-- 画像一覧 -->
-<section id="view-gallery" class="view">
-<div id="works-list" class="works-grid"></div>
-</section>
-
-<!-- ABOUT -->
-<section id="view-about" class="view hidden">
-<h2>ABOUT</h2>
-<div id="about-content"></div>
-<button id="edit-about" class="admin-only">編集</button>
-</section>
-
-<!-- 制作について -->
-<section id="view-info" class="view hidden">
-<h2>制作について</h2>
-<div id="info-content"></div>
-<button id="edit-info" class="admin-only">編集</button>
-</section>
-
-</main>
-</div>
-
-<!-- =============================== -->
-<!-- viewer -->
+<!-- Viewer -->
 <!-- =============================== -->
 <div id="image-viewer" class="image-viewer">
-<button id="viewer-close-btn" class="viewer-close-btn">×</button>
+  <button id="viewer-close-btn" class="viewer-close-btn">×</button>
 
-<div class="viewer-left">
-<button class="viewer-arrow left" id="viewer-prev">‹</button>
-<img id="viewer-image" class="viewer-image" src="" alt="" />
-<button class="viewer-arrow right" id="viewer-next">›</button>
-</div>
-
-<div class="viewer-right">
-<div class="viewer-drag-handle"></div>
-
-<h3 class="viewer-section-title">TITLE</h3>
-<p id="viewer-title"></p>
-
-<h3 class="viewer-section-title">TAGS</h3>
-<div id="viewer-tags"></div>
-
-<!-- ★★★ DATE（追加） -->
-<h3 class="viewer-section-title">DATE</h3>
-<p id="viewer-date"></p>
-
-<h3 class="viewer-section-title">DESCRIPTION</h3>
-<p id="viewer-description"></p>
-
-<div class="viewer-admin-actions admin-only">
-<button id="viewer-edit-work">編集</button>
-<button id="viewer-delete-work">削除</button>
-</div>
-<div id="viewer-edit-form" class="viewer-edit-form admin-only hidden">
-  <label>
-    TITLE
-    <input id="viewer-edit-title" type="text" />
-  </label>
-
-  <label>
-    TAGS
-    <input id="viewer-edit-tags" type="text" />
-  </label>
-
-  <label>
-    DATE
-    <input id="viewer-edit-date" type="month" />
-  </label>
-
-  <label>
-    DESCRIPTION
-    <textarea id="viewer-edit-description"></textarea>
-  </label>
-
-  <div class="viewer-edit-buttons">
-    <button id="viewer-save-work">保存</button>
-    <button id="viewer-cancel-edit">キャンセル</button>
+  <div class="viewer-left">
+    <button class="viewer-arrow left" id="viewer-prev">‹</button>
+    <img id="viewer-image" class="viewer-image" src="" alt="" />
+    <button class="viewer-arrow right" id="viewer-next">›</button>
   </div>
-</div>
-</div>
+
+  <div class="viewer-right">
+    <div class="viewer-drag-handle"></div>
+
+    <h3 class="viewer-section-title">TITLE</h3>
+    <p id="viewer-title"></p>
+
+    <h3 class="viewer-section-title">TAGS</h3>
+    <div id="viewer-tags"></div>
+
+    <h3 class="viewer-section-title">DATE</h3>
+    <p id="viewer-date"></p>
+
+    <h3 class="viewer-section-title">DESCRIPTION</h3>
+    <p id="viewer-description"></p>
+
+    <div class="viewer-admin-actions admin-only">
+      <button id="viewer-edit-work">編集</button>
+      <button id="viewer-delete-work">削除</button>
+    </div>
+
+    <div id="viewer-edit-form" class="viewer-edit-form admin-only hidden">
+      <label>
+        TITLE
+        <input id="viewer-edit-title" type="text" />
+      </label>
+
+      <label>
+        TAGS
+        <input id="viewer-edit-tags" type="text" />
+      </label>
+
+      <label>
+        DATE
+        <input id="viewer-edit-date" type="month" />
+      </label>
+
+      <label>
+        DESCRIPTION
+        <textarea id="viewer-edit-description"></textarea>
+      </label>
+
+      <div class="viewer-edit-buttons">
+        <button id="viewer-save-work">保存</button>
+        <button id="viewer-cancel-edit">キャンセル</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- =============================== -->
 <!-- 編集モーダル -->
 <!-- =============================== -->
 <div id="edit-modal" class="modal">
-<div class="modal-content">
-<h3 id="modal-title"></h3>
-<textarea id="modal-textarea"></textarea>
-<div class="modal-buttons">
-<button class="modal-btn save" id="modal-save">保存</button>
-<button class="modal-btn cancel" id="modal-cancel">キャンセル</button>
-</div>
-</div>
+  <div class="modal-content">
+    <h3 id="modal-title"></h3>
+    <textarea id="modal-textarea"></textarea>
+    <div class="modal-buttons">
+      <button class="modal-btn save" id="modal-save">保存</button>
+      <button class="modal-btn cancel" id="modal-cancel">キャンセル</button>
+    </div>
+  </div>
 </div>
 
 <!-- =============================== -->
-<!-- ★ ステップ式アップロードモーダル -->
+<!-- ステップ式アップロードモーダル -->
 <!-- =============================== -->
 <div id="upload-step-modal" class="modal">
-<div class="upload-step-content">
-<h3 id="upload-step-title"></h3>
+  <div class="upload-step-content">
+    <h3 id="upload-step-title"></h3>
 
-<!-- テキスト入力 -->
-<input id="upload-step-input" type="text" />
+    <input id="upload-step-input" type="text" />
+    <input id="upload-step-month" type="month" />
+    <textarea id="upload-step-textarea"></textarea>
 
-<!-- 月入力（追加） -->
-<input id="upload-step-month" type="month" />
-
-<!-- 概要 -->
-<textarea id="upload-step-textarea"></textarea>
-
-<div class="upload-step-buttons">
-<button id="upload-step-back">戻る</button>
-<button id="upload-step-ok">OK</button>
-</div>
-</div>
+    <div class="upload-step-buttons">
+      <button id="upload-step-back">戻る</button>
+      <button id="upload-step-ok">OK</button>
+    </div>
+  </div>
 </div>
 
-<script src="app.js?v=20260713-title-tags-description-v7"></script>
+<script src="app.js?v=20260717-recent-tabs-v1"></script>
 </body>
 </html>
