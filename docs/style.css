@@ -2311,3 +2311,197 @@ body.admin-mode .work-title {
     width: 78%;
   }
 }
+
+
+/* =========================================================
+ 2026-07-17 HOME画像配置 v6
+ 主役1枚＋脇役2枚の重なり構成
+========================================================= */
+
+.home-hero {
+  grid-template-columns: minmax(0, 1.02fr) minmax(410px, .98fr);
+  gap: clamp(28px, 4vw, 56px);
+  align-items: center;
+}
+
+.home-visual {
+  position: relative;
+  width: 100%;
+  height: 420px;
+  min-height: 420px;
+  display: block;
+  overflow: visible;
+  isolation: isolate;
+}
+
+.home-visual::before {
+  content: "";
+  position: absolute;
+  inset: 8% 2% 6% 6%;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at center,
+      rgba(139,30,63,.10),
+      rgba(139,30,63,.03) 58%,
+      transparent 74%);
+  filter: blur(2px);
+  z-index: -1;
+}
+
+.home-visual-card {
+  position: absolute;
+  width: auto;
+  height: auto !important;
+  border: 0;
+  border-radius: 16px;
+  overflow: hidden;
+  background: transparent;
+  box-shadow: 0 20px 44px rgba(18,18,18,.14);
+}
+
+.home-visual-card img {
+  display: block;
+  width: 100%;
+  height: auto !important;
+  object-fit: contain;
+  background: transparent;
+  border-radius: inherit;
+}
+
+.home-visual-card-a {
+  width: 34%;
+  top: 2%;
+  left: 8%;
+  transform: rotate(-4deg);
+  z-index: 2;
+}
+
+.home-visual-card-b {
+  width: 52%;
+  top: 10%;
+  right: 0;
+  transform: rotate(2.4deg);
+  z-index: 1;
+}
+
+.home-visual-card-c {
+  width: 31%;
+  left: 24%;
+  bottom: 1%;
+  transform: rotate(3.5deg);
+  z-index: 3;
+}
+
+.home-visual-card.is-empty {
+  display: none;
+}
+
+@media (max-width: 1200px) {
+  .home-hero {
+    grid-template-columns: minmax(0, 1fr) minmax(360px, .95fr);
+  }
+
+  .home-visual {
+    height: 390px;
+    min-height: 390px;
+  }
+
+  .home-visual-card-a {
+    width: 35%;
+    left: 5%;
+  }
+
+  .home-visual-card-b {
+    width: 54%;
+  }
+
+  .home-visual-card-c {
+    width: 32%;
+    left: 20%;
+  }
+}
+
+@media (max-width: 980px) {
+  .home-hero {
+    grid-template-columns: 1fr;
+  }
+
+  .home-visual {
+    width: min(620px, 100%);
+    height: 380px;
+    min-height: 380px;
+    margin: 0 auto;
+  }
+
+  .home-visual-card-a {
+    width: 32%;
+    left: 10%;
+  }
+
+  .home-visual-card-b {
+    width: 48%;
+    right: 6%;
+  }
+
+  .home-visual-card-c {
+    width: 29%;
+    left: 28%;
+  }
+}
+
+@media (max-width: 768px) {
+  .home-hero {
+    gap: 24px;
+  }
+
+  .home-visual {
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 12px;
+  }
+
+  .home-visual::before {
+    inset: 4% 0 0 0;
+  }
+
+  .home-visual-card,
+  .home-visual-card-a,
+  .home-visual-card-b,
+  .home-visual-card-c {
+    position: static;
+    transform: none;
+    width: 100%;
+    box-shadow: 0 12px 28px rgba(18,18,18,.10);
+  }
+
+  .home-visual-card-b {
+    grid-column: 1 / 3;
+    grid-row: 1;
+    width: 74%;
+    justify-self: center;
+  }
+
+  .home-visual-card-a {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .home-visual-card-c {
+    grid-column: 2;
+    grid-row: 2;
+  }
+}
+
+@media (max-width: 430px) {
+  .home-visual {
+    gap: 10px;
+  }
+
+  .home-visual-card-b {
+    width: 82%;
+  }
+}
