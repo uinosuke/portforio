@@ -2962,3 +2962,238 @@ textarea {
   line-height: 1.7;
   letter-spacing: 0.015em;
 }
+
+/* =========================================================
+ 2026-07-17 ABOUTプロフィールレイアウト
+========================================================= */
+
+#view-about {
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+.about-profile-card {
+  position: relative;
+  display: grid;
+  grid-template-columns: 240px minmax(0, 1fr);
+  gap: clamp(30px, 5vw, 64px);
+  align-items: center;
+  padding: clamp(28px, 4vw, 50px);
+  border: 1px solid var(--portfolio-line);
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at 90% 10%, rgba(122, 31, 44, 0.09), transparent 25rem),
+    var(--portfolio-panel);
+  box-shadow: var(--portfolio-shadow);
+  overflow: hidden;
+}
+
+.about-profile-card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 180px;
+  height: 4px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--portfolio-accent-light),
+    var(--portfolio-accent)
+  );
+}
+
+.about-profile-photo {
+  position: relative;
+  width: 240px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  isolation: isolate;
+  overflow: hidden;
+  border: 8px solid #ffffff;
+  background: var(--portfolio-accent-soft);
+  box-shadow:
+    0 18px 34px rgba(69, 25, 34, 0.16),
+    0 0 0 1px rgba(122, 31, 44, 0.08);
+}
+
+.about-profile-photo svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.about-profile-photo > span {
+  position: absolute;
+  left: 50%;
+  bottom: 18px;
+  transform: translateX(-50%);
+  z-index: 2;
+  padding: 6px 11px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--portfolio-accent);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  white-space: nowrap;
+  backdrop-filter: blur(8px);
+}
+
+.about-profile-copy {
+  min-width: 0;
+}
+
+.about-profile-copy h1 {
+  margin: 8px 0 10px;
+  font-size: clamp(38px, 4.5vw, 64px);
+  line-height: 1;
+  letter-spacing: -0.035em;
+}
+
+.about-profile-copy > p {
+  margin: 0;
+  color: var(--portfolio-muted);
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.about-profile-keywords {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin-top: 25px;
+}
+
+.about-profile-keywords span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 34px;
+  padding: 7px 16px;
+  border: 1px solid rgba(122, 31, 44, 0.38);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.76);
+  color: var(--portfolio-accent);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.about-content-panel {
+  position: relative;
+  margin-top: 22px;
+  padding: clamp(30px, 4.5vw, 58px);
+  border-radius: 24px;
+  box-shadow: var(--portfolio-shadow);
+}
+
+#about-content {
+  max-width: 880px;
+}
+
+#about-content h1,
+#about-content h2,
+#about-content h3 {
+  position: relative;
+  margin-top: 2.1em;
+  margin-bottom: 0.8em;
+  color: var(--portfolio-text);
+  line-height: 1.45;
+}
+
+#about-content h1:first-child,
+#about-content h2:first-child,
+#about-content h3:first-child {
+  margin-top: 0;
+}
+
+#about-content h2::after,
+#about-content h3::after {
+  content: "";
+  display: block;
+  width: 34px;
+  height: 2px;
+  margin-top: 10px;
+  background: var(--portfolio-accent);
+}
+
+#about-content p {
+  margin: 0 0 1.25em;
+  color: #4f4a48;
+  line-height: 2;
+}
+
+#about-content ul,
+#about-content ol {
+  margin: 1em 0 1.5em;
+  padding-left: 1.6em;
+  color: #4f4a48;
+  line-height: 1.9;
+}
+
+#view-about .text-edit-btn {
+  position: sticky;
+  bottom: 18px;
+  float: right;
+  margin-top: 18px;
+  box-shadow: 0 8px 20px rgba(122, 31, 44, 0.2);
+}
+
+@media (max-width: 900px) {
+  .about-profile-card {
+    grid-template-columns: 190px minmax(0, 1fr);
+    gap: 28px;
+  }
+
+  .about-profile-photo {
+    width: 190px;
+  }
+}
+
+@media (max-width: 680px) {
+  .about-profile-card {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    text-align: center;
+    padding: 28px 22px;
+  }
+
+  .about-profile-photo {
+    width: min(210px, 68vw);
+  }
+
+  .about-profile-keywords {
+    justify-content: center;
+  }
+
+  .about-content-panel {
+    padding: 28px 22px;
+  }
+
+  #about-content {
+    max-width: none;
+  }
+}
+
+@media (max-width: 430px) {
+  .about-profile-card,
+  .about-content-panel {
+    border-radius: 18px;
+  }
+
+  .about-profile-copy h1 {
+    font-size: 42px;
+  }
+
+  .about-profile-keywords {
+    gap: 7px;
+  }
+
+  .about-profile-keywords span {
+    padding: 6px 12px;
+    font-size: 10px;
+  }
+}
