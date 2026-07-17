@@ -2200,3 +2200,114 @@ body.admin-mode .work-title {
     height: 245px;
   }
 }
+
+
+/* =========================================================
+ 2026-07-17 HOME画像配置 v5
+ 3枚を重ねず、2列のモザイク配置に変更
+========================================================= */
+
+.home-visual {
+  width: 100%;
+  height: auto;
+  min-height: 380px;
+  display: grid;
+  grid-template-columns: minmax(150px, .78fr) minmax(250px, 1.22fr);
+  grid-template-rows: 1fr 1fr;
+  gap: 16px;
+  align-items: center;
+  overflow: visible;
+}
+
+.home-visual::before {
+  width: 94%;
+  height: 88%;
+  right: 0;
+  top: 6%;
+}
+
+.home-visual-card,
+.home-visual-card-a,
+.home-visual-card-b,
+.home-visual-card-c {
+  position: static;
+  inset: auto;
+  width: 100%;
+  height: auto !important;
+  transform: none;
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+.home-visual-card-a {
+  grid-column: 2;
+  grid-row: 1 / 3;
+  align-self: center;
+  justify-self: stretch;
+  z-index: 1;
+}
+
+.home-visual-card-b {
+  grid-column: 1;
+  grid-row: 1;
+  align-self: end;
+  z-index: 1;
+}
+
+.home-visual-card-c {
+  grid-column: 1;
+  grid-row: 2;
+  align-self: start;
+  z-index: 1;
+}
+
+.home-visual-card img {
+  display: block;
+  width: 100%;
+  height: auto !important;
+  object-fit: contain;
+  border-radius: inherit;
+}
+
+@media (max-width: 1120px) {
+  .home-visual {
+    width: min(720px, 100%);
+    min-height: 0;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .home-visual {
+    width: 100%;
+    min-height: 0;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 10px;
+  }
+
+  .home-visual-card-a {
+    grid-column: 1 / 3;
+    grid-row: 1;
+    width: 72%;
+    justify-self: center;
+  }
+
+  .home-visual-card-b {
+    grid-column: 1;
+    grid-row: 2;
+    align-self: start;
+  }
+
+  .home-visual-card-c {
+    grid-column: 2;
+    grid-row: 2;
+    align-self: start;
+  }
+}
+
+@media (max-width: 430px) {
+  .home-visual-card-a {
+    width: 78%;
+  }
+}
