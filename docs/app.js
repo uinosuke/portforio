@@ -2,7 +2,7 @@
 // 設定
 // ===============================
 const API_BASE = "https://delicate-sunset-ea8a.d08084222816.workers.dev";
-const APP_VERSION = "2026-07-17-home-design-v2";
+const APP_VERSION = "2026-07-17-home-design-v3";
 console.info(`[portfolio] ${APP_VERSION}`);
 
 // ===============================
@@ -351,6 +351,14 @@ function showView(view) {
       renderHome();
     }
   }
+
+  requestAnimationFrame(() => {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "auto",
+    });
+  });
 }
 
 document
@@ -421,9 +429,15 @@ function getRecentWorks() {
     getRecentMonthKeys(),
   );
 
-  return works.filter((item) =>
-    monthKeys.has(getMonthKey(item.date)),
-  );
+  return works
+    .filter((item) =>
+      monthKeys.has(getMonthKey(item.date)),
+    )
+    .sort((itemA, itemB) =>
+      getMonthKey(itemB.date).localeCompare(
+        getMonthKey(itemA.date),
+      ),
+    );
 }
 
 function getRecentRangeLabel() {
