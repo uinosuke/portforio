@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>MyPortfolio</title>
-<link rel="stylesheet" href="style.css?v=20260717-recent-tabs-v1" />
+<link rel="stylesheet" href="style.css?v=20260717-home-design-v2" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 
@@ -42,8 +42,12 @@
 <!-- スマホメニュー -->
 <!-- =============================== -->
 <div class="mobile-menu-panel">
+  <a class="nav-item" href="#home" data-view="home">
+    <span class="nav-label"><i class="fa-solid fa-house"></i>HOME</span>
+  </a>
+
   <a class="nav-item" href="#gallery" data-view="gallery">
-    <span class="nav-label"><i class="fa-regular fa-images"></i>画像一覧</span>
+    <span class="nav-label"><i class="fa-regular fa-images"></i>デザイン一覧</span>
     <span id="mobile-gallery-count" class="nav-count">—</span>
   </a>
 
@@ -88,8 +92,12 @@
 
   <aside class="sidebar">
     <nav class="sidebar-nav">
+      <a class="nav-item" href="#home" data-view="home">
+        <span class="nav-label"><i class="fa-solid fa-house"></i>HOME</span>
+      </a>
+
       <a class="nav-item" href="#gallery" data-view="gallery">
-        <span class="nav-label"><i class="fa-regular fa-images"></i>画像一覧</span>
+        <span class="nav-label"><i class="fa-regular fa-images"></i>デザイン一覧</span>
         <span id="gallery-count" class="nav-count">—</span>
       </a>
 
@@ -128,12 +136,95 @@
   <!-- =============================== -->
   <main class="main">
 
-    <!-- 画像一覧 -->
-    <section id="view-gallery" class="view">
+    <!-- HOME -->
+    <section id="view-home" class="view hidden">
+      <div class="home-hero">
+        <div class="home-hero-copy">
+          <span class="view-eyebrow">DESIGN &amp; WORK SUPPORT</span>
+          <h1>現場の困りごとを、<br>伝わる形に。</h1>
+          <p>
+            保育・学育・高齢者・本部で使用するポスター、掲示物、資料、
+            業務ツールなどの制作実績をまとめています。
+            誰に何を伝えるか、どう使われるかまで考えて形にします。
+          </p>
+
+          <div class="home-actions">
+            <a class="home-primary-btn" href="#gallery">デザイン一覧を見る</a>
+            <a class="home-secondary-btn" href="#services">依頼できること</a>
+          </div>
+
+          <div class="home-stats">
+            <div>
+              <strong id="home-design-count">—</strong>
+              <span>DESIGNS</span>
+            </div>
+            <div>
+              <strong id="home-recent-count">—</strong>
+              <span>RECENT WORKS</span>
+            </div>
+            <div>
+              <strong id="home-recent-range">—</strong>
+              <span>LATEST PERIOD</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="home-visual" aria-label="最近の制作物">
+          <figure class="home-visual-card home-visual-card-a">
+            <img id="home-feature-image-1" alt="最近の制作物" />
+          </figure>
+          <figure class="home-visual-card home-visual-card-b">
+            <img id="home-feature-image-2" alt="最近の制作物" />
+          </figure>
+          <figure class="home-visual-card home-visual-card-c">
+            <img id="home-feature-image-3" alt="最近の制作物" />
+          </figure>
+        </div>
+      </div>
+
+      <section class="home-section">
+        <div class="home-section-header">
+          <div>
+            <span class="view-eyebrow">RECENT WORKS</span>
+            <h2>最近の制作</h2>
+            <p>今月と先月に制作したものから、最新6件を表示しています。</p>
+          </div>
+          <a href="#recent">すべて見る <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+
+        <div id="home-recent-list" class="home-recent-grid"></div>
+      </section>
+
+      <section class="home-link-grid" aria-label="サイト案内">
+        <a class="home-link-card" href="#gallery">
+          <span>01 / DESIGNS</span>
+          <i class="fa-regular fa-images"></i>
+          <h2>デザイン一覧</h2>
+          <p>登録しているすべての制作物を、検索やカテゴリから探せます。</p>
+        </a>
+
+        <a class="home-link-card" href="#services">
+          <span>02 / SERVICES</span>
+          <i class="fa-solid fa-plus"></i>
+          <h2>依頼できること</h2>
+          <p>ポスター、現場向け制作、資料整理、業務ツールなどを紹介します。</p>
+        </a>
+
+        <a class="home-link-card" href="https://works.do/R/ti/p/300885@himawari-fukushikai" target="_blank">
+          <span>03 / CONTACT</span>
+          <i class="fa-regular fa-comments"></i>
+          <h2>相談する</h2>
+          <p>作るものがまだ決まっていない段階でも、目的から一緒に整理します。</p>
+        </a>
+      </section>
+    </section>
+
+    <!-- デザイン一覧 -->
+    <section id="view-gallery" class="view hidden">
       <div class="view-header">
         <div>
           <span class="view-eyebrow">WORKS ARCHIVE</span>
-          <h1>画像一覧</h1>
+          <h1>デザイン一覧</h1>
           <p>これまで制作したデザイン・広報物をまとめています。</p>
         </div>
         <span id="gallery-total-label" class="view-total">— works</span>
@@ -147,7 +238,6 @@
         <button class="filter-chip active" data-filter="all">すべて</button>
         <button class="filter-chip" data-filter="ポスター">ポスター</button>
         <button class="filter-chip" data-filter="サムネイル">サムネイル</button>
-        <button class="filter-chip" data-filter="採用">採用</button>
         <button class="filter-chip" data-filter="保育">保育</button>
         <button class="filter-chip" data-filter="学育">学育</button>
         <button class="filter-chip" data-filter="高齢者">高齢者</button>
@@ -163,7 +253,7 @@
         <div>
           <span class="view-eyebrow">RECENT WORKS</span>
           <h1>最近の制作</h1>
-          <p>今月と先月に制作したものを、画像一覧から自動でまとめます。</p>
+          <p>今月と先月に制作したものを、デザイン一覧から自動でまとめます。</p>
         </div>
         <span id="recent-range" class="view-total">—</span>
       </div>
@@ -208,7 +298,7 @@
           <span>01 / POSTER</span>
           <i class="fa-regular fa-images"></i>
           <h2>ポスター・チラシ</h2>
-          <p>園行事、地域イベント、採用、施設案内など。情報を整理して、伝わる順番に組み立てます。</p>
+          <p>園行事、地域イベント、施設案内、お知らせなど。情報を整理して、伝わる順番に組み立てます。</p>
         </article>
 
         <article class="service-card">
@@ -222,10 +312,7 @@
           <span>03 / FIELD SUPPORT</span>
           <i class="fa-solid fa-shapes"></i>
           <h2>保育・学育の現場制作</h2>
-          <p>
-            園だより、行事案内、掲示物、カード、教材、工作の見本や型紙など、
-            現場で時間のかかる制作物を相談しながら整えます。
-          </p>
+          <p>園だより、行事案内、掲示物、カード、教材、工作の見本や型紙など、現場で時間のかかる制作物を相談しながら整えます。</p>
         </article>
 
         <article class="service-card">
@@ -379,6 +466,6 @@
   </div>
 </div>
 
-<script src="app.js?v=20260717-recent-tabs-v1"></script>
+<script src="app.js?v=20260717-home-design-v2"></script>
 </body>
 </html>
