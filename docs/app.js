@@ -2,7 +2,7 @@
 // 設定
 // ===============================
 const API_BASE = "https://delicate-sunset-ea8a.d08084222816.workers.dev";
-const APP_VERSION = "2026-07-17-viewer-fix-v1";
+const APP_VERSION = "2026-07-17-mobile-sheet-logo-v2";
 console.info(`[portfolio] ${APP_VERSION}`);
 
 // ===============================
@@ -283,18 +283,36 @@ function adminLogout() {
   alert("管理者モードを終了しました");
 }
 
-siteTitle.addEventListener("dblclick", () => {
-  if (adminMode) {
-    adminLogout();
-  } else {
-    adminLogin();
-  }
-});
+// ロゴは通常クリックでHOMEへ戻り、短時間に4回クリックすると管理者モードを切り替える
+siteTitle.removeAttribute("title");
+
+let logoClickCount = 0;
+let logoClickResetTimer = null;
 
 siteTitle.addEventListener("click", () => {
   if (location.hash !== "#home") {
     location.hash = "#home";
   }
+
+  logoClickCount += 1;
+
+  clearTimeout(logoClickResetTimer);
+
+  if (logoClickCount >= 4) {
+    logoClickCount = 0;
+
+    if (adminMode) {
+      adminLogout();
+    } else {
+      adminLogin();
+    }
+
+    return;
+  }
+
+  logoClickResetTimer = setTimeout(() => {
+    logoClickCount = 0;
+  }, 1400);
 });
 
 // ===============================
@@ -1136,6 +1154,77 @@ document
 // ===============================
 // Viewer
 // ===============================
+function getViewerSheetLimits() {
+  const viewportHeight =
+    window.visualViewport?.height ||
+    window.innerHeight;
+
+  const minHeight = Math.max(
+    185,
+    viewportHeight * 0.30,
+  );
+
+  const maxHeight = Math.max(
+    minHeight,
+    viewportHeight - 82,
+  );
+
+  return {
+    minHeight,
+    maxHeight,
+  };
+}
+
+function setViewerSheetHeight(
+  height,
+  animate = true,
+) {
+  if (!viewerRight ||
+      window.innerWidth > 768) {
+    return;
+  }
+
+  const {
+    minHeight,
+    maxHeight,
+  } = getViewerSheetLimits();
+
+  const nextHeight = Math.min(
+    maxHeight,
+    Math.max(minHeight, height),
+  );
+
+  viewerRight.classList.toggle(
+    "is-dragging",
+    !animate,
+  );
+
+  viewerRight.style.setProperty(
+    "--viewer-sheet-height",
+    `${nextHeight}px`,
+  );
+
+  viewerRight.classList.toggle(
+    "active",
+    nextHeight >
+      minHeight + (maxHeight - minHeight) * 0.35,
+  );
+}
+
+function collapseViewerSheet() {
+  const { minHeight } =
+    getViewerSheetLimits();
+
+  setViewerSheetHeight(minHeight);
+}
+
+function expandViewerSheet() {
+  const { maxHeight } =
+    getViewerSheetLimits();
+
+  setViewerSheetHeight(maxHeight);
+}
+
 function openViewer(index) {
   const item = displayedWorks[index];
 
@@ -1172,7 +1261,7 @@ function openViewer(index) {
 
   if (window.innerWidth <= 768) {
     viewerLeft.style.display = "flex";
-    viewerRight.classList.remove("active");
+    collapseViewerSheet();
   }
 }
 
@@ -1282,7 +1371,7 @@ function openViewerEditForm() {
   viewerEditForm.classList.remove("hidden");
 
   if (window.innerWidth <= 768) {
-    viewerRight.classList.add("active");
+    expandViewerSheet();
   }
 
   requestAnimationFrame(() => {
@@ -1429,70 +1518,137 @@ async function deleteWork(id) {
 // スマホViewer操作
 // ===============================
 function enableDragSheet() {
-  if (!viewerRight) {
+  if (!viewerRight ||
+      !dragHandle ||
+      viewerRight.dataset.dragReady === "true") {
     return;
   }
 
+  viewerRight.dataset.dragReady = "true";
+
+  let dragging = false;
   let startY = 0;
-  let isDragging = false;
+  let startHeight = 0;
+  let lastY = 0;
 
-  viewerRight.addEventListener(
-    "touchstart",
-    (event) => {
-      const touchY =
-        event.touches[0].clientY;
+  const beginDrag = (event) => {
+    if (window.innerWidth > 768) {
+      return;
+    }
 
-      const rect =
-        viewerRight.getBoundingClientRect();
+    dragging = true;
+    startY = event.clientY;
+    lastY = event.clientY;
+    startHeight =
+      viewerRight.getBoundingClientRect().height;
 
-      const offsetY =
-        touchY - rect.top;
-
-      if (offsetY <= 60) {
-        startY = touchY;
-        isDragging = true;
-      }
-    },
-  );
-
-  viewerRight.addEventListener(
-    "touchmove",
-    (event) => {
-      if (!isDragging) {
-        return;
-      }
-
-      const currentY =
-        event.touches[0].clientY;
-
-      const diff =
-        startY - currentY;
-
-      if (diff > 20) {
-        viewerRight.classList.add("active");
-      }
-
-      if (diff < -20) {
-        viewerRight.classList.remove("active");
-      }
-    },
-  );
-
-  viewerRight.addEventListener(
-    "touchend",
-    () => {
-      isDragging = false;
-    },
-  );
-
-  if (dragHandle) {
-    dragHandle.addEventListener(
-      "click",
-      () => {
-        viewerRight.classList.toggle("active");
-      },
+    viewerRight.classList.add(
+      "is-dragging",
     );
-  }
+
+    dragHandle.setPointerCapture?.(
+      event.pointerId,
+    );
+
+    event.preventDefault();
+  };
+
+  const moveDrag = (event) => {
+    if (!dragging) {
+      return;
+    }
+
+    lastY = event.clientY;
+
+    const movedUp =
+      startY - event.clientY;
+
+    setViewerSheetHeight(
+      startHeight + movedUp,
+      false,
+    );
+
+    event.preventDefault();
+  };
+
+  const endDrag = (event) => {
+    if (!dragging) {
+      return;
+    }
+
+    dragging = false;
+
+    viewerRight.classList.remove(
+      "is-dragging",
+    );
+
+    dragHandle.releasePointerCapture?.(
+      event.pointerId,
+    );
+
+    const movedDistance =
+      Math.abs(lastY - startY);
+
+    // 軽くタップした場合だけ、最小・最大を切り替える
+    if (movedDistance < 8) {
+      const currentHeight =
+        viewerRight.getBoundingClientRect().height;
+
+      const {
+        minHeight,
+        maxHeight,
+      } = getViewerSheetLimits();
+
+      const middle =
+        minHeight +
+        (maxHeight - minHeight) / 2;
+
+      setViewerSheetHeight(
+        currentHeight < middle
+          ? maxHeight
+          : minHeight,
+      );
+    }
+  };
+
+  dragHandle.addEventListener(
+    "pointerdown",
+    beginDrag,
+  );
+
+  dragHandle.addEventListener(
+    "pointermove",
+    moveDrag,
+  );
+
+  dragHandle.addEventListener(
+    "pointerup",
+    endDrag,
+  );
+
+  dragHandle.addEventListener(
+    "pointercancel",
+    endDrag,
+  );
+
+  window.addEventListener("resize", () => {
+    if (!viewer.classList.contains("open") ||
+        window.innerWidth > 768) {
+      viewerRight.style.removeProperty(
+        "--viewer-sheet-height",
+      );
+      viewerRight.classList.remove(
+        "active",
+        "is-dragging",
+      );
+      return;
+    }
+
+    const currentHeight =
+      viewerRight.getBoundingClientRect().height;
+
+    setViewerSheetHeight(currentHeight);
+  });
 }
 
 function enableSwipeNavigation() {
