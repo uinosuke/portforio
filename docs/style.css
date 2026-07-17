@@ -1,471 +1,2063 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>MyPortfolio</title>
-<link rel="stylesheet" href="style.css?v=20260717-home-design-v3" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-</head>
-
-<body>
-<!-- =============================== -->
-<!-- ローディングアニメーション -->
-<!-- =============================== -->
-<div id="loading-overlay">
-  <div class="spinner"></div>
-</div>
-
-<!-- =============================== -->
-<!-- ヘッダー -->
-<!-- =============================== -->
-<header class="header">
-  <img
-    id="site-title"
-    src="https://raw.githubusercontent.com/uinosuke/portforio/main/docs/images/logo.png"
-    alt="MyPortfolio"
-    title="ダブルクリックで管理者モード"
-  />
-
-  <div class="search-box pc-search">
-    <i class="fa-solid fa-magnifying-glass search-icon"></i>
-    <input id="search-input" type="text" placeholder="タイトル・タグ・概要を検索..." />
-    <span id="search-clear">×</span>
-  </div>
-
-  <div class="mobile-menu-btn" aria-label="メニューを開く">
-    <span></span><span></span><span></span>
-  </div>
-</header>
-
-<!-- =============================== -->
-<!-- スマホメニュー -->
-<!-- =============================== -->
-<div class="mobile-menu-panel">
-  <a class="nav-item" href="#home" data-view="home">
-    <span class="nav-label"><i class="fa-solid fa-house"></i>HOME</span>
-  </a>
-
-  <a class="nav-item" href="#gallery" data-view="gallery">
-    <span class="nav-label"><i class="fa-regular fa-images"></i>デザイン一覧</span>
-    <span id="mobile-gallery-count" class="nav-count">—</span>
-  </a>
-
-  <a class="nav-item" href="#recent" data-view="recent">
-    <span class="nav-label"><i class="fa-regular fa-clock"></i>最近の制作</span>
-    <span class="nav-meta"><span class="nav-new">NEW</span><span id="mobile-recent-count" class="nav-count">—</span></span>
-  </a>
-
-  <a class="nav-item" href="#services" data-view="services">
-    <span class="nav-label"><i class="fa-solid fa-plus"></i>依頼できること</span>
-  </a>
-
-  <a class="nav-item" href="#about" data-view="about">
-    <span class="nav-label"><i class="fa-regular fa-circle-user"></i>ABOUT</span>
-  </a>
-
-  <a class="nav-item" href="#info" data-view="info">
-    <span class="nav-label"><i class="fa-regular fa-file-lines"></i>制作について</span>
-  </a>
-
-  <a class="nav-item" href="https://himawari-fukushikai.org/" target="_blank">
-    <span class="nav-label"><i class="fa-solid fa-arrow-up-right-from-square"></i>法人HP</span>
-  </a>
-
-  <div class="mobile-search-area">
-    <div class="mobile-search-box">
-      <i class="fa-solid fa-magnifying-glass search-icon"></i>
-      <input id="mobile-search-input" type="text" placeholder="検索..." />
-      <button id="mobile-search-btn">検索</button>
-    </div>
-  </div>
-
-  <a class="consult-btn" href="https://works.do/R/ti/p/300885@himawari-fukushikai" target="_blank">
-    ご相談はこちら
-  </a>
-</div>
-
-<!-- =============================== -->
-<!-- レイアウト -->
-<!-- =============================== -->
-<div class="layout">
-
-  <aside class="sidebar">
-    <nav class="sidebar-nav">
-      <a class="nav-item" href="#home" data-view="home">
-        <span class="nav-label"><i class="fa-solid fa-house"></i>HOME</span>
-      </a>
-
-      <a class="nav-item" href="#gallery" data-view="gallery">
-        <span class="nav-label"><i class="fa-regular fa-images"></i>デザイン一覧</span>
-        <span id="gallery-count" class="nav-count">—</span>
-      </a>
-
-      <a class="nav-item" href="#recent" data-view="recent">
-        <span class="nav-label"><i class="fa-regular fa-clock"></i>最近の制作</span>
-        <span class="nav-meta"><span class="nav-new">NEW</span><span id="recent-count" class="nav-count">—</span></span>
-      </a>
-
-      <a class="nav-item" href="#services" data-view="services">
-        <span class="nav-label"><i class="fa-solid fa-plus"></i>依頼できること</span>
-      </a>
-
-      <a class="nav-item" href="#about" data-view="about">
-        <span class="nav-label"><i class="fa-regular fa-circle-user"></i>ABOUT</span>
-      </a>
-
-      <a class="nav-item" href="#info" data-view="info">
-        <span class="nav-label"><i class="fa-regular fa-file-lines"></i>制作について</span>
-      </a>
-
-      <a class="nav-item" href="https://himawari-fukushikai.org/" target="_blank">
-        <span class="nav-label"><i class="fa-solid fa-arrow-up-right-from-square"></i>法人HP</span>
-      </a>
-    </nav>
-
-    <div class="sidebar-bottom">
-      <a class="consult-btn" href="https://works.do/R/ti/p/300885@himawari-fukushikai" target="_blank">
-        ご相談はこちら
-      </a>
-      <div id="admin-panel" class="admin-only">管理者モード</div>
-    </div>
-  </aside>
-
-  <!-- =============================== -->
-  <!-- メイン -->
-  <!-- =============================== -->
-  <main class="main">
-
-    <!-- HOME -->
-    <section id="view-home" class="view hidden">
-      <div class="home-hero">
-        <div class="home-hero-copy">
-          <span class="view-eyebrow">DESIGN &amp; WORK SUPPORT</span>
-          <h1>現場の困りごとを、<br>伝わる形に。</h1>
-          <p>
-            保育・学育・高齢者・本部で使用するポスター、掲示物、資料、
-            業務ツールなどの制作実績をまとめています。
-            誰に何を伝えるか、どう使われるかまで考えて形にします。
-          </p>
-
-          <div class="home-actions">
-            <a class="home-primary-btn" href="#gallery">デザイン一覧を見る</a>
-            <a class="home-secondary-btn" href="#services">依頼できること</a>
-          </div>
-
-          <div class="home-stats">
-            <div>
-              <strong id="home-design-count">—</strong>
-              <span>DESIGNS</span>
-            </div>
-            <div>
-              <strong id="home-recent-count">—</strong>
-              <span>RECENT WORKS</span>
-            </div>
-            <div>
-              <strong id="home-recent-range">—</strong>
-              <span>LATEST PERIOD</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="home-visual" aria-label="最近の制作物">
-          <figure class="home-visual-card home-visual-card-a">
-            <img id="home-feature-image-1" alt="最近の制作物" />
-          </figure>
-          <figure class="home-visual-card home-visual-card-b">
-            <img id="home-feature-image-2" alt="最近の制作物" />
-          </figure>
-          <figure class="home-visual-card home-visual-card-c">
-            <img id="home-feature-image-3" alt="最近の制作物" />
-          </figure>
-        </div>
-      </div>
-
-      <section class="home-section">
-        <div class="home-section-header">
-          <div>
-            <span class="view-eyebrow">RECENT WORKS</span>
-            <h2>最近の制作</h2>
-            <p>今月と先月に制作したものから、最新6件を表示しています。</p>
-          </div>
-          <a href="#recent">すべて見る <i class="fa-solid fa-arrow-right"></i></a>
-        </div>
-
-        <div id="home-recent-list" class="home-recent-grid"></div>
-      </section>
-
-      <section class="home-link-grid" aria-label="サイト案内">
-        <a class="home-link-card" href="#gallery">
-          <span>01 / DESIGNS</span>
-          <i class="fa-regular fa-images"></i>
-          <h2>デザイン一覧</h2>
-          <p>登録しているすべての制作物を、検索やカテゴリから探せます。</p>
-        </a>
-
-        <a class="home-link-card" href="#services">
-          <span>02 / SERVICES</span>
-          <i class="fa-solid fa-plus"></i>
-          <h2>依頼できること</h2>
-          <p>ポスター、現場向け制作、資料整理、業務ツールなどを紹介します。</p>
-        </a>
-
-        <a class="home-link-card" href="https://works.do/R/ti/p/300885@himawari-fukushikai" target="_blank">
-          <span>03 / CONTACT</span>
-          <i class="fa-regular fa-comments"></i>
-          <h2>相談する</h2>
-          <p>作るものがまだ決まっていない段階でも、目的から一緒に整理します。</p>
-        </a>
-      </section>
-    </section>
-
-    <!-- デザイン一覧 -->
-    <section id="view-gallery" class="view hidden">
-      <div class="view-header">
-        <div>
-          <span class="view-eyebrow">WORKS ARCHIVE</span>
-          <h1>デザイン一覧</h1>
-          <p>これまで制作したデザイン・広報物をまとめています。</p>
-        </div>
-        <span id="gallery-total-label" class="view-total">— works</span>
-      </div>
-
-      <div id="upload-dropzone" class="upload-dropzone admin-only">
-        ここに画像をドラッグ＆ドロップしてください
-      </div>
-
-      <div class="filter-row" aria-label="カテゴリで絞り込み">
-        <button class="filter-chip active" data-filter="all">すべて</button>
-        <button class="filter-chip" data-filter="ポスター">ポスター</button>
-        <button class="filter-chip" data-filter="サムネイル">サムネイル</button>
-        <button class="filter-chip" data-filter="保育">保育</button>
-        <button class="filter-chip" data-filter="学育">学育</button>
-        <button class="filter-chip" data-filter="高齢者">高齢者</button>
-        <button class="filter-chip" data-filter="本部">本部</button>
-      </div>
-
-      <div id="works-list" class="works-grid"></div>
-    </section>
-
-    <!-- 最近の制作 -->
-    <section id="view-recent" class="view hidden">
-      <div class="view-header">
-        <div>
-          <span class="view-eyebrow">RECENT WORKS</span>
-          <h1>最近の制作</h1>
-          <p>今月と先月に制作したものを、デザイン一覧から自動でまとめます。</p>
-        </div>
-        <span id="recent-range" class="view-total">—</span>
-      </div>
-
-      <div class="recent-summary">
-        <div>
-          <span class="recent-summary-label">LATEST TWO MONTHS</span>
-          <strong id="recent-summary-range">—</strong>
-          <p>新しく追加した制作物を、古い作品に埋もれさせず見せるためのタブ。</p>
-        </div>
-        <div class="recent-summary-count">
-          <strong id="recent-total-label">0</strong>
-          <span>WORKS</span>
-        </div>
-      </div>
-
-      <div class="filter-row" aria-label="最近の制作をカテゴリで絞り込み">
-        <button class="filter-chip active" data-filter="all">すべて</button>
-        <button class="filter-chip" data-filter="ポスター">ポスター</button>
-        <button class="filter-chip" data-filter="サムネイル">サムネイル</button>
-        <button class="filter-chip" data-filter="保育">保育</button>
-        <button class="filter-chip" data-filter="学育">学育</button>
-        <button class="filter-chip" data-filter="高齢者">高齢者</button>
-        <button class="filter-chip" data-filter="本部">本部</button>
-      </div>
-
-      <div id="recent-works-list" class="works-grid"></div>
-    </section>
-
-    <!-- 依頼できること -->
-    <section id="view-services" class="view hidden">
-      <div class="view-header">
-        <div>
-          <span class="view-eyebrow">SERVICES</span>
-          <h1>依頼できること</h1>
-          <p>どんな制作や相談ができるのかを、作品とは別にまとめています。</p>
-        </div>
-      </div>
-
-      <div class="service-grid">
-        <article class="service-card">
-          <span>01 / POSTER</span>
-          <i class="fa-regular fa-images"></i>
-          <h2>ポスター・チラシ</h2>
-          <p>園行事、地域イベント、施設案内、お知らせなど。情報を整理して、伝わる順番に組み立てます。</p>
-        </article>
-
-        <article class="service-card">
-          <span>02 / SNS</span>
-          <i class="fa-regular fa-window-maximize"></i>
-          <h2>SNS・サムネイル</h2>
-          <p>LINE WORKS、SNS投稿、動画サムネイルなど、掲載先に合わせて見せ方を調整します。</p>
-        </article>
-
-        <article class="service-card">
-          <span>03 / FIELD SUPPORT</span>
-          <i class="fa-solid fa-shapes"></i>
-          <h2>保育・学育の現場制作</h2>
-          <p>園だより、行事案内、掲示物、カード、教材、工作の見本や型紙など、現場で時間のかかる制作物を相談しながら整えます。</p>
-        </article>
-
-        <article class="service-card">
-          <span>04 / DOCUMENT</span>
-          <i class="fa-regular fa-file-lines"></i>
-          <h2>資料・シート整理</h2>
-          <p>ヒアリングシート、管理表、説明資料など、現場で迷わず使える形へ整理します。</p>
-        </article>
-
-        <article class="service-card">
-          <span>05 / TOOL</span>
-          <i class="fa-solid fa-code"></i>
-          <h2>小さな業務ツール</h2>
-          <p>検索ページ、入力支援、管理画面など、日々の小さな面倒を減らす仕組みを作ります。</p>
-        </article>
-
-        <article class="service-card">
-          <span>06 / CONSULT</span>
-          <i class="fa-regular fa-comments"></i>
-          <h2>相談から一緒に整理</h2>
-          <p>何を作ればいいか決まっていない段階でも、目的や対象を聞きながら必要な形を考えます。</p>
-        </article>
-      </div>
-    </section>
-
-    <!-- ABOUT -->
-    <section id="view-about" class="view hidden">
-      <div class="view-header">
-        <div>
-          <span class="view-eyebrow">PROFILE</span>
-          <h1>ABOUT</h1>
-          <p>このサイトと制作活動について。</p>
-        </div>
-      </div>
-
-      <div class="text-panel">
-        <div id="about-content"></div>
-        <button id="edit-about" class="admin-only text-edit-btn">編集</button>
-      </div>
-    </section>
-
-    <!-- 制作について -->
-    <section id="view-info" class="view hidden">
-      <div class="view-header">
-        <div>
-          <span class="view-eyebrow">PROCESS</span>
-          <h1>制作について</h1>
-          <p>依頼から完成までの考え方や流れ。</p>
-        </div>
-      </div>
-
-      <div class="text-panel">
-        <div id="info-content"></div>
-        <button id="edit-info" class="admin-only text-edit-btn">編集</button>
-      </div>
-    </section>
-
-  </main>
-</div>
-
-<!-- =============================== -->
-<!-- Viewer -->
-<!-- =============================== -->
-<div id="image-viewer" class="image-viewer">
-  <button id="viewer-close-btn" class="viewer-close-btn">×</button>
-
-  <div class="viewer-left">
-    <button class="viewer-arrow left" id="viewer-prev">‹</button>
-    <img id="viewer-image" class="viewer-image" src="" alt="" />
-    <button class="viewer-arrow right" id="viewer-next">›</button>
-  </div>
-
-  <div class="viewer-right">
-    <div class="viewer-drag-handle"></div>
-
-    <h3 class="viewer-section-title">TITLE</h3>
-    <p id="viewer-title"></p>
-
-    <h3 class="viewer-section-title">TAGS</h3>
-    <div id="viewer-tags"></div>
-
-    <h3 class="viewer-section-title">DATE</h3>
-    <p id="viewer-date"></p>
-
-    <h3 class="viewer-section-title">DESCRIPTION</h3>
-    <p id="viewer-description"></p>
-
-    <div class="viewer-admin-actions admin-only">
-      <button id="viewer-edit-work">編集</button>
-      <button id="viewer-delete-work">削除</button>
-    </div>
-
-    <div id="viewer-edit-form" class="viewer-edit-form admin-only hidden">
-      <label>
-        TITLE
-        <input id="viewer-edit-title" type="text" />
-      </label>
-
-      <label>
-        TAGS
-        <input id="viewer-edit-tags" type="text" />
-      </label>
-
-      <label>
-        DATE
-        <input id="viewer-edit-date" type="month" />
-      </label>
-
-      <label>
-        DESCRIPTION
-        <textarea id="viewer-edit-description"></textarea>
-      </label>
-
-      <div class="viewer-edit-buttons">
-        <button id="viewer-save-work">保存</button>
-        <button id="viewer-cancel-edit">キャンセル</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- =============================== -->
-<!-- 編集モーダル -->
-<!-- =============================== -->
-<div id="edit-modal" class="modal">
-  <div class="modal-content">
-    <h3 id="modal-title"></h3>
-    <textarea id="modal-textarea"></textarea>
-    <div class="modal-buttons">
-      <button class="modal-btn save" id="modal-save">保存</button>
-      <button class="modal-btn cancel" id="modal-cancel">キャンセル</button>
-    </div>
-  </div>
-</div>
-
-<!-- =============================== -->
-<!-- ステップ式アップロードモーダル -->
-<!-- =============================== -->
-<div id="upload-step-modal" class="modal">
-  <div class="upload-step-content">
-    <h3 id="upload-step-title"></h3>
-
-    <input id="upload-step-input" type="text" />
-    <input id="upload-step-month" type="month" />
-    <textarea id="upload-step-textarea"></textarea>
-
-    <div class="upload-step-buttons">
-      <button id="upload-step-back">戻る</button>
-      <button id="upload-step-ok">OK</button>
-    </div>
-  </div>
-</div>
-
-<script src="app.js?v=20260717-home-design-v3"></script>
-</body>
-</html>
+/* ===============================
+ 全体
+=============================== */
+* { box-sizing: border-box; }
+
+html, body {
+margin: 0;
+padding: 0;
+font-family: 'Noto Sans', system-ui, sans-serif;
+background: #f7f7f5;
+color: #111;
+overflow-x: hidden;
+}
+
+/* ===============================
+ ヘッダー（高さ10%）
+=============================== */
+.header {
+display: flex;
+align-items: center;
+justify-content: space-between;
+height: 10vh;
+padding: 0 24px;
+border-bottom: 1px solid #e8e8e6;
+background: #ffffff;
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+z-index: 10000;
+box-shadow: 0 1px 0 #e8e8e6, 0 2px 8px rgba(0,0,0,0.06);
+}
+
+#site-title {
+margin: 0;
+font-size: 20px;
+color: #111;
+user-select: none;
+}
+
+/* PC検索バー */
+.pc-search {
+display: flex;
+align-items: center;
+gap: 8px;
+padding: 6px 10px;
+border-radius: 999px;
+background: #f2f2f0;
+border: 1px solid #e2e2e0;
+}
+
+.pc-search input {
+border: none;
+outline: none;
+background: transparent;
+color: #111;
+font-size: 13px;
+min-width: 180px;
+}
+
+#search-clear {
+display: none;
+cursor: pointer;
+font-size: 18px;
+color: #666;
+padding: 0 6px;
+}
+
+#search-clear:hover { color: #000; }
+
+.search-icon {
+color: #666;
+font-size: 16px;
+}
+
+/* ===============================
+ ハンバーガー
+=============================== */
+.mobile-menu-btn {
+display: none;
+position: fixed;
+top: 14px;
+right: 14px;
+width: 28px;
+height: 22px;
+z-index: 20000;
+cursor: pointer;
+}
+
+.mobile-menu-btn span {
+display: block;
+height: 3px;
+background: #111;
+margin-bottom: 5px;
+border-radius: 3px;
+}
+
+/* スマホメニュー */
+.mobile-menu-panel {
+display: none;
+position: fixed;
+top: -100%;
+left: 0;
+width: 100%;
+background: #ffffff;
+padding: 20px;
+z-index: 15000;
+transition: top 0.3s ease;
+box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.mobile-menu-panel.open {
+top: 10vh;
+}
+
+.mobile-menu-panel .nav-item {
+padding: 16px;
+font-size: 16px;
+color: #111;
+}
+
+.mobile-menu-panel .consult-btn {
+margin-top: 20px;
+width: 100%;
+}
+
+/* スマホ検索バー */
+.mobile-search-area {
+margin-top: 20px;
+}
+
+.mobile-search-box {
+display: flex;
+align-items: center;
+gap: 8px;
+background: #f2f2f0;
+border: 1px solid #e2e2e0;
+padding: 8px 12px;
+border-radius: 999px;
+}
+
+#mobile-search-input {
+flex: 1;
+border: none;
+outline: none;
+background: transparent;
+color: #111;
+font-size: 14px;
+}
+
+#mobile-search-btn {
+background: #1a1a1a;
+color: #fff;
+border: none;
+padding: 6px 12px;
+border-radius: 999px;
+cursor: pointer;
+font-size: 13px;
+}
+
+/* ===============================
+ レイアウト
+=============================== */
+.layout {
+display: flex;
+min-height: 90vh;
+padding-top: 10vh;
+}
+
+/* ===============================
+ PCサイドバー
+=============================== */
+.sidebar {
+width: 220px;
+background: #ffffff;
+border-right: 1px solid #e8e8e6;
+display: flex;
+flex-direction: column;
+padding: 10px 0 40px 0px;
+position: fixed;
+top: 10vh;
+bottom: 0;
+left: 0;
+z-index: 9000;
+box-shadow: 1px 0 0 #f0f0ee;
+}
+
+.nav-item {
+display: block;
+width: 100%;
+padding: 14px 28px;
+background: transparent;
+color: #555;
+font-size: 14px;
+text-decoration: none;
+cursor: pointer;
+border-left: 2px solid transparent;
+position: relative;
+overflow: hidden;
+transition: color 0.2s ease;
+}
+
+.nav-item::after {
+content: "";
+position: absolute;
+top: 50%;
+right: 28px;
+width: 0%;
+height: 1px;
+background: #ffffff;
+transition: width 0.2s ease 0.15s;
+z-index: 3;
+transform: translateY(-50%);
+}
+
+.nav-item:hover::after {
+width: calc(100% - 170px);
+}
+
+.nav-item::before {
+content: "";
+position: absolute;
+top: 0;
+left: 0;
+width: 0%;
+height: 100%;
+background: #1a1a1a;
+transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+z-index: 0;
+}
+
+.nav-item:hover::before {
+width: 100%;
+}
+
+.nav-item:hover {
+color: #fff;
+}
+
+.nav-item span,
+.nav-item {
+position: relative;
+z-index: 1;
+}
+
+.sidebar-bottom { margin-top: auto; }
+
+.consult-btn {
+display: block;
+text-decoration: none;
+text-align: center;
+width: 90%;
+padding: 10px 12px;
+border-radius: 6px;
+background: #8b1e3f;
+color: #fff;
+border: none;
+font-size: 13px;
+font-weight: 600;
+cursor: pointer;
+margin: 0 auto;
+transition: background 0.15s ease;
+}
+
+.consult-btn:hover { background: #7a1937; }
+
+#admin-panel {
+font-size: 12px;
+color: #666;
+}
+
+/* ===============================
+ メイン
+=============================== */
+.main {
+flex: 1;
+padding: 24px;
+margin-left: 220px;
+}
+
+.view.hidden { display: none; }
+
+/* ===============================
+ 画像グリッド（Masonry）
+=============================== */
+.works-grid {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.work-card {
+break-inside: avoid;
+margin-bottom: 16px;
+background: #ffffff;
+border-radius: 10px;
+border: 1px solid #e8e8e6;
+cursor: pointer;
+position: relative;
+animation: fadeIn 0.8s ease;
+overflow: visible;
+box-shadow: 0 2px 8px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.work-card:hover {
+box-shadow: 0 6px 20px rgba(0,0,0,0.10), 0 2px 4px rgba(0,0,0,0.06);
+transform: translateY(-2px);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.work-image {
+width: 100%;
+height: auto;
+display: block;
+background: #eee;
+border-radius: 10px 10px 0 0;
+}
+
+/* タイトル（ホバー時のみ） */
+.work-title {
+position: absolute;
+bottom: 8px;
+left: 12px;
+margin: 0;
+font-weight: 600;
+font-size: 14px;
+color: #fff;
+opacity: 0;
+z-index: 2;
+transition: opacity 0.2s ease;
+}
+
+/* 黒グラデ */
+.work-card::after {
+content: "";
+position: absolute;
+bottom: 0;
+left: 0;
+width: 100%;
+height: 40%;
+background: linear-gradient(to top, rgba(0,0,0,0.6), transparent);
+opacity: 0;
+transition: opacity 0.2s ease;
+z-index: 1;
+border-radius: 0 0 10px 10px;
+}
+
+.work-card:hover::after,
+.work-card:hover .work-title {
+opacity: 1;
+}
+
+/* ===============================
+ ★ 管理者モード：ホバー演出を透明化
+=============================== */
+body.admin-mode .work-card::after {
+opacity: 0 !important;
+}
+
+body.admin-mode .work-title {
+opacity: 0 !important;
+}
+
+/* ===============================
+ 管理者モード
+=============================== */
+.admin-only { display: none; }
+body.admin-mode .admin-only { display: block; }
+
+/* 編集・削除ボタンのクリック優先度UP */
+.work-actions {
+position: absolute;
+bottom: 10px;
+right: 10px;
+z-index: 9999;
+}
+
+.edit-button,
+.delete-button {
+position: relative;
+z-index: 10000;
+padding: 6px 10px;
+font-size: 12px;
+border-radius: 4px;
+border: none;
+cursor: pointer;
+background: #fff;
+}
+
+/* ===============================
+ ドロップゾーン
+=============================== */
+.upload-dropzone {
+margin-bottom: 24px;
+padding: 24px;
+border: 2px dashed #ccc;
+border-radius: 10px;
+background: #ffffff;
+color: #888;
+text-align: center;
+font-size: 14px;
+}
+
+.upload-dropzone.dragover {
+border-color: #111;
+background: #f7f7f5;
+}
+
+/* ===============================
+ viewer（PC）
+=============================== */
+.image-viewer {
+position: fixed;
+top: 10vh;
+left: 0;
+width: 100%;
+height: 90vh;
+display: flex;
+background: rgba(0,0,0,0.4);
+transform: translateY(20px);
+opacity: 0;
+pointer-events: none;
+transition: opacity 0.25s ease, transform 0.25s ease;
+z-index: 9600;
+}
+
+.image-viewer.open {
+opacity: 1;
+transform: translateY(0);
+pointer-events: auto;
+}
+
+.viewer-left {
+width: 80%;
+height: 90%;
+display: flex;
+align-items: center;
+justify-content: center;
+position: relative;
+margin: auto 0;
+}
+
+.viewer-image {
+max-width: 100%;
+max-height: 100%;
+object-fit: contain;
+margin: auto;
+display: block;
+}
+
+.viewer-arrow {
+position: absolute;
+top: 50%;
+transform: translateY(-50%);
+width: 48px;
+height: 48px;
+border-radius: 50%;
+border: none;
+background: rgba(0,0,0,0.35);
+color: #fff;
+font-size: 28px;
+cursor: pointer;
+display: flex;
+align-items: center;
+justify-content: center;
+transition: background 0.2s ease;
+z-index: 9700;
+}
+
+.viewer-arrow.left { left: 20px; }
+.viewer-arrow.right { right: 20px; }
+
+.viewer-close-btn {
+display: none;
+}
+
+/* viewer-right（PC） */
+.viewer-right {
+width: 20%;
+height: 100%;
+background: #ffffff;
+border-left: 1px solid #e8e8e6;
+padding: 20px;
+overflow-y: auto;
+box-shadow: -4px 0 20px rgba(0,0,0,0.06);
+}
+
+/* ===============================
+ viewer（スマホ）
+=============================== */
+@media (max-width: 768px) {
+
+.sidebar { display: none; }
+
+.mobile-menu-btn { display: block; }
+.mobile-menu-panel { display: block; }
+
+.pc-search { display: none; }
+
+.main {
+margin-left: 0;
+padding: 16px;
+}
+
+.works-grid {
+  display: flex;
+  gap: 8px;
+}
+
+.image-viewer {
+position: fixed;
+top: 10vh;
+left: 0;
+width: 100%;
+height: calc(100dvh - 10vh);
+display: flex;
+flex-direction: column;
+}
+
+.viewer-close-btn {
+display: block;
+position: absolute;
+top: 16px;
+right: 16px;
+z-index: 9999;
+background: rgba(0,0,0,0.55);
+backdrop-filter: blur(4px);
+color: #fff;
+border: none;
+width: 42px;
+height: 42px;
+border-radius: 50%;
+font-size: 22px;
+cursor: pointer;
+box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.viewer-close-btn:active {
+transform: scale(0.92);
+background: rgba(0,0,0,0.75);
+}
+
+.viewer-left {
+width: 100%;
+height: 70%;
+display: flex;
+justify-content: center;
+align-items: center;
+position: relative;
+margin: 0;
+}
+
+.viewer-image {
+max-width: 100%;
+max-height: 100%;
+object-fit: contain;
+padding: 10px;
+}
+
+.viewer-right {
+position: fixed;
+bottom: 0;
+left: 0;
+width: 100%;
+height: 30%;
+background: #ffffff;
+border-radius: 16px 16px 0 0;
+padding: 16px;
+overflow: hidden;
+transition: height 0.3s ease;
+box-shadow: 0 -6px 20px rgba(0,0,0,0.08);
+border-top: 1px solid #e8e8e6;
+}
+
+.viewer-right.active {
+height: 60%;
+overflow-y: auto;
+}
+
+.viewer-drag-handle {
+width: 50px;
+height: 6px;
+background: #ccc;
+border-radius: 999px;
+margin: 0 auto 12px;
+touch-action: none;
+}
+}
+
+/* ===============================
+ モーダル
+=============================== */
+.modal {
+position: fixed;
+inset: 0;
+background: rgba(0,0,0,0.4);
+display: none;
+align-items: center;
+justify-content: center;
+z-index: 20000;
+}
+
+.modal.open {
+display: flex;
+}
+
+.modal-content {
+width: 70%;
+height: 70%;
+background: #fff;
+color: #111;
+border-radius: 10px;
+padding: 20px;
+display: flex;
+flex-direction: column;
+box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+}
+
+#modal-textarea {
+flex: 1;
+width: 100%;
+resize: none;
+font-size: 14px;
+padding: 10px;
+border: 1px solid #e2e2e0;
+border-radius: 6px;
+}
+
+.modal-buttons {
+display: flex;
+justify-content: flex-end;
+gap: 10px;
+margin-top: 12px;
+}
+
+.modal-btn {
+padding: 8px 16px;
+border-radius: 6px;
+border: none;
+cursor: pointer;
+font-size: 14px;
+}
+
+.modal-btn.save {
+background: #1a1a1a;
+color: #fff;
+}
+
+.modal-btn.cancel {
+background: #f2f2f0;
+color: #555;
+}
+
+/* ===============================
+ ステップ式アップロードモーダル
+=============================== */
+#upload-step-modal {
+position: fixed;
+inset: 0;
+background: rgba(0,0,0,0.4);
+display: none;
+align-items: center;
+justify-content: center;
+z-index: 30000;
+}
+
+#upload-step-modal.open {
+display: flex;
+}
+
+.upload-step-content {
+width: 480px;
+background: #fff;
+color: #111;
+padding: 24px;
+border-radius: 10px;
+display: flex;
+flex-direction: column;
+gap: 16px;
+box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+}
+
+#upload-step-title {
+margin: 0;
+font-size: 16px;
+}
+
+#upload-step-input,
+#upload-step-month,
+#upload-step-textarea {
+width: 100%;
+font-size: 14px;
+padding: 10px;
+border: 1px solid #e2e2e0;
+border-radius: 6px;
+}
+
+#upload-step-textarea {
+height: 120px;
+resize: none;
+}
+
+#upload-step-ok {
+align-self: flex-end;
+padding: 10px 16px;
+background: #1a1a1a;
+color: #fff;
+border: none;
+border-radius: 6px;
+cursor: pointer;
+font-size: 14px;
+}
+
+/* ===============================
+ スクロールバー
+=============================== */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-thumb {
+background: #ddd;
+border-radius: 4px;
+}
+
+.upload-step-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+#upload-step-back,
+#upload-step-ok {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+#upload-step-back {
+  background: #f2f2f0;
+  color: #555;
+}
+
+#upload-step-ok {
+  background: #1a1a1a;
+  color: #fff;
+}
+
+.viewer-admin-actions {
+  margin-top: 20px;
+  gap: 10px;
+}
+
+body.admin-mode .viewer-admin-actions {
+  display: flex;
+}
+
+#viewer-edit-work,
+#viewer-delete-work {
+  flex: 1;
+  padding: 10px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+#viewer-edit-work {
+  background: #1a1a1a;
+  color: #fff;
+}
+
+#viewer-delete-work {
+  background: #d93025;
+  color: #fff;
+}
+
+/* ===============================
+ アバウト/制作について
+=============================== */
+#about-content,
+#info-content {
+  animation: fadeIn 0.8s ease;
+}
+
+/* ===============================
+ ローディングアニメーション
+=============================== */
+#loading-overlay {
+  position: fixed;
+  inset: 0;
+  background: #f7f7f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999;
+  transition: opacity 0.4s ease;
+}
+
+#loading-overlay.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid #e2e2e0;
+  border-top-color: #111;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* =========================================================
+ 2026-07-17 デザイン刷新
+ 現在の骨格を維持しながら、タブ・カード・情報設計を改善
+========================================================= */
+
+:root {
+  --portfolio-bg: #f7f7f5;
+  --portfolio-panel: #ffffff;
+  --portfolio-text: #151515;
+  --portfolio-muted: #72726d;
+  --portfolio-line: #e5e5e1;
+  --portfolio-accent: #8b1e3f;
+  --portfolio-accent-soft: #f1d8e0;
+  --portfolio-dark: #171717;
+  --portfolio-shadow: 0 10px 30px rgba(20,20,18,0.08);
+}
+
+body {
+  background:
+    radial-gradient(circle at 90% 0%, rgba(139,30,63,0.055), transparent 28rem),
+    var(--portfolio-bg);
+  color: var(--portfolio-text);
+}
+
+.header {
+  min-height: 70px;
+  background: rgba(255,255,255,0.94);
+  backdrop-filter: blur(14px);
+}
+
+#site-title {
+  height: 50px;
+  max-width: min(360px, 48vw);
+  object-fit: contain;
+  cursor: pointer;
+}
+
+.pc-search {
+  width: min(360px, 34vw);
+  min-height: 42px;
+  padding: 7px 14px;
+  background: #f3f3f0;
+}
+
+.pc-search input {
+  width: 100%;
+  min-width: 0;
+}
+
+.sidebar {
+  width: 235px;
+  padding-top: 10px;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+}
+
+.nav-item {
+  min-height: 51px;
+  padding: 14px 18px 14px 24px;
+  border-left: 3px solid transparent;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.nav-label {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  min-width: 0;
+}
+
+.nav-label i {
+  width: 18px;
+  text-align: center;
+  opacity: 0.72;
+}
+
+.nav-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.nav-count {
+  min-width: 26px;
+  height: 21px;
+  padding: 0 7px;
+  border-radius: 999px;
+  display: inline-grid;
+  place-items: center;
+  background: #eeeeeb;
+  color: #777771;
+  font-size: 10px;
+  line-height: 1;
+  transition: 0.2s ease;
+}
+
+.nav-new {
+  padding: 4px 7px;
+  border-radius: 999px;
+  background: var(--portfolio-accent-soft);
+  color: var(--portfolio-accent);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+}
+
+.nav-item.active {
+  color: #fff;
+  border-left-color: var(--portfolio-accent);
+}
+
+.nav-item.active::before {
+  width: 100%;
+}
+
+.nav-item.active .nav-count {
+  color: #fff;
+  background: rgba(255,255,255,0.16);
+}
+
+.nav-item.active .nav-new {
+  color: #fff;
+  background: var(--portfolio-accent);
+}
+
+.nav-item.active::after {
+  display: none;
+}
+
+.sidebar-bottom {
+  padding: 0 14px;
+}
+
+#admin-panel {
+  margin-top: 12px;
+  text-align: center;
+}
+
+.main {
+  margin-left: 235px;
+  padding: 28px;
+}
+
+.view {
+  animation: viewFadeIn 0.34s ease;
+}
+
+@keyframes viewFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.view-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 22px;
+}
+
+.view-header h1 {
+  margin: 5px 0 7px;
+  font-size: clamp(26px, 2.3vw, 36px);
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+}
+
+.view-header p {
+  margin: 0;
+  color: var(--portfolio-muted);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.view-eyebrow {
+  color: var(--portfolio-accent);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+}
+
+.view-total {
+  color: var(--portfolio-muted);
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.filter-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 0 0 22px;
+}
+
+.filter-chip {
+  border: 1px solid var(--portfolio-line);
+  border-radius: 999px;
+  padding: 8px 13px;
+  background: rgba(255,255,255,0.72);
+  color: #686863;
+  cursor: pointer;
+  font-size: 12px;
+  transition: 0.18s ease;
+}
+
+.filter-chip:hover,
+.filter-chip.active {
+  border-color: var(--portfolio-dark);
+  background: var(--portfolio-dark);
+  color: #fff;
+}
+
+.works-grid {
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.works-column {
+  min-width: 0;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.work-card {
+  margin: 0;
+  overflow: hidden;
+  border-radius: 12px;
+  box-shadow: 0 2px 9px rgba(0,0,0,0.05);
+}
+
+.work-card::after {
+  display: none;
+}
+
+.work-image {
+  border-radius: 0;
+  transition: transform 0.35s ease;
+}
+
+.work-card:hover .work-image {
+  transform: scale(1.018);
+}
+
+.work-body {
+  position: relative;
+  z-index: 3;
+  padding: 13px 14px 14px;
+  background: #fff;
+}
+
+.work-tag-list {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+.work-tag {
+  display: inline-flex;
+  align-items: center;
+  min-height: 20px;
+  padding: 3px 7px;
+  border-radius: 999px;
+  background: #f0efec;
+  color: #6b6b66;
+  font-size: 9px;
+}
+
+.work-title {
+  position: static;
+  margin: 0;
+  color: var(--portfolio-text);
+  opacity: 1;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.55;
+}
+
+.work-card:hover .work-title {
+  opacity: 1;
+}
+
+.work-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 7px;
+}
+
+.work-date {
+  color: #9a9a94;
+  font-size: 10px;
+}
+
+body.admin-mode .work-title {
+  opacity: 1 !important;
+}
+
+.recent-summary {
+  min-height: 190px;
+  margin-bottom: 22px;
+  padding: 28px 30px;
+  border-radius: 16px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 28px;
+  background:
+    radial-gradient(circle at 88% 20%, rgba(139,30,63,0.52), transparent 24rem),
+    var(--portfolio-dark);
+  color: #fff;
+  overflow: hidden;
+}
+
+.recent-summary-label {
+  color: #bdbdb8;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+}
+
+.recent-summary strong {
+  display: block;
+  margin: 8px 0 12px;
+  font-size: clamp(30px, 4vw, 50px);
+  line-height: 1;
+}
+
+.recent-summary p {
+  max-width: 620px;
+  margin: 0;
+  color: #cfcfca;
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+.recent-summary-count {
+  flex: 0 0 auto;
+  min-width: 105px;
+  text-align: right;
+}
+
+.recent-summary-count strong {
+  margin: 0;
+  font-size: 48px;
+}
+
+.recent-summary-count span {
+  color: #aaa;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+}
+
+.service-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0,1fr));
+  gap: 16px;
+}
+
+.service-card {
+  min-height: 245px;
+  padding: 24px;
+  border: 1px solid var(--portfolio-line);
+  border-radius: 14px;
+  background: #fff;
+  position: relative;
+  overflow: hidden;
+  transition: 0.22s ease;
+}
+
+.service-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--portfolio-shadow);
+}
+
+.service-card > span {
+  color: var(--portfolio-accent);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+}
+
+.service-card > i {
+  position: absolute;
+  top: 23px;
+  right: 23px;
+  color: #d7d7d2;
+  font-size: 24px;
+}
+
+.service-card h2 {
+  margin: 56px 0 12px;
+  font-size: 19px;
+}
+
+.service-card p {
+  margin: 0;
+  color: var(--portfolio-muted);
+  font-size: 13px;
+  line-height: 1.85;
+}
+
+.text-panel {
+  max-width: 1000px;
+  padding: clamp(24px, 4vw, 44px);
+  border: 1px solid var(--portfolio-line);
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.035);
+}
+
+#about-content,
+#info-content {
+  color: #555550;
+  line-height: 2;
+}
+
+#about-content > :first-child,
+#info-content > :first-child {
+  margin-top: 0;
+}
+
+.text-edit-btn {
+  margin-top: 22px;
+  padding: 9px 16px;
+  border: 0;
+  border-radius: 7px;
+  background: var(--portfolio-dark);
+  color: #fff;
+  cursor: pointer;
+}
+
+.empty-state {
+  width: 100%;
+  min-height: 220px;
+  padding: 40px;
+  border: 1px dashed #d3d3ce;
+  border-radius: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,255,255,0.55);
+  text-align: center;
+}
+
+.empty-state strong {
+  margin-bottom: 8px;
+  font-size: 16px;
+}
+
+.empty-state span {
+  color: var(--portfolio-muted);
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.upload-dropzone {
+  margin-bottom: 22px;
+  background: rgba(255,255,255,0.8);
+}
+
+.viewer-right {
+  width: 22%;
+  min-width: 330px;
+  padding: 28px;
+}
+
+.viewer-left {
+  width: calc(100% - 330px);
+}
+
+.viewer-section-title {
+  margin: 26px 0 8px;
+  color: #999992;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+}
+
+#viewer-title {
+  margin: 0 0 8px;
+  font-size: 21px;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+#viewer-date,
+#viewer-description {
+  color: #686863;
+  line-height: 1.8;
+}
+
+#viewer-tags {
+  display: flex;
+  gap: 7px;
+  flex-wrap: wrap;
+}
+
+#viewer-tags .tag {
+  padding: 5px 9px;
+  border-radius: 999px;
+  background: var(--portfolio-accent-soft);
+  color: var(--portfolio-accent);
+  font-size: 11px;
+}
+
+.viewer-edit-form {
+  margin-top: 20px;
+  padding-top: 18px;
+  border-top: 1px solid var(--portfolio-line);
+}
+
+.viewer-edit-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 12px;
+  color: #777;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.viewer-edit-form input,
+.viewer-edit-form textarea {
+  width: 100%;
+  padding: 9px 10px;
+  border: 1px solid var(--portfolio-line);
+  border-radius: 6px;
+  background: #fff;
+  color: #111;
+  font-size: 13px;
+}
+
+.viewer-edit-form textarea {
+  min-height: 110px;
+  resize: vertical;
+}
+
+.viewer-edit-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+#viewer-save-work,
+#viewer-cancel-edit {
+  flex: 1;
+  padding: 9px 10px;
+  border: 0;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+#viewer-save-work {
+  background: #171717;
+  color: #fff;
+}
+
+#viewer-cancel-edit {
+  background: #eeeeeb;
+  color: #555;
+}
+
+@media (max-width: 1200px) {
+  .service-grid {
+    grid-template-columns: repeat(2, minmax(0,1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .header {
+    height: 68px;
+    min-height: 68px;
+    padding: 0 14px;
+  }
+
+  #site-title {
+    height: 43px;
+    max-width: calc(100vw - 74px);
+  }
+
+  .layout {
+    padding-top: 68px;
+  }
+
+  .mobile-menu-panel.open {
+    top: 68px;
+  }
+
+  .mobile-menu-panel {
+    max-height: calc(100dvh - 68px);
+    overflow-y: auto;
+    padding: 14px 16px 20px;
+  }
+
+  .mobile-menu-panel .nav-item {
+    min-height: 48px;
+    padding: 12px 10px;
+    border-radius: 8px;
+  }
+
+  .mobile-menu-panel .nav-item::before,
+  .mobile-menu-panel .nav-item::after {
+    display: none;
+  }
+
+  .mobile-menu-panel .nav-item.active {
+    background: var(--portfolio-dark);
+    color: #fff;
+  }
+
+  .main {
+    padding: 18px 14px 30px;
+  }
+
+  .view-header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 18px;
+  }
+
+  .view-header h1 {
+    font-size: 26px;
+  }
+
+  .filter-row {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    margin-right: -14px;
+    padding-right: 14px;
+    scrollbar-width: none;
+  }
+
+  .filter-row::-webkit-scrollbar {
+    display: none;
+  }
+
+  .filter-chip {
+    flex: 0 0 auto;
+  }
+
+  .works-grid {
+    gap: 9px;
+  }
+
+  .works-column {
+    gap: 9px;
+  }
+
+  .work-body {
+    padding: 10px 10px 11px;
+  }
+
+  .work-tag-list {
+    gap: 4px;
+  }
+
+  .work-tag {
+    padding: 3px 6px;
+    font-size: 8px;
+  }
+
+  .work-title {
+    font-size: 11px;
+  }
+
+  .recent-summary {
+    min-height: 170px;
+    padding: 22px;
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .recent-summary-count {
+    min-width: 0;
+    text-align: left;
+  }
+
+  .recent-summary-count strong {
+    display: inline;
+    margin-right: 8px;
+    font-size: 32px;
+  }
+
+  .service-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .service-card {
+    min-height: 210px;
+  }
+
+  .viewer-right {
+    min-width: 0;
+    padding: 18px;
+  }
+
+  .viewer-left {
+    width: 100%;
+  }
+}
+
+/* =========================================================
+ 2026-07-17 HOME追加・スマホ最終調整
+========================================================= */
+
+/* ホバー時に右から伸びていた白線を撤廃 */
+.nav-item::after {
+  display: none !important;
+}
+
+.home-hero {
+  min-height: 430px;
+  padding: clamp(30px, 4vw, 52px);
+  border: 1px solid var(--portfolio-line);
+  border-radius: 22px;
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(340px, .92fr);
+  gap: clamp(28px, 5vw, 70px);
+  align-items: center;
+  background:
+    radial-gradient(circle at 88% 18%, rgba(139,30,63,.12), transparent 24rem),
+    #fff;
+  overflow: hidden;
+}
+
+.home-hero-copy {
+  min-width: 0;
+}
+
+.home-hero h1 {
+  margin: 14px 0 18px;
+  max-width: 720px;
+  font-size: clamp(38px, 5.1vw, 72px);
+  line-height: 1.04;
+  letter-spacing: -.048em;
+}
+
+.home-hero-copy > p {
+  max-width: 720px;
+  margin: 0;
+  color: var(--portfolio-muted);
+  font-size: 15px;
+  line-height: 1.95;
+}
+
+.home-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 26px;
+}
+
+.home-primary-btn,
+.home-secondary-btn {
+  min-height: 46px;
+  padding: 12px 19px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 800;
+  text-decoration: none;
+  transition: .2s ease;
+}
+
+.home-primary-btn {
+  border: 1px solid var(--portfolio-dark);
+  background: var(--portfolio-dark);
+  color: #fff;
+}
+
+.home-secondary-btn {
+  border: 1px solid var(--portfolio-line);
+  background: #fff;
+  color: var(--portfolio-text);
+}
+
+.home-primary-btn:hover,
+.home-secondary-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(0,0,0,.09);
+}
+
+.home-stats {
+  display: flex;
+  gap: clamp(20px, 4vw, 42px);
+  flex-wrap: wrap;
+  margin-top: 34px;
+}
+
+.home-stats strong {
+  display: block;
+  font-size: 25px;
+  letter-spacing: -.035em;
+}
+
+.home-stats span {
+  display: block;
+  margin-top: 3px;
+  color: #94948e;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: .11em;
+}
+
+.home-visual {
+  position: relative;
+  width: 100%;
+  height: 330px;
+  min-width: 0;
+}
+
+.home-visual-card {
+  position: absolute;
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,.9);
+  border-radius: 17px;
+  background: linear-gradient(135deg, #eee, #d9d9d5);
+  box-shadow: 0 18px 45px rgba(25,20,18,.16);
+}
+
+.home-visual-card img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.home-visual-card.is-empty::before {
+  content: "DESIGN";
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: rgba(0,0,0,.22);
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: .16em;
+}
+
+.home-visual-card-a {
+  width: 58%;
+  height: 72%;
+  top: 0;
+  right: 1%;
+  transform: rotate(3.5deg);
+}
+
+.home-visual-card-b {
+  width: 50%;
+  height: 64%;
+  left: 0;
+  bottom: 0;
+  transform: rotate(-4.5deg);
+}
+
+.home-visual-card-c {
+  width: 41%;
+  height: 49%;
+  right: 7%;
+  bottom: 0;
+  transform: rotate(6deg);
+}
+
+.home-section {
+  margin-top: 30px;
+}
+
+.home-section-header {
+  margin-bottom: 17px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 22px;
+}
+
+.home-section-header h2 {
+  margin: 5px 0 6px;
+  font-size: clamp(24px, 2.5vw, 34px);
+  letter-spacing: -.025em;
+}
+
+.home-section-header p {
+  margin: 0;
+  color: var(--portfolio-muted);
+  font-size: 12px;
+}
+
+.home-section-header > a {
+  padding: 9px 0;
+  color: #555550;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.home-section-header > a i {
+  margin-left: 6px;
+  transition: transform .18s ease;
+}
+
+.home-section-header > a:hover i {
+  transform: translateX(4px);
+}
+
+.home-recent-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.home-recent-grid .work-card {
+  min-width: 0;
+}
+
+.home-recent-grid .work-image {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+.home-recent-grid .home-empty-state {
+  grid-column: 1 / -1;
+}
+
+.home-link-grid {
+  margin-top: 30px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.home-link-card {
+  min-height: 190px;
+  padding: 23px;
+  border: 1px solid var(--portfolio-line);
+  border-radius: 14px;
+  position: relative;
+  overflow: hidden;
+  background: #fff;
+  color: var(--portfolio-text);
+  text-decoration: none;
+  transition: .22s ease;
+}
+
+.home-link-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--portfolio-shadow);
+}
+
+.home-link-card > span {
+  color: var(--portfolio-accent);
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: .12em;
+}
+
+.home-link-card > i {
+  position: absolute;
+  top: 23px;
+  right: 23px;
+  color: #d7d7d2;
+  font-size: 23px;
+}
+
+.home-link-card h2 {
+  margin: 45px 0 9px;
+  font-size: 19px;
+}
+
+.home-link-card p {
+  margin: 0;
+  color: var(--portfolio-muted);
+  font-size: 12px;
+  line-height: 1.8;
+}
+
+@media (max-width: 1120px) {
+  .home-hero {
+    grid-template-columns: 1fr;
+  }
+
+  .home-visual {
+    width: min(560px, 100%);
+    height: 310px;
+    margin: 0 auto;
+  }
+
+  .home-link-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  html,
+  body {
+    overflow-x: hidden;
+  }
+
+  .mobile-menu-btn {
+    top: 23px;
+    right: 16px;
+  }
+
+  .mobile-menu-panel {
+    top: 68px;
+    transform: translateY(-120%);
+    transition: transform .28s ease;
+  }
+
+  .mobile-menu-panel.open {
+    top: 68px;
+    transform: translateY(0);
+  }
+
+  .home-hero {
+    min-height: 0;
+    padding: 25px 20px 22px;
+    border-radius: 17px;
+    gap: 26px;
+  }
+
+  .home-hero h1 {
+    margin: 12px 0 15px;
+    font-size: clamp(34px, 10.5vw, 46px);
+    line-height: 1.08;
+  }
+
+  .home-hero-copy > p {
+    font-size: 13px;
+    line-height: 1.85;
+  }
+
+  .home-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+    margin-top: 21px;
+  }
+
+  .home-primary-btn,
+  .home-secondary-btn {
+    width: 100%;
+  }
+
+  .home-stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 26px;
+  }
+
+  .home-stats > div {
+    min-width: 0;
+  }
+
+  .home-stats strong {
+    overflow-wrap: anywhere;
+    font-size: 17px;
+  }
+
+  .home-stats span {
+    font-size: 7px;
+    letter-spacing: .07em;
+  }
+
+  .home-visual {
+    width: min(430px, 100%);
+    height: 230px;
+  }
+
+  .home-visual-card {
+    border-radius: 13px;
+  }
+
+  .home-section {
+    margin-top: 25px;
+  }
+
+  .home-section-header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .home-section-header > a {
+    align-self: flex-end;
+  }
+
+  .home-recent-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 9px;
+  }
+
+  .home-recent-grid .work-body {
+    padding: 10px;
+  }
+
+  .home-link-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin-top: 25px;
+  }
+
+  .home-link-card {
+    min-height: 155px;
+    padding: 20px;
+  }
+
+  .home-link-card h2 {
+    margin-top: 35px;
+  }
+}
+
+@media (max-width: 430px) {
+  .home-recent-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .home-recent-grid .work-image {
+    aspect-ratio: 16 / 10;
+  }
+
+  .home-stats {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .home-stats > div:last-child {
+    grid-column: 1 / -1;
+  }
+}
+
+/* スマホでPC用サイドバー余白が残らないよう最終固定 */
+@media (max-width: 768px) {
+  .layout {
+    display: block;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .sidebar {
+    display: none !important;
+  }
+
+  .main {
+    width: 100% !important;
+    max-width: 100%;
+    min-width: 0;
+    margin-left: 0 !important;
+  }
+}
+
+
+/* =========================================================
+ 2026-07-17 HOME微調整 v3
+========================================================= */
+
+/* HOMEのコラージュ画像は切り抜かず、画像全体を表示 */
+.home-visual-card img {
+  object-fit: contain;
+  object-position: center;
+  background: #fff;
+}
+
+/* 回転したカードがHOME枠の端で欠けないよう、少し内側へ配置 */
+.home-visual-card-a {
+  width: 54%;
+  height: 68%;
+  top: 5%;
+  right: 4%;
+}
+
+.home-visual-card-b {
+  width: 48%;
+  height: 60%;
+  left: 3%;
+  bottom: 4%;
+}
+
+.home-visual-card-c {
+  width: 39%;
+  height: 46%;
+  right: 10%;
+  bottom: 4%;
+}
+
+@media (max-width: 768px) {
+  .home-visual {
+    height: 245px;
+  }
+
+  .home-visual-card-a {
+    width: 55%;
+    height: 66%;
+    top: 5%;
+    right: 4%;
+  }
+
+  .home-visual-card-b {
+    width: 47%;
+    height: 58%;
+    left: 3%;
+    bottom: 5%;
+  }
+
+  .home-visual-card-c {
+    width: 38%;
+    height: 44%;
+    right: 10%;
+    bottom: 5%;
+  }
+}
+
+@media (max-width: 430px) {
+  .home-visual {
+    height: 225px;
+  }
+}
